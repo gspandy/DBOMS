@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的app-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <#include "/views/common/head.html"/>
+	<script type="text/javascript" src="${ctx}/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+	<script type="text/javascript" src="${ctx}/js/json2.js"></script>
+	<link rel="stylesheet" href="${ctx}/js/jbox/jbox.css" type="text/css"></link>
+	<script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+</head>
+<script type="text/javascript">
+var type="0";
+$(function(){
+    $("#menu7").parent(".info").show();
+    $("#menu7").addClass("active").siblings().removeClass("active");
+    type = "${type?if_exists}";
+	var h4val = type==0?"APP新增":"APP详情";
+	$("#tile").text(h4val);
+	
+});
+//app名称相同校验
+var flag = false;
+function checkNameFirst(){
+	if ($("#appName").val()==undefined||$("#appName").val().trim()=="") {
+		$("#errorMsg").text("");
+		$("#errorMsg").hide();
+		return false;
+	}else {
+		checkName();
+	}
+	return false;
+}
+function checkName(){
+	var  appName =$("#appName").val();
+	if (appName==undefined||appName==null||appName.trim()=="") {
+		$("#errorMsg").text("请输入app名称");
+		$("#errorMsg").show();
+		flag = false;
+		return flag;
+	}
+				    	$.ajax({	
+						url:rootPath+"/author/bussinfo/appSame?appName="+appName,
+						type:"post",
+						/* async: false, */
+						dataType:"json",
+						success:function(response) {
+						var flag1 = response.flag;
+							if(flag1=="true") {//已经被注册
+								$("#errorMsg").text("");
+								$("#errorMsg").hide();
+								flag = true;
+							}else {
+								$("#errorMsg").text("app名称已被使用！");
+								$("#errorMsg").show();
+								flag = false;
+							}
+						},
+						error:function() {
+							$("#errorMsg").text("");
+							$("#errorMsg").hide();
+							$.jBox.error("错误信息：<br>系统错误，请稍后再试！","提示");
+							flag = false;
+						}
+					}); 
+				    	return flag;
+   		}
+
+function toSubmit(){
+	if (!flag) {
+		if ($("#appName").val()==undefined||$("#appName").val()=="") {
+			$("#errorMsg").text("请输入app名称");
+			$("#errorMsg").show();
+			flag = false;
+			return flag;
+		}
+	}
+	if ($("#appDes").val()!=""){$("#errorMsg1").text("");$("#errorMsg1").hide();}
+	if ($("#appDes").val()==undefined||$("#appDes").val()==""){
+		$("#errorMsg1").text("请输入app的描述信息");
+		$("#errorMsg1").show();
+		return false;
+	}
+	if ($("#appUrl").val()!=""){$("#errorMsg2").text("");$("#errorMsg2").hide();}
+	if ($("#appUrl").val()==undefined||$("#appUrl").val()==""){
+		$("#errorMsg2").text("请输入app url");
+		$("#errorMsg2").show();
+		return false;
+	}
+	var prdDatafile = $("#uploadfile").val();
+	if (type == 0){
+		if (prdDatafile==undefined||prdDatafile==null||prdDatafile=="") {
+			$.jBox.error("错误信息：<br>请选择app图片！","提示");
+			return false;
+		}
+	} 
+	var arr = prdDatafile.split(".");
+	if(arr[arr.length-1]!="jpg"&&arr[arr.length-1]!="jpng"&&arr[arr.length-1]!="png"){
+		$.jBox.error("错误信息：<br>请选择 *.jpg、 *.jpng、*.png 格式图片！","提示");
+		return false;
+	}
+	/* var fileInput = document.getElementById("uploaded");
+	var byteSize = fileInput.files[0].size;
+	if (byteSize<=0) {
+		$.jBox.error("错误信息：<br>所选图片为空，请重新选择！","提示");
+		return false;
+	} */
+	//保存
+	$("#appForm").attr("enctype","multipart/form-data");
+	$("#appForm").ajaxSubmit({
+		type: "post",
+		url: rootPath +'/author/bussinfo/appSave',
+		dataType:"json",
+		success: function (result) {
+			var appSave = result.appSave;//商户保存标识
+				if(appSave){//对用户信息的保存成功与否提示
+					$.jBox.tip('新增成功！','success');
+					setTimeout('document.location.href="${ctx}/author/bussinfo/management/appInfo"',3000);
+				}else{
+					$.jBox.tip('新增失败！','false');
+					return false;
+				}
+		},
+		error : function(result){
+			$("#registerForm").attr("enctype","multipart/form-data");
+			$.jBox.error("商户登记App失败，请检查App资料！","提示");
+		}
+	});
+}
+</script>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+<input type="hidden" id="type" value="${type}">
+<!-------------------------CONT---------------------------->    
+     <article class="article-box">
+        <div class="add-cont">
+        <form id="appForm" method="post" enctype="multipart/form-data">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4 id="tile"></h4></div>
+              <div class="panel-seheader">
+                     <h5>APP资料</h5>
+              </div>
+             <div class="panel-body">
+             	  <input type="hidden" id="prdId" name="prdId" value="">
+                  <div class="form-group  cl">
+                      <label class=" fl">APP名称：</label><p>${appInfo.appName?if_exists}</p>
+                     <!--  <input class="input-text fl" maxlength="50" type="text" id="appName" name="appName" value="" onblur="checkNameFirst();"> -->
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="appcheckTip" name="appcheckTip">该字段不允许为空，请填写！</span>
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="appcheckTip1" name="appcheckTip1">该app应用已经登录</span>
+                      <label class=" fl" ><span id="errorMsg"style="display:none;color:red;"></span></label>
+                  </div>
+                  <div class="form-group  cl">
+                      <label class=" fl">APP描述：</label><p>${appInfo.appDes?if_exists}</p>
+                      <!-- <input class="input-text fl" maxlength="1000" type="text" id="appDes" name="appDes" value=""> -->
+                      <label class=" fl" ><span id="errorMsg1"style="display:none;color:red;"></span></label>
+                  </div>
+                  <div class="form-group  cl">
+                    <label class=" fl">APP URL：</label><p>${appInfo.appurl?if_exists}</p>
+                    <!-- <input class="input-text fl" name="appUrl" id="appUrl" type="text" value=""> -->
+                    <label class=" fl" ><span id="errorMsg2"style="display:none;color:red;"></span></label>
+                </div>
+                  <div class="form-group cl">
+                        <label class=" fl">APP·图片：</label>
+                        <div class="formControls col-sm-9"> 
+                        <p>${appInfo.appImg}</p>
+                        	<img width='60' height='60' src='${imageRoot}/${appSmall}/${appInfo.appImg}'  alt=''/>
+							<!-- 		<input style="width:200px" class="input-text upload-url" type="text" name="uploadfile1" id="uploadfile" readonly="" onblur="checkFile();">
+									<a href="javascript:void();" class="btn btn-primary-outline upload-btn ml-20 f-12"><i class="fa fa-cloud-upload "></i>&nbsp;&nbsp; 选择图片</a>
+									<input type="file"  name="uploaded" id="uploaded" accept=".jpng,.jpg,.png" onchange="document.getElementById('uploadfile').value=this.value;" class="input-file valid">
+									</span> 
+									<label class=" fl" ><span id="errorMsg3"style="display:none;color:red;"></span></label>
+									<span style="color: #ee3170;font-size: 14px;display:none" id="fileSelect" name="fileSelect" >请选择*.jpng、*.jpg、*.png格式图片上传上传</span>
+									<p class="mt-10 f-12">请选择*.jpng、*.jpg、*.png格式的图片上传上传</p>
+									 -->
+						</div>
+                    </div>
+                  <br>    
+                  <br>    
+             </div>
+         </section>
+         <div class="btn-wrap mt-20 ml-60">
+           <!--   <input  type="button"  class="btn btn-primary"  onclick="toSubmit();" value="保存">
+             &nbsp; &nbsp;  -->
+              <button class="btn btn-close" onClick="javascript:history.go(-1);return false;">取消</button>
+         </div>
+         </form>
+         </div>    
+    </article>
+     <!------------------------FOOTER----------------------------> 
+  	<#include "/views/common/footer.html"/>
+</body>
+</html>

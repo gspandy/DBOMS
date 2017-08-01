@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PRD_INFO">
+	<resultMap type="PrdInfo" id="prdInfoResultMap">
+		<id property="prdId" column="PRD_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="prdName" column="PRD_NAME"/>
+		<result property="prdDes" column="PRD_DES"/>
+		<result property="prdDatafile" column="PRD_DATAFILE"/>
+		<result property="prdOthers" column="PRD_OTHERS"/>
+		<result property="prdStatus" column="PRD_STATUS"/>
+		<result property="prdUnit" column="PRD_UNIT"/>
+		<result property="prdPrice" column="PRD_PRICE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="checker" column="CHECKER"/>
+		<result property="checkTime" column="CHECK_TIME"/>
+		<result property="checkOpin" column="CHECK_OPIN"/>
+		<result property="prdType" column="PRD_TYPE"/>
+		<result property="dataBaseIp" column="DATA_BASE_IP"/>
+		<result property="dataBasePort" column="DATA_BASE_PORT"/>
+		<result property="dataBaseUserName" column="DATA_BASE_USER_NAME"/>
+		<result property="dataBaseUserPwd" column="DATA_BASE_USER_PWD"/>
+	</resultMap>
+	<resultMap type="PrdInfo" id="childPrdInfoResultMap" extends="prdInfoResultMap">
+		<result property="prdDataName" column="FILE_NAME"/>
+	</resultMap>
+
+	<resultMap id="prdDataResourceMap" type="PrdDataResource">
+		<id property="dataResourceId" column="DATA_RESOURCE_ID"></id>
+		<result property="prdId" column="PRD_ID"></result>
+		<result property="dataResourceName" column="SERVICE_NAME"></result>
+		<result property="createTime" column="REMARK"></result>
+		<result property="remark" column="REMARK"></result>
+	</resultMap>
+
+    <resultMap id="ordPrdAndDataMap" type="OrdPrdAndData">
+        <id property="prdId" column="PRD_ID"/>
+        <result property="bussId" column="BUSS_ID"/>
+        <result property="prdName" column="PRD_NAME"/>
+        <result property="prdDes" column="PRD_DES"/>
+        <result property="prdDatafile" column="PRD_DATAFILE"/>
+        <result property="prdOthers" column="PRD_OTHERS"/>
+        <result property="prdStatus" column="PRD_STATUS"/>
+        <result property="prdUnit" column="PRD_UNIT"/>
+        <result property="prdPrice" column="PRD_PRICE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="creater" column="CREATER"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <result property="modifier" column="MODIFIER"/>
+        <result property="checker" column="CHECKER"/>
+        <result property="checkTime" column="CHECK_TIME"/>
+        <result property="checkOpin" column="CHECK_OPIN"/>
+        <result property="DataResourceId" column="DATA_RESOURCE_ID"/>
+        <result property="dataResourceName" column="DATA_RESOURCE_NAME"/>
+        <result property="prdDataName" column="FILE_NAME"/>
+        <result property="columnName" column="COLUMN_NAME"/>
+        <result property="columnType" column="COLUMN_TYPE"/>
+        <result property="columnDesc" column="COLUMN_DESC"/>
+    </resultMap>
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="prdIdLike != null"><![CDATA[ AND t.PRD_ID LIKE CONCAT(CONCAT('%', #{prdIdLike}), '%') ]]></if>
+		<if test="prdIdStart != null"><![CDATA[ AND t.PRD_ID LIKE #{prdIdStart} || '%' ]]></if>
+		<if test="prdIdEnd != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdEnd} ]]></if>
+		<if test="prdIdNotIn != null"><![CDATA[ AND t.PRD_ID NOT IN (#{prdIdNotIn}) ]]></if>
+		<if test="prdIdIn != null"><![CDATA[ AND t.PRD_ID IN ]]><foreach item="item" index="index" collection="prdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdName != null"><![CDATA[ AND t.PRD_NAME = #{prdName} ]]></if>
+		<if test="prdNameLike != null"><![CDATA[ AND t.PRD_NAME LIKE CONCAT(CONCAT('%', #{prdNameLike}), '%') ]]></if>
+		<if test="prdNameStart != null"><![CDATA[ AND t.PRD_NAME LIKE #{prdNameStart} || '%' ]]></if>
+		<if test="prdNameEnd != null"><![CDATA[ AND t.PRD_NAME LIKE '%' || #{prdNameEnd} ]]></if>
+		<if test="prdNameIn != null"><![CDATA[ AND t.PRD_NAME IN ]]><foreach item="item" index="index" collection="prdNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdDes != null"><![CDATA[ AND t.PRD_DES = #{prdDes} ]]></if>
+		<if test="prdDesLike != null"><![CDATA[ AND t.PRD_DES LIKE '%' || #{prdDesLike} || '%' ]]></if>
+		<if test="prdDesStart != null"><![CDATA[ AND t.PRD_DES LIKE #{prdDesStart} || '%' ]]></if>
+		<if test="prdDesEnd != null"><![CDATA[ AND t.PRD_DES LIKE '%' || #{prdDesEnd} ]]></if>
+		<if test="prdDesIn != null"><![CDATA[ AND t.PRD_DES IN ]]><foreach item="item" index="index" collection="prdDesIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdDatafile != null"><![CDATA[ AND t.PRD_DATAFILE = #{prdDatafile} ]]></if>
+		<if test="prdDatafileLike != null"><![CDATA[ AND t.PRD_DATAFILE LIKE '%' || #{prdDatafileLike} || '%' ]]></if>
+		<if test="prdDatafileStart != null"><![CDATA[ AND t.PRD_DATAFILE LIKE #{prdDatafileStart} || '%' ]]></if>
+		<if test="prdDatafileEnd != null"><![CDATA[ AND t.PRD_DATAFILE LIKE '%' || #{prdDatafileEnd} ]]></if>
+		<if test="prdDatafileIn != null"><![CDATA[ AND t.PRD_DATAFILE IN ]]><foreach item="item" index="index" collection="prdDatafileIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdOthers != null"><![CDATA[ AND t.PRD_OTHERS = #{prdOthers} ]]></if>
+		<if test="prdOthersLike != null"><![CDATA[ AND t.PRD_OTHERS LIKE '%' || #{prdOthersLike} || '%' ]]></if>
+		<if test="prdOthersStart != null"><![CDATA[ AND t.PRD_OTHERS LIKE #{prdOthersStart} || '%' ]]></if>
+		<if test="prdOthersEnd != null"><![CDATA[ AND t.PRD_OTHERS LIKE '%' || #{prdOthersEnd} ]]></if>
+		<if test="prdOthersIn != null"><![CDATA[ AND t.PRD_OTHERS IN ]]><foreach item="item" index="index" collection="prdOthersIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdStatus != null"><![CDATA[ AND t.PRD_STATUS = #{prdStatus} ]]></if>
+		<if test="prdStatusLike != null"><![CDATA[ AND t.PRD_STATUS LIKE '%' || #{prdStatusLike} || '%' ]]></if>
+		<if test="prdStatusStart != null"><![CDATA[ AND t.PRD_STATUS LIKE #{prdStatusStart} || '%' ]]></if>
+		<if test="prdStatusEnd != null"><![CDATA[ AND t.PRD_STATUS LIKE '%' || #{prdStatusEnd} ]]></if>
+		<if test="prdStatusIn != null"><![CDATA[ AND t.PRD_STATUS IN ]]><foreach item="item" index="index" collection="prdStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdUnit != null"><![CDATA[ AND t.PRD_UNIT = #{prdUnit} ]]></if>
+		<if test="prdUnitLike != null"><![CDATA[ AND t.PRD_UNIT LIKE '%' || #{prdUnitLike} || '%' ]]></if>
+		<if test="prdUnitStart != null"><![CDATA[ AND t.PRD_UNIT LIKE #{prdUnitStart} || '%' ]]></if>
+		<if test="prdUnitEnd != null"><![CDATA[ AND t.PRD_UNIT LIKE '%' || #{prdUnitEnd} ]]></if>
+		<if test="prdUnitIn != null"><![CDATA[ AND t.PRD_UNIT IN ]]><foreach item="item" index="index" collection="prdUnitIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdPrice != null"><![CDATA[ AND t.PRD_PRICE = #{prdPrice} ]]></if>
+		<if test="prdPriceLike != null"><![CDATA[ AND t.PRD_PRICE LIKE '%' || #{prdPriceLike} || '%' ]]></if>
+		<if test="prdPriceStart != null"><![CDATA[ AND t.PRD_PRICE LIKE #{prdPriceStart} || '%' ]]></if>
+		<if test="prdPriceEnd != null"><![CDATA[ AND t.PRD_PRICE LIKE '%' || #{prdPriceEnd} ]]></if>
+		<if test="prdPriceIn != null"><![CDATA[ AND t.PRD_PRICE IN ]]><foreach item="item" index="index" collection="prdPriceIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="checker != null"><![CDATA[ AND t.CHECKER = #{checker} ]]></if>
+		<if test="checkerLike != null"><![CDATA[ AND t.CHECKER LIKE '%' || #{checkerLike} || '%' ]]></if>
+		<if test="checkerStart != null"><![CDATA[ AND t.CHECKER LIKE #{checkerStart} || '%' ]]></if>
+		<if test="checkerEnd != null"><![CDATA[ AND t.CHECKER LIKE '%' || #{checkerEnd} ]]></if>
+		<if test="checkerIn != null"><![CDATA[ AND t.CHECKER IN ]]><foreach item="item" index="index" collection="checkerIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="checkTime != null"><![CDATA[ AND t.CHECK_TIME = #{checkTime} ]]></if>
+		<if test="checkTimeLike != null"><![CDATA[ AND t.CHECK_TIME LIKE '%' || #{checkTimeLike} || '%' ]]></if>
+		<if test="checkTimeStart != null"><![CDATA[ AND t.CHECK_TIME LIKE #{checkTimeStart} || '%' ]]></if>
+		<if test="checkTimeEnd != null"><![CDATA[ AND t.CHECK_TIME LIKE '%' || #{checkTimeEnd} ]]></if>
+		<if test="checkTimeIn != null"><![CDATA[ AND t.CHECK_TIME IN ]]><foreach item="item" index="index" collection="checkTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="checkOpin != null"><![CDATA[ AND t.CHECK_OPIN = #{checkOpin} ]]></if>
+		<if test="checkOpinLike != null"><![CDATA[ AND t.CHECK_OPIN LIKE '%' || #{checkOpinLike} || '%' ]]></if>
+		<if test="checkOpinStart != null"><![CDATA[ AND t.CHECK_OPIN LIKE #{checkOpinStart} || '%' ]]></if>
+		<if test="checkOpinEnd != null"><![CDATA[ AND t.CHECK_OPIN LIKE '%' || #{checkOpinEnd} ]]></if>
+		<if test="checkOpinIn != null"><![CDATA[ AND t.CHECK_OPIN IN ]]><foreach item="item" index="index" collection="checkOpinIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdType != null"><![CDATA[ AND t.PRD_TYPE = #{prdType} ]]></if>
+		<if test="prdTypeLike != null"><![CDATA[ AND t.PRD_TYPE LIKE '%' || #{prdTypeLike} || '%' ]]></if>
+		<if test="prdTypeStart != null"><![CDATA[ AND t.PRD_TYPE LIKE #{prdTypeStart} || '%' ]]></if>
+		<if test="prdTypeEnd != null"><![CDATA[ AND t.PRD_TYPE LIKE '%' || #{prdTypeEnd} ]]></if>
+		<if test="prdTypeIn != null"><![CDATA[ AND t.PRD_TYPE IN ]]><foreach item="item" index="index" collection="prdTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataBaseIp != null"><![CDATA[ AND t.DATA_BASE_IP = #{dataBaseIp} ]]></if>
+		<if test="dataBaseIpLike != null"><![CDATA[ AND t.DATA_BASE_IP LIKE '%' || #{dataBaseIpLike} || '%' ]]></if>
+		<if test="dataBaseIpStart != null"><![CDATA[ AND t.DATA_BASE_IP LIKE #{dataBaseIpStart} || '%' ]]></if>
+		<if test="dataBaseIpEnd != null"><![CDATA[ AND t.DATA_BASE_IP LIKE '%' || #{dataBaseIpEnd} ]]></if>
+		<if test="dataBaseIpIn != null"><![CDATA[ AND t.DATA_BASE_IP IN ]]><foreach item="item" index="index" collection="dataBaseIpIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataBasePort != null"><![CDATA[ AND t.DATA_BASE_PORT = #{dataBasePort} ]]></if>
+		<if test="dataBasePortLike != null"><![CDATA[ AND t.DATA_BASE_PORT LIKE '%' || #{dataBasePortLike} || '%' ]]></if>
+		<if test="dataBasePortStart != null"><![CDATA[ AND t.DATA_BASE_PORT LIKE #{dataBasePortStart} || '%' ]]></if>
+		<if test="dataBasePortEnd != null"><![CDATA[ AND t.DATA_BASE_PORT LIKE '%' || #{dataBasePortEnd} ]]></if>
+		<if test="dataBasePortIn != null"><![CDATA[ AND t.DATA_BASE_PORT IN ]]><foreach item="item" index="index" collection="dataBasePortIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataBaseUserName != null"><![CDATA[ AND t.DATA_BASE_USER_NAME = #{dataBaseUserName} ]]></if>
+		<if test="dataBaseUserNameLike != null"><![CDATA[ AND t.DATA_BASE_USER_NAME LIKE '%' || #{dataBaseUserNameLike} || '%' ]]></if>
+		<if test="dataBaseUserNameStart != null"><![CDATA[ AND t.DATA_BASE_USER_NAME LIKE #{dataBaseUserNameStart} || '%' ]]></if>
+		<if test="dataBaseUserNameEnd != null"><![CDATA[ AND t.DATA_BASE_USER_NAME LIKE '%' || #{dataBaseUserNameEnd} ]]></if>
+		<if test="dataBaseUserNameIn != null"><![CDATA[ AND t.DATA_BASE_USER_NAME IN ]]><foreach item="item" index="index" collection="dataBaseUserNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataBaseUserPwd != null"><![CDATA[ AND t.DATA_BASE_USER_PWD = #{dataBaseUserPwd} ]]></if>
+		<if test="dataBaseUserPwdLike != null"><![CDATA[ AND t.DATA_BASE_USER_PWD LIKE '%' || #{dataBaseUserPwdLike} || '%' ]]></if>
+		<if test="dataBaseUserPwdStart != null"><![CDATA[ AND t.DATA_BASE_USER_PWD LIKE #{dataBaseUserPwdStart} || '%' ]]></if>
+		<if test="dataBaseUserPwdEnd != null"><![CDATA[ AND t.DATA_BASE_USER_PWD LIKE '%' || #{dataBaseUserPwdEnd} ]]></if>
+		<if test="dataBaseUserPwdIn != null"><![CDATA[ AND t.DATA_BASE_USER_PWD IN ]]><foreach item="item" index="index" collection="dataBaseUserPwdIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="prdName != null"><![CDATA[ AND t.PRD_NAME = #{prdName} ]]></if>
+		<if test="prdDes != null"><![CDATA[ AND t.PRD_DES = #{prdDes} ]]></if>
+		<if test="prdDatafile != null"><![CDATA[ AND t.PRD_DATAFILE = #{prdDatafile} ]]></if>
+		<if test="prdOthers != null"><![CDATA[ AND t.PRD_OTHERS = #{prdOthers} ]]></if>
+		<if test="prdStatus != null"><![CDATA[ AND t.PRD_STATUS = #{prdStatus} ]]></if>
+		<if test="prdUnit != null"><![CDATA[ AND t.PRD_UNIT = #{prdUnit} ]]></if>
+		<if test="prdPrice != null"><![CDATA[ AND t.PRD_PRICE = #{prdPrice} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="checker != null"><![CDATA[ AND t.CHECKER = #{checker} ]]></if>
+		<if test="checkTime != null"><![CDATA[ AND t.CHECK_TIME = #{checkTime} ]]></if>
+		<if test="checkOpin != null"><![CDATA[ AND t.CHECK_OPIN = #{checkOpin} ]]></if>
+		<if test="prdType != null"><![CDATA[ AND t.PRD_TYPE = #{prdType} ]]></if>
+		<if test="dataBaseIp != null"><![CDATA[ AND t.DATA_BASE_IP = #{dataBaseIp} ]]></if>
+		<if test="dataBasePort != null"><![CDATA[ AND t.DATA_BASE_PORT = #{dataBasePort} ]]></if>
+		<if test="dataBaseUserName != null"><![CDATA[ AND t.DATA_BASE_USER_NAME = #{dataBaseUserName} ]]></if>
+		<if test="dataBaseUserPwd != null"><![CDATA[ AND t.DATA_BASE_USER_PWD = #{dataBaseUserPwd} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'prdIdAsc'"><![CDATA[ t.PRD_ID asc ]]></if>
+	  			<if test="item == 'prdIdDesc'"><![CDATA[ t.PRD_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'prdNameAsc'"><![CDATA[ t.PRD_NAME asc ]]></if>
+	  			<if test="item == 'prdNameDesc'"><![CDATA[ t.PRD_NAME desc ]]></if>
+	  			<if test="item == 'prdDesAsc'"><![CDATA[ t.PRD_DES asc ]]></if>
+	  			<if test="item == 'prdDesDesc'"><![CDATA[ t.PRD_DES desc ]]></if>
+	  			<if test="item == 'prdDatafileAsc'"><![CDATA[ t.PRD_DATAFILE asc ]]></if>
+	  			<if test="item == 'prdDatafileDesc'"><![CDATA[ t.PRD_DATAFILE desc ]]></if>
+	  			<if test="item == 'prdOthersAsc'"><![CDATA[ t.PRD_OTHERS asc ]]></if>
+	  			<if test="item == 'prdOthersDesc'"><![CDATA[ t.PRD_OTHERS desc ]]></if>
+	  			<if test="item == 'prdStatusAsc'"><![CDATA[ t.PRD_STATUS asc ]]></if>
+	  			<if test="item == 'prdStatusDesc'"><![CDATA[ t.PRD_STATUS desc ]]></if>
+	  			<if test="item == 'prdUnitAsc'"><![CDATA[ t.PRD_UNIT asc ]]></if>
+	  			<if test="item == 'prdUnitDesc'"><![CDATA[ t.PRD_UNIT desc ]]></if>
+	  			<if test="item == 'prdPriceAsc'"><![CDATA[ t.PRD_PRICE asc ]]></if>
+	  			<if test="item == 'prdPriceDesc'"><![CDATA[ t.PRD_PRICE desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+	  			<if test="item == 'checkerAsc'"><![CDATA[ t.CHECKER asc ]]></if>
+	  			<if test="item == 'checkerDesc'"><![CDATA[ t.CHECKER desc ]]></if>
+	  			<if test="item == 'checkTimeAsc'"><![CDATA[ t.CHECK_TIME asc ]]></if>
+	  			<if test="item == 'checkTimeDesc'"><![CDATA[ t.CHECK_TIME desc ]]></if>
+	  			<if test="item == 'checkOpinAsc'"><![CDATA[ t.CHECK_OPIN asc ]]></if>
+	  			<if test="item == 'checkOpinDesc'"><![CDATA[ t.CHECK_OPIN desc ]]></if>
+	  			<if test="item == 'prdTypeAsc'"><![CDATA[ t.PRD_TYPE asc ]]></if>
+	  			<if test="item == 'prdTypeDesc'"><![CDATA[ t.PRD_TYPE desc ]]></if>
+	  			<if test="item == 'dataBaseIpAsc'"><![CDATA[ t.DATA_BASE_IP asc ]]></if>
+	  			<if test="item == 'dataBaseIpDesc'"><![CDATA[ t.DATA_BASE_IP desc ]]></if>
+	  			<if test="item == 'dataBasePortAsc'"><![CDATA[ t.DATA_BASE_PORT asc ]]></if>
+	  			<if test="item == 'dataBasePortDesc'"><![CDATA[ t.DATA_BASE_PORT desc ]]></if>
+	  			<if test="item == 'dataBaseUserNameAsc'"><![CDATA[ t.DATA_BASE_USER_NAME asc ]]></if>
+	  			<if test="item == 'dataBaseUserNameDesc'"><![CDATA[ t.DATA_BASE_USER_NAME desc ]]></if>
+	  			<if test="item == 'dataBaseUserPwdAsc'"><![CDATA[ t.DATA_BASE_USER_PWD asc ]]></if>
+	  			<if test="item == 'dataBaseUserPwdDesc'"><![CDATA[ t.DATA_BASE_USER_PWD desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="prdInfoResultMap">
+		<![CDATA[ SELECT * FROM PRD_INFO t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM PRD_INFO t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="prdInfoResultMap">
+		<![CDATA[ SELECT * FROM PRD_INFO t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_INFO t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="PrdInfo" resultMap="prdInfoResultMap">
+   	<![CDATA[ SELECT * FROM PRD_INFO t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="PrdInfo" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_INFO t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="childPrdInfoResultMap">
+    <![CDATA[ SELECT t.*,(SELECT SUF.FILE_NAME FROM SYS_UPLOAD_FILE SUF WHERE t.PRD_DATAFILE=SUF.FILE_ID ) FILE_NAME 
+    		  FROM PRD_INFO t
+     		  WHERE t.PRD_ID=#{prdId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="PrdInfo">
+				<!-- <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="prdId">  
+		        	SELECT nextval('SEQ_PRD_INFO') AS prdId
+		        </selectKey> -->
+
+		<![CDATA[
+		    INSERT INTO PRD_INFO
+		      (
+		      PRD_ID,
+		      BUSS_ID,
+		      PRD_NAME,
+		      PRD_DES,
+		      PRD_DATAFILE,
+		      PRD_OTHERS,
+		      PRD_STATUS,
+		      PRD_UNIT,
+		      PRD_PRICE,
+		      CREATE_TIME,
+		      CREATER,
+		      MODIFY_TIME,
+		      MODIFIER,
+		      CHECKER,
+		      CHECK_TIME,
+		      CHECK_OPIN,
+		      PRD_TYPE,
+		      DATA_BASE_IP,
+		      DATA_BASE_PORT,
+		      DATA_BASE_USER_NAME,
+		      DATA_BASE_USER_PWD
+		      )
+		    VALUES
+		      (			  
+					#{prdId,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{prdName,jdbcType=VARCHAR}
+				,
+					#{prdDes,jdbcType=VARCHAR}
+				,
+					#{prdDatafile,jdbcType=VARCHAR}
+				,
+					#{prdOthers,jdbcType=VARCHAR}
+				,
+					#{prdStatus,jdbcType=VARCHAR}
+				,
+					#{prdUnit,jdbcType=VARCHAR}
+				,
+					#{prdPrice,jdbcType=DECIMAL}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				,
+					#{checker,jdbcType=VARCHAR}
+				,
+					#{checkTime,jdbcType=TIMESTAMP}
+				,
+					#{checkOpin,jdbcType=VARCHAR}
+				,
+					#{prdType,jdbcType=VARCHAR}
+				,
+					#{dataBaseIp,jdbcType=VARCHAR}
+				,
+					#{dataBasePort,jdbcType=VARCHAR}
+				,
+					#{dataBaseUserName,jdbcType=VARCHAR}
+				,
+					#{dataBaseUserPwd,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="PrdInfo">
+    <![CDATA[ UPDATE PRD_INFO ]]>
+	    <set>
+			<if test="bussId!=null">
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdName!=null">
+    		<![CDATA[ 
+					PRD_NAME = #{prdName,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdDes!=null">
+    		<![CDATA[ 
+					PRD_DES = #{prdDes,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdDatafile!=null">
+    		<![CDATA[ 
+					PRD_DATAFILE = #{prdDatafile,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdOthers!=null">
+    		<![CDATA[ 
+					PRD_OTHERS = #{prdOthers,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdStatus!=null">
+    		<![CDATA[ 
+					PRD_STATUS = #{prdStatus,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdUnit!=null">
+    		<![CDATA[ 
+					PRD_UNIT = #{prdUnit,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="prdPrice!=null">
+    		<![CDATA[ 
+					PRD_PRICE = #{prdPrice,jdbcType=DECIMAL},
+    		]]>
+			</if>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+			<if test="modifyTime != null">
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+			</if>
+			<if test="modifier != null">
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="checker != null">
+    		<![CDATA[ 
+					CHECKER = #{checker,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="checkTime != null">
+    		<![CDATA[ 
+					CHECK_TIME = #{checkTime,jdbcType=TIMESTAMP},
+    		]]>
+			</if>
+			<if test="checkOpin != null">
+    		<![CDATA[ 
+					CHECK_OPIN = #{checkOpin,jdbcType=VARCHAR},
+    		]]>
+    		</if>
+    		<if test="prdType != null">
+    		<![CDATA[ 
+					PRD_TYPE = #{prdType,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="dataBaseIp != null">
+			<![CDATA[ 
+					DATA_BASE_IP = #{dataBaseIp,jdbcType=VARCHAR},
+    		]]>
+    		</if>
+    		<if test="dataBasePort != null">
+    		<![CDATA[ 
+					DATA_BASE_PORT = #{dataBasePort,jdbcType=VARCHAR},
+    		]]>
+    		</if>
+    		<if test="dataBaseUserName != null">
+    		<![CDATA[ 
+					DATA_BASE_USER_NAME = #{dataBaseUserName,jdbcType=VARCHAR},
+    		]]>
+    		</if>
+    		<if test="dataBaseUserPwd != null">
+    		<![CDATA[ 
+					DATA_BASE_USER_PWD = #{dataBaseUserPwd,jdbcType=VARCHAR}
+    		]]>
+    		</if>
+	    </set>  
+			WHERE PRD_ID=#{prdId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="PrdInfo">
+    <![CDATA[ UPDATE PRD_INFO ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="prdName != null"><![CDATA[ PRD_NAME = #{prdName}, ]]></if>
+    		<if test="prdDes != null"><![CDATA[ PRD_DES = #{prdDes}, ]]></if>
+    		<if test="prdDatafile != null"><![CDATA[ PRD_DATAFILE = #{prdDatafile}, ]]></if>
+    		<if test="prdOthers != null"><![CDATA[ PRD_OTHERS = #{prdOthers}, ]]></if>
+    		<if test="prdStatus != null"><![CDATA[ PRD_STATUS = #{prdStatus}, ]]></if>
+    		<if test="prdUnit != null"><![CDATA[ PRD_UNIT = #{prdUnit}, ]]></if>
+    		<if test="prdPrice != null"><![CDATA[ PRD_PRICE = #{prdPrice}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="checker != null"><![CDATA[ CHECKER = #{checker}, ]]></if>
+    		<if test="checkTime != null"><![CDATA[ CHECK_TIME = #{checkTime}, ]]></if>
+    		<if test="checkOpin != null"><![CDATA[ CHECK_OPIN = #{checkOpin}, ]]></if>
+    		<if test="prdType != null"><![CDATA[ PRD_TYPE = #{prdType}, ]]></if>
+    		<if test="dataBaseIp != null"><![CDATA[ DATA_BASE_IP = #{dataBaseIp}, ]]></if>
+    		<if test="dataBasePort != null"><![CDATA[ DATA_BASE_PORT = #{dataBasePort}, ]]></if>
+    		<if test="dataBaseUserName != null"><![CDATA[ DATA_BASE_USER_NAME = #{dataBaseUserName}, ]]></if>
+    		<if test="dataBaseUserPwd != null"><![CDATA[ DATA_BASE_USER_PWD = #{dataBaseUserPwd} ]]></if>
+	    </set>  
+			WHERE PRD_ID=#{prdId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE PRD_INFO ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE PRD_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM PRD_INFO  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="PrdInfo">
+   <![CDATA[ DELETE FROM PRD_INFO WHERE 1=1  ]]>    			
+		<![CDATA[ AND PRD_ID = #{prdId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND PRD_NAME = #{prdName} ]]>
+		<![CDATA[ AND PRD_DES = #{prdDes} ]]>
+		<![CDATA[ AND PRD_DATAFILE = #{prdDatafile} ]]>
+		<![CDATA[ AND PRD_OTHERS = #{prdOthers} ]]>
+		<![CDATA[ AND PRD_STATUS = #{prdStatus} ]]>
+		<![CDATA[ AND PRD_UNIT = #{prdUnit} ]]>
+		<![CDATA[ AND PRD_PRICE = #{prdPrice} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+		<![CDATA[ AND CHECKER = #{checker} ]]>
+		<![CDATA[ AND CHECK_TIME = #{checkTime} ]]>
+		<![CDATA[ AND CHECK_OPIN = #{checkOpin} ]]>
+	    <![CDATA[ AND PRD_TYPE = #{prdType} ]]>
+	    <![CDATA[ AND DATA_BASE_IP = #{dataBaseIp} ]]>
+		<![CDATA[ AND DATA_BASE_PORT = #{dataBasePort} ]]>
+		<![CDATA[ AND DATA_BASE_USER_NAME = #{dataBaseUserName} ]]>
+		<![CDATA[ AND DATA_BASE_USER_PWD = #{dataBaseUserPwd} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM PRD_INFO WHERE 
+		PRD_ID IN (#{prdId})
+		]]>
+	</delete>
+	
+	
+    <!-- (9-1)============================= selectByParamsBuss =================================== -->
+  <select id="selectByParamsBuss" parameterType="map" resultMap="childPrdInfoResultMap">
+		<![CDATA[ SELECT t.*,(SELECT SUF.FILE_NAME FROM SYS_UPLOAD_FILE SUF WHERE t.PRD_DATAFILE=SUF.FILE_ID ) FILE_NAME FROM PRD_INFO t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    <!-- (9-2)============================= selectByParamsBussCount =================================== -->
+  <select id="selectByParamsBussCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_INFO t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+	</select>
+	<!-- =========================================getResouceByPrdId=================================================================== -->
+	<select id="getResouceByPrdId" parameterType="java.lang.String" resultMap="prdDataResourceMap">
+		<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE t WHERE 1=1 AND t.PRD_ID= #{prdId}]]>
+	</select>
+
+	<!-- (1)=====================================================selectPrdByParam=========================================================-->
+    <select id="selectPrdByParam" parameterType="map" resultMap="ordPrdAndDataMap">
+        <![CDATA[ SELECT p.*,d.DATA_RESOURCE_ID,d.DATA_RESOURCE_NAME,s.FILE_NAME FROM PRD_INFO p LEFT JOIN PRD_DATA_RESOURCE d ON p.PRD_ID=d.PRD_ID
+			  LEFT JOIN SYS_UPLOAD_FILE s ON p.PRD_DATAFILE=s.FILE_ID WHERE 1=1 AND d.DATA_RESOURCE_ID IS NOT NULL]]>
+        <if test="prdStatus != null"><![CDATA[AND p.PRD_STATUS =#{prdStatus}]]></if>
+        <if test="prdId != null"><![CDATA[AND p.PRD_ID =#{prdId}]]></if>
+		<if test="bussId != null"><![CDATA[AND p.BUSS_ID =#{bussId}]]></if>
+		<if test="prdName != null"><![CDATA[AND p.PRD_NAME =#{prdName}]]></if>
+        <![CDATA[ORDER BY p.CREATE_TIME DESC ]]>
+    </select>
+
+    <!-- (2)=====================================================selectPrdByParamCount=========================================================-->
+    <select id="selectPrdByParamCount" parameterType="map" resultType="int">
+        <![CDATA[ SELECT COUNT(1) FROM PRD_INFO p LEFT JOIN PRD_DATA_RESOURCE d ON p.PRD_ID=d.PRD_ID
+			  LEFT JOIN SYS_UPLOAD_FILE s ON p.PRD_DATAFILE=s.FILE_ID WHERE 1=1 AND d.DATA_RESOURCE_ID IS NOT NULL]]>
+        <if test="prdStatus != null"><![CDATA[AND p.PRD_STATUS =#{prdStatus}]]></if>
+        <if test="prdId != null"><![CDATA[AND p.PRD_ID =#{prdId}]]></if>
+		<if test="bussId != null"><![CDATA[AND p.BUSS_ID =#{bussId}]]></if>
+		<if test="prdName != null"><![CDATA[AND p.PRD_NAME =#{prdName}]]></if>
+    </select>
+    <!-- (1)=====================================================selectPrdByParams=========================================================-->
+    <select id="selectPrdByParams" parameterType="map" resultMap="ordPrdAndDataMap">
+        <![CDATA[ SELECT p.* FROM PRD_INFO p WHERE 1=1 ]]>
+        <if test="prdStatus != null"><![CDATA[AND p.PRD_STATUS =#{prdStatus}]]></if>
+        <if test="prdId != null"><![CDATA[AND p.PRD_ID =#{prdId}]]></if>
+		<if test="bussId != null"><![CDATA[AND p.BUSS_ID =#{bussId}]]></if>
+		<if test="prdName != null"><![CDATA[AND p.PRD_NAME =#{prdName}]]></if>
+        <![CDATA[ORDER BY p.CREATE_TIME DESC ]]>
+    </select>
+
+    <!-- (2)=====================================================selectPrdByParamsCount=========================================================-->
+    <select id="selectPrdByParamsCount" parameterType="map" resultType="int">
+        <![CDATA[ SELECT COUNT(1) FROM PRD_INFO p WHERE 1=1]]>
+        <if test="prdStatus != null"><![CDATA[AND p.PRD_STATUS =#{prdStatus}]]></if>
+        <if test="prdId != null"><![CDATA[AND p.PRD_ID =#{prdId}]]></if>
+		<if test="bussId != null"><![CDATA[AND p.BUSS_ID =#{bussId}]]></if>
+		<if test="prdName != null"><![CDATA[AND p.PRD_NAME =#{prdName}]]></if>
+    </select>
+    
+</mapper>

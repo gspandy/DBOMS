@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="INF_INDENT">
+	<resultMap type="InfIndent" id="infIndentResultMap">
+		<id property="infId" column="INF_ID"/>   
+		<result property="infName" column="INF_NAME"/>
+		<result property="infFlag" column="INF_FLAG"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="infId != null"><![CDATA[ AND t.INF_ID = #{infId} ]]></if>
+		<if test="infIdLike != null"><![CDATA[ AND t.INF_ID LIKE '%' || #{infIdLike} || '%' ]]></if>
+		<if test="infIdStart != null"><![CDATA[ AND t.INF_ID LIKE #{infIdStart} || '%' ]]></if>
+		<if test="infIdEnd != null"><![CDATA[ AND t.INF_ID LIKE '%' || #{infIdEnd} ]]></if>
+		<if test="infIdIn != null"><![CDATA[ AND t.INF_ID IN ]]><foreach item="item" index="index" collection="infIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="infName != null"><![CDATA[ AND t.INF_NAME = #{infName} ]]></if>
+		<if test="infNameLike != null"><![CDATA[ AND t.INF_NAME LIKE '%' || #{infNameLike} || '%' ]]></if>
+		<if test="infNameStart != null"><![CDATA[ AND t.INF_NAME LIKE #{infNameStart} || '%' ]]></if>
+		<if test="infNameEnd != null"><![CDATA[ AND t.INF_NAME LIKE '%' || #{infNameEnd} ]]></if>
+		<if test="infNameIn != null"><![CDATA[ AND t.INF_NAME IN ]]><foreach item="item" index="index" collection="infNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="infFlag != null"><![CDATA[ AND t.INF_FLAG = #{infFlag} ]]></if>
+		<if test="infFlagLike != null"><![CDATA[ AND t.INF_FLAG LIKE '%' || #{infFlagLike} || '%' ]]></if>
+		<if test="infFlagStart != null"><![CDATA[ AND t.INF_FLAG LIKE #{infFlagStart} || '%' ]]></if>
+		<if test="infFlagEnd != null"><![CDATA[ AND t.INF_FLAG LIKE '%' || #{infFlagEnd} ]]></if>
+		<if test="infFlagIn != null"><![CDATA[ AND t.INF_FLAG IN ]]><foreach item="item" index="index" collection="infFlagIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="infId != null"><![CDATA[ AND t.INF_ID = #{infId} ]]></if>
+		<if test="infName != null"><![CDATA[ AND t.INF_NAME = #{infName} ]]></if>
+		<if test="infFlag != null"><![CDATA[ AND t.INF_FLAG = #{infFlag} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'infIdAsc'"><![CDATA[ t.INF_ID asc ]]></if>
+	  			<if test="item == 'infIdDesc'"><![CDATA[ t.INF_ID desc ]]></if>
+	  			<if test="item == 'infNameAsc'"><![CDATA[ t.INF_NAME asc ]]></if>
+	  			<if test="item == 'infNameDesc'"><![CDATA[ t.INF_NAME desc ]]></if>
+	  			<if test="item == 'infFlagAsc'"><![CDATA[ t.INF_FLAG asc ]]></if>
+	  			<if test="item == 'infFlagDesc'"><![CDATA[ t.INF_FLAG desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="infIndentResultMap">
+		<![CDATA[ SELECT * FROM INF_INDENT t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM INF_INDENT t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="infIndentResultMap">
+		<![CDATA[ SELECT * FROM INF_INDENT t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM INF_INDENT t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="InfIndent" resultMap="infIndentResultMap">
+   	<![CDATA[ SELECT * FROM INF_INDENT t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="InfIndent" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM INF_INDENT t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="infIndentResultMap">
+    <![CDATA[ SELECT * FROM INF_INDENT WHERE  
+				INF_NAME=#{infId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="InfIndent">
+
+		<![CDATA[
+		    INSERT INTO INF_INDENT
+		      (
+		      INF_ID,
+		      INF_NAME,
+		      INF_FLAG
+		      )
+		    VALUES
+		      (			  
+					#{infId,jdbcType=BIGINT}
+				,
+					#{infName,jdbcType=VARCHAR}
+				,
+					#{infFlag,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="InfIndent">
+    <![CDATA[ UPDATE INF_INDENT ]]>
+	    <set>  		
+    		<![CDATA[ 
+					INF_NAME = #{infName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					INF_FLAG = #{infFlag,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE INF_ID=#{infId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="InfIndent">
+    <![CDATA[ UPDATE INF_INDENT ]]>
+	    <set>  		
+    		<if test="infName != null"><![CDATA[ INF_NAME = #{infName}, ]]></if>
+    		<if test="infFlag != null"><![CDATA[ INF_FLAG = #{infFlag} ]]></if>
+	    </set>  
+			WHERE INF_ID=#{infId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE INF_INDENT ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE INF_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM INF_INDENT  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="InfIndent">
+   <![CDATA[ DELETE FROM INF_INDENT WHERE 1=1  ]]>    			
+		<![CDATA[ AND INF_ID = #{infId} ]]>
+		<![CDATA[ AND INF_NAME = #{infName} ]]>
+		<![CDATA[ AND INF_FLAG = #{infFlag} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM INF_INDENT WHERE 
+		INF_ID IN (#{infId})
+		]]>
+	</delete>
+  
+</mapper>

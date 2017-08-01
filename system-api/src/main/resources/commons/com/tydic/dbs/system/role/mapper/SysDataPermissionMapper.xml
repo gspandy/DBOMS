@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_DATA_PERMISSION">
+	
+	<resultMap type="SysDataPermission" id="sysDataPermissionResultMap">
+		<id property="dataPermissionId" column="DATA_PERMISSION_ID"/>   
+		<id property="roleCode" column="ROLE_CODE"/>   
+		<id property="mallCode" column="MALL_CODE"/>   
+		<id property="regionCode" column="REGION_CODE"/> 
+		<result property="remark" column="REMARK"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="roleCode != null"><![CDATA[ AND t.ROLE_CODE = #{roleCode} ]]></if>
+		<if test="roleCodeLike != null"><![CDATA[ AND t.ROLE_CODE LIKE '%' || #{roleCodeLike} || '%' ]]></if>
+		<if test="roleCodeIn != null"><![CDATA[ AND t.ROLE_CODE IN ]]><foreach item="item" index="index" collection="roleCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mallCode != null"><![CDATA[ AND t.MALL_CODE = #{mallCode} ]]></if>
+		<if test="mallCodeLike != null"><![CDATA[ AND t.MALL_CODE LIKE '%' || #{mallCodeLike} || '%' ]]></if>
+		<if test="mallCodeIn != null"><![CDATA[ AND t.MALL_CODE IN ]]><foreach item="item" index="index" collection="mallCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="regionCodeIn != null"><![CDATA[ AND t.REGION_CODE IN ]]><foreach item="item" index="index" collection="regionCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="roleCode != null"><![CDATA[ AND t.ROLE_CODE = #{roleCode} ]]></if>
+		<if test="mallCode != null"><![CDATA[ AND t.MALL_CODE = #{mallCode} ]]></if>
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+  			<if test="item == 'roleCodeAsc'"><![CDATA[ t.ROLE_CODE asc ]]></if>
+  			<if test="item == 'roleCodeDesc'"><![CDATA[ t.ROLE_CODE desc ]]></if>
+  			<if test="item == 'mallCodeAsc'"><![CDATA[ t.MALL_CODE asc ]]></if>
+  			<if test="item == 'mallCodeDesc'"><![CDATA[ t.MALL_CODE desc ]]></if>
+  			<if test="item == 'regionCodeAsc'"><![CDATA[ t.REGION_CODE asc ]]></if>
+  			<if test="item == 'regionCodeDesc'"><![CDATA[ t.REGION_CODE desc ]]></if>
+  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysDataPermissionResultMap">
+		<![CDATA[ SELECT * FROM SYS_DATA_PERMISSION t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_PERMISSION t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  	<select id="selectByParams" parameterType="map" resultMap="sysDataPermissionResultMap">
+		<![CDATA[ SELECT * FROM SYS_DATA_PERMISSION t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+    
+  	<!-- (2-2)============================= selectByParamsCount =================================== -->
+  	<select id="selectByParamsCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_PERMISSION t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysDataPermission" resultMap="sysDataPermissionResultMap">
+   	<![CDATA[ SELECT * FROM SYS_DATA_PERMISSION t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysDataPermission" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_PERMISSION t ]]>
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="map" resultMap="sysDataPermissionResultMap">
+    	<![CDATA[ SELECT * FROM SYS_DATA_PERMISSION WHERE ROLE_CODE=#{roleCode} AND MALL_CODE=#{mallCode} AND REGION_CODE=#{regionCode} ]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysDataPermission">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="dataPermissionId">  
+        	SELECT nextval('SEQ_SYS_DATA_PERMISSION') AS dataPermissionId
+        </selectKey>
+		<![CDATA[
+		    INSERT INTO SYS_DATA_PERMISSION
+		      ( DATA_PERMISSION_ID,ROLE_CODE, MALL_CODE, REGION_CODE, CREATER, CREATE_TIME, MODIFIER, MODIFY_TIME, REMARK )
+		    VALUES
+		      (	#{dataPermissionId,jdbcType=DECIMAL}, #{roleCode,jdbcType=VARCHAR}, #{mallCode,jdbcType=VARCHAR}, #{regionCode,jdbcType=VARCHAR},
+				#{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR} )
+      	]]>
+  	</insert>
+  	
+  	<!-- batch add role and data relation information -->
+  	<insert id="batchInsertDataPermission" parameterType="map">
+		<![CDATA[
+		    INSERT INTO SYS_DATA_PERMISSION
+		      ( DATA_PERMISSION_ID, ROLE_CODE, MALL_CODE, REGION_CODE, CREATER, CREATE_TIME, MODIFIER, MODIFY_TIME, REMARK )
+		]]>
+		<foreach collection="dataPermissionArray" item="item" index="index" separator="union all">
+			<![CDATA[
+			   	SELECT SEQ_SYS_DATA_PERMISSION.nextval,
+					#{item.roleCode,jdbcType=VARCHAR}, #{item.mallCode,jdbcType=VARCHAR}, #{item.regionCode,jdbcType=VARCHAR},
+					#{item.creater,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+					#{item.modifier,jdbcType=VARCHAR}, #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR} 
+			    FROM DUAL 
+			]]>
+		</foreach>
+  	</insert>
+    
+  	<!-- (5-1)============================= updateByVO =================================== -->
+  	<update id="updateByVO" parameterType="SysDataPermission">
+    	<![CDATA[ UPDATE SYS_DATA_PERMISSION ]]>
+	    <set>  	
+    		<![CDATA[ CREATER = #{creater,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}, ]]>
+    		<![CDATA[ MODIFIER = #{modifier,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}, ]]>
+    		<![CDATA[ REMARK = #{remark,jdbcType=VARCHAR} ]]>
+	    </set>  
+			WHERE ROLE_CODE=#{roleCode}
+			AND MALL_CODE=#{mallCode}
+			AND REGION_CODE=#{regionCode}
+  	</update>
+  
+  	<!-- (5-2)============================= updateByVO2 =================================== -->
+  	<update id="updateByVoNotNull" parameterType="SysDataPermission">
+    	<![CDATA[ UPDATE SYS_DATA_PERMISSION ]]>
+	    <set>  
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE ROLE_CODE=#{roleCode}
+			AND MALL_CODE=#{mallCode}
+			AND REGION_CODE=#{regionCode}
+  	</update>
+  
+  	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    	<![CDATA[ DELETE FROM SYS_DATA_PERMISSION  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysDataPermission">
+   		<![CDATA[ DELETE FROM SYS_DATA_PERMISSION WHERE 1=1  ]]>    			
+		<if test="roleCode != null"><![CDATA[ AND ROLE_CODE = #{roleCode} ]]></if>
+		<if test="mallCode != null"><![CDATA[ AND MALL_CODE = #{mallCode} ]]></if>
+		<if test="regionCode != null"><![CDATA[ AND REGION_CODE = #{regionCode} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="map">
+   		<![CDATA[ 
+			DELETE FROM SYS_DATA_PERMISSION WHERE DATA_PERMISSION_ID = #{dataPermission}
+		]]>
+	</delete>
+	
+	<!-- delete dataPermission relation information by roleCode -->
+	<delete id="deleteByRoleCode" parameterType="java.lang.String">
+   		<![CDATA[ DELETE FROM SYS_DATA_PERMISSION WHERE ROLE_CODE = #{roleCode} ]]>
+	</delete>
+	
+</mapper>

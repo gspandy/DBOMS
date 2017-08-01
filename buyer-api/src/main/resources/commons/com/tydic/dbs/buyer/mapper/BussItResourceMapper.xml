@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BUSS_IT_RESOURCE">
+	<resultMap type="BussItResource" id="bussItResourceResultMap">
+		<id property="resoureId" column="RESOURE_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="cupType" column="CUP_TYPE"/>
+		<result property="memorySize" column="MEMORY_SIZE"/>
+		<result property="diskSize" column="DISK_SIZE"/>
+		<result property="ftpSize" column="FTP_SIZE"/>
+		<result property="ftpIp" column="FTP_IP"/>
+		<result property="ftpPort" column="FTP_PORT"/>
+		<result property="ftpUser" column="FTP_USER"/>
+		<result property="ftpPass" column="FTP_PASS"/>
+		<result property="ftpPath" column="FTP_PATH"/>
+		<result property="status" column="STATUS"/>
+		<result property="remark" column="REMARK"/>
+		<result property="appTime" column="APP_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+		<if test="resoureIdLike != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdLike} || '%' ]]></if>
+		<if test="resoureIdStart != null"><![CDATA[ AND t.RESOURE_ID LIKE #{resoureIdStart} || '%' ]]></if>
+		<if test="resoureIdEnd != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdEnd} ]]></if>
+		<if test="resoureIdIn != null"><![CDATA[ AND t.RESOURE_ID IN ]]><foreach item="item" index="index" collection="resoureIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="cupType != null"><![CDATA[ AND t.CUP_TYPE = #{cupType} ]]></if>
+		<if test="cupTypeLike != null"><![CDATA[ AND t.CUP_TYPE LIKE '%' || #{cupTypeLike} || '%' ]]></if>
+		<if test="cupTypeStart != null"><![CDATA[ AND t.CUP_TYPE LIKE #{cupTypeStart} || '%' ]]></if>
+		<if test="cupTypeEnd != null"><![CDATA[ AND t.CUP_TYPE LIKE '%' || #{cupTypeEnd} ]]></if>
+		<if test="cupTypeIn != null"><![CDATA[ AND t.CUP_TYPE IN ]]><foreach item="item" index="index" collection="cupTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="memorySize != null"><![CDATA[ AND t.MEMORY_SIZE = #{memorySize} ]]></if>
+		<if test="memorySizeLike != null"><![CDATA[ AND t.MEMORY_SIZE LIKE '%' || #{memorySizeLike} || '%' ]]></if>
+		<if test="memorySizeStart != null"><![CDATA[ AND t.MEMORY_SIZE LIKE #{memorySizeStart} || '%' ]]></if>
+		<if test="memorySizeEnd != null"><![CDATA[ AND t.MEMORY_SIZE LIKE '%' || #{memorySizeEnd} ]]></if>
+		<if test="memorySizeIn != null"><![CDATA[ AND t.MEMORY_SIZE IN ]]><foreach item="item" index="index" collection="memorySizeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="diskSize != null"><![CDATA[ AND t.DISK_SIZE = #{diskSize} ]]></if>
+		<if test="diskSizeLike != null"><![CDATA[ AND t.DISK_SIZE LIKE '%' || #{diskSizeLike} || '%' ]]></if>
+		<if test="diskSizeStart != null"><![CDATA[ AND t.DISK_SIZE LIKE #{diskSizeStart} || '%' ]]></if>
+		<if test="diskSizeEnd != null"><![CDATA[ AND t.DISK_SIZE LIKE '%' || #{diskSizeEnd} ]]></if>
+		<if test="diskSizeIn != null"><![CDATA[ AND t.DISK_SIZE IN ]]><foreach item="item" index="index" collection="diskSizeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpSize != null"><![CDATA[ AND t.FTP_SIZE = #{ftpSize} ]]></if>
+		<if test="ftpSizeLike != null"><![CDATA[ AND t.FTP_SIZE LIKE '%' || #{ftpSizeLike} || '%' ]]></if>
+		<if test="ftpSizeStart != null"><![CDATA[ AND t.FTP_SIZE LIKE #{ftpSizeStart} || '%' ]]></if>
+		<if test="ftpSizeEnd != null"><![CDATA[ AND t.FTP_SIZE LIKE '%' || #{ftpSizeEnd} ]]></if>
+		<if test="ftpSizeIn != null"><![CDATA[ AND t.FTP_SIZE IN ]]><foreach item="item" index="index" collection="ftpSizeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpIp != null"><![CDATA[ AND t.FTP_IP = #{ftpIp} ]]></if>
+		<if test="ftpIpLike != null"><![CDATA[ AND t.FTP_IP LIKE '%' || #{ftpIpLike} || '%' ]]></if>
+		<if test="ftpIpStart != null"><![CDATA[ AND t.FTP_IP LIKE #{ftpIpStart} || '%' ]]></if>
+		<if test="ftpIpEnd != null"><![CDATA[ AND t.FTP_IP LIKE '%' || #{ftpIpEnd} ]]></if>
+		<if test="ftpIpIn != null"><![CDATA[ AND t.FTP_IP IN ]]><foreach item="item" index="index" collection="ftpIpIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpPort != null"><![CDATA[ AND t.FTP_PORT = #{ftpPort} ]]></if>
+		<if test="ftpPortLike != null"><![CDATA[ AND t.FTP_PORT LIKE '%' || #{ftpPortLike} || '%' ]]></if>
+		<if test="ftpPortStart != null"><![CDATA[ AND t.FTP_PORT LIKE #{ftpPortStart} || '%' ]]></if>
+		<if test="ftpPortEnd != null"><![CDATA[ AND t.FTP_PORT LIKE '%' || #{ftpPortEnd} ]]></if>
+		<if test="ftpPortIn != null"><![CDATA[ AND t.FTP_PORT IN ]]><foreach item="item" index="index" collection="ftpPortIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpUser != null"><![CDATA[ AND t.FTP_USER = #{ftpUser} ]]></if>
+		<if test="ftpUserLike != null"><![CDATA[ AND t.FTP_USER LIKE '%' || #{ftpUserLike} || '%' ]]></if>
+		<if test="ftpUserStart != null"><![CDATA[ AND t.FTP_USER LIKE #{ftpUserStart} || '%' ]]></if>
+		<if test="ftpUserEnd != null"><![CDATA[ AND t.FTP_USER LIKE '%' || #{ftpUserEnd} ]]></if>
+		<if test="ftpUserIn != null"><![CDATA[ AND t.FTP_USER IN ]]><foreach item="item" index="index" collection="ftpUserIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpPass != null"><![CDATA[ AND t.FTP_PASS = #{ftpPass} ]]></if>
+		<if test="ftpPassLike != null"><![CDATA[ AND t.FTP_PASS LIKE '%' || #{ftpPassLike} || '%' ]]></if>
+		<if test="ftpPassStart != null"><![CDATA[ AND t.FTP_PASS LIKE #{ftpPassStart} || '%' ]]></if>
+		<if test="ftpPassEnd != null"><![CDATA[ AND t.FTP_PASS LIKE '%' || #{ftpPassEnd} ]]></if>
+		<if test="ftpPassIn != null"><![CDATA[ AND t.FTP_PASS IN ]]><foreach item="item" index="index" collection="ftpPassIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ftpPath != null"><![CDATA[ AND t.FTP_PATH = #{ftpPath} ]]></if>
+		<if test="ftpPathLike != null"><![CDATA[ AND t.FTP_PATH LIKE '%' || #{ftpPathLike} || '%' ]]></if>
+		<if test="ftpPathStart != null"><![CDATA[ AND t.FTP_PATH LIKE #{ftpPathStart} || '%' ]]></if>
+		<if test="ftpPathEnd != null"><![CDATA[ AND t.FTP_PATH LIKE '%' || #{ftpPathEnd} ]]></if>
+		<if test="ftpPathIn != null"><![CDATA[ AND t.FTP_PATH IN ]]><foreach item="item" index="index" collection="ftpPathIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appTime != null"><![CDATA[ AND t.APP_TIME = #{appTime} ]]></if>
+		<if test="appTimeLike != null"><![CDATA[ AND t.APP_TIME LIKE '%' || #{appTimeLike} || '%' ]]></if>
+		<if test="appTimeStart != null"><![CDATA[ AND t.APP_TIME LIKE #{appTimeStart} || '%' ]]></if>
+		<if test="appTimeEnd != null"><![CDATA[ AND t.APP_TIME LIKE '%' || #{appTimeEnd} ]]></if>
+		<if test="appTimeIn != null"><![CDATA[ AND t.APP_TIME IN ]]><foreach item="item" index="index" collection="appTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="cupType != null"><![CDATA[ AND t.CUP_TYPE = #{cupType} ]]></if>
+		<if test="memorySize != null"><![CDATA[ AND t.MEMORY_SIZE = #{memorySize} ]]></if>
+		<if test="diskSize != null"><![CDATA[ AND t.DISK_SIZE = #{diskSize} ]]></if>
+		<if test="ftpSize != null"><![CDATA[ AND t.FTP_SIZE = #{ftpSize} ]]></if>
+		<if test="ftpIp != null"><![CDATA[ AND t.FTP_IP = #{ftpIp} ]]></if>
+		<if test="ftpPort != null"><![CDATA[ AND t.FTP_PORT = #{ftpPort} ]]></if>
+		<if test="ftpUser != null"><![CDATA[ AND t.FTP_USER = #{ftpUser} ]]></if>
+		<if test="ftpPass != null"><![CDATA[ AND t.FTP_PASS = #{ftpPass} ]]></if>
+		<if test="ftpPath != null"><![CDATA[ AND t.FTP_PATH = #{ftpPath} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="appTime != null"><![CDATA[ AND t.APP_TIME = #{appTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'resoureIdAsc'"><![CDATA[ t.RESOURE_ID asc ]]></if>
+	  			<if test="item == 'resoureIdDesc'"><![CDATA[ t.RESOURE_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'cupTypeAsc'"><![CDATA[ t.CUP_TYPE asc ]]></if>
+	  			<if test="item == 'cupTypeDesc'"><![CDATA[ t.CUP_TYPE desc ]]></if>
+	  			<if test="item == 'memorySizeAsc'"><![CDATA[ t.MEMORY_SIZE asc ]]></if>
+	  			<if test="item == 'memorySizeDesc'"><![CDATA[ t.MEMORY_SIZE desc ]]></if>
+	  			<if test="item == 'diskSizeAsc'"><![CDATA[ t.DISK_SIZE asc ]]></if>
+	  			<if test="item == 'diskSizeDesc'"><![CDATA[ t.DISK_SIZE desc ]]></if>
+	  			<if test="item == 'ftpSizeAsc'"><![CDATA[ t.FTP_SIZE asc ]]></if>
+	  			<if test="item == 'ftpSizeDesc'"><![CDATA[ t.FTP_SIZE desc ]]></if>
+	  			<if test="item == 'ftpIpAsc'"><![CDATA[ t.FTP_IP asc ]]></if>
+	  			<if test="item == 'ftpIpDesc'"><![CDATA[ t.FTP_IP desc ]]></if>
+	  			<if test="item == 'ftpPortAsc'"><![CDATA[ t.FTP_PORT asc ]]></if>
+	  			<if test="item == 'ftpPortDesc'"><![CDATA[ t.FTP_PORT desc ]]></if>
+	  			<if test="item == 'ftpUserAsc'"><![CDATA[ t.FTP_USER asc ]]></if>
+	  			<if test="item == 'ftpUserDesc'"><![CDATA[ t.FTP_USER desc ]]></if>
+	  			<if test="item == 'ftpPassAsc'"><![CDATA[ t.FTP_PASS asc ]]></if>
+	  			<if test="item == 'ftpPassDesc'"><![CDATA[ t.FTP_PASS desc ]]></if>
+	  			<if test="item == 'ftpPathAsc'"><![CDATA[ t.FTP_PATH asc ]]></if>
+	  			<if test="item == 'ftpPathDesc'"><![CDATA[ t.FTP_PATH desc ]]></if>
+	  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+	  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+	  			<if test="item == 'appTimeAsc'"><![CDATA[ t.APP_TIME asc ]]></if>
+	  			<if test="item == 'appTimeDesc'"><![CDATA[ t.APP_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="bussItResourceResultMap">
+		<![CDATA[ SELECT * FROM BUSS_IT_RESOURCE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BUSS_IT_RESOURCE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="bussItResourceResultMap">
+		<![CDATA[ SELECT * FROM BUSS_IT_RESOURCE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_IT_RESOURCE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BussItResource" resultMap="bussItResourceResultMap">
+   	<![CDATA[ SELECT * FROM BUSS_IT_RESOURCE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BussItResource" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_IT_RESOURCE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="bussItResourceResultMap">
+    <![CDATA[ SELECT * FROM BUSS_IT_RESOURCE WHERE  
+				RESOURE_ID=#{resoureId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BussItResource" useGeneratedKeys="true" keyProperty="id">
+
+		<![CDATA[
+		    INSERT INTO BUSS_IT_RESOURCE
+		      (
+		      BUSS_ID,
+		      CUP_TYPE,
+		      MEMORY_SIZE,
+		      DISK_SIZE,
+		      FTP_SIZE,
+		      FTP_IP,
+		      FTP_PORT,
+		      FTP_USER,
+		      FTP_PASS,
+		      FTP_PATH,
+		      STATUS,
+		      REMARK,
+		      APP_TIME,
+		      CREATER,
+		      MODIFY_TIME,
+		      MODIFIER
+		      )
+		    VALUES
+		      (
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{cupType,jdbcType=VARCHAR}
+				,
+					#{memorySize,jdbcType=DECIMAL}
+				,
+					#{diskSize,jdbcType=DECIMAL}
+				,
+					#{ftpSize,jdbcType=DECIMAL}
+				,
+					#{ftpIp,jdbcType=VARCHAR}
+				,
+					#{ftpPort,jdbcType=DECIMAL}
+				,
+					#{ftpUser,jdbcType=VARCHAR}
+				,
+					#{ftpPass,jdbcType=VARCHAR}
+				,
+					#{ftpPath,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=VARCHAR}
+				,
+					#{remark,jdbcType=VARCHAR}
+				,
+					#{appTime,jdbcType=TIMESTAMP}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BussItResource">
+    <![CDATA[ UPDATE BUSS_IT_RESOURCE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CUP_TYPE = #{cupType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					MEMORY_SIZE = #{memorySize,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					DISK_SIZE = #{diskSize,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					FTP_SIZE = #{ftpSize,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					FTP_IP = #{ftpIp,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FTP_PORT = #{ftpPort,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					FTP_USER = #{ftpUser,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FTP_PASS = #{ftpPass,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FTP_PATH = #{ftpPath,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STATUS = #{status,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_TIME = #{appTime,jdbcType=TIMESTAMP},
+    		]]>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE RESOURE_ID=#{resoureId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="BussItResource">
+    <![CDATA[ UPDATE BUSS_IT_RESOURCE ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="cupType != null"><![CDATA[ CUP_TYPE = #{cupType}, ]]></if>
+    		<if test="memorySize != null"><![CDATA[ MEMORY_SIZE = #{memorySize}, ]]></if>
+    		<if test="diskSize != null"><![CDATA[ DISK_SIZE = #{diskSize}, ]]></if>
+    		<if test="ftpSize != null"><![CDATA[ FTP_SIZE = #{ftpSize}, ]]></if>
+    		<if test="ftpIp != null"><![CDATA[ FTP_IP = #{ftpIp}, ]]></if>
+    		<if test="ftpPort != null"><![CDATA[ FTP_PORT = #{ftpPort}, ]]></if>
+    		<if test="ftpUser != null"><![CDATA[ FTP_USER = #{ftpUser}, ]]></if>
+    		<if test="ftpPass != null"><![CDATA[ FTP_PASS = #{ftpPass}, ]]></if>
+    		<if test="ftpPath != null"><![CDATA[ FTP_PATH = #{ftpPath}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark}, ]]></if>
+    		<if test="appTime != null"><![CDATA[ APP_TIME = #{appTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier} ]]></if>
+	    </set>  
+			WHERE RESOURE_ID=#{resoureId}
+  </update>
+
+	<update id="modifyFtpInfoByBussId" parameterType="BussItResource">
+		<![CDATA[ UPDATE BUSS_IT_RESOURCE ]]>
+		<set>
+
+			<if test="ftpIp != null"><![CDATA[ FTP_IP = #{ftpIp}, ]]></if>
+			<if test="ftpPort != null"><![CDATA[ FTP_PORT = #{ftpPort}, ]]></if>
+			<if test="ftpUser != null"><![CDATA[ FTP_USER = #{ftpUser}, ]]></if>
+			<if test="ftpPass != null"><![CDATA[ FTP_PASS = #{ftpPass}, ]]></if>
+			<if test="ftpPath != null"><![CDATA[ FTP_PATH = #{ftpPath}, ]]></if>
+			<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+			<if test="appTime != null"><![CDATA[ APP_TIME = #{appTime}, ]]></if>
+		</set>
+		WHERE BUSS_ID=#{bussId}
+	</update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE BUSS_IT_RESOURCE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE RESOURE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BUSS_IT_RESOURCE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BussItResource">
+   <![CDATA[ DELETE FROM BUSS_IT_RESOURCE WHERE 1=1  ]]>    			
+		<![CDATA[ AND RESOURE_ID = #{resoureId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND CUP_TYPE = #{cupType} ]]>
+		<![CDATA[ AND MEMORY_SIZE = #{memorySize} ]]>
+		<![CDATA[ AND DISK_SIZE = #{diskSize} ]]>
+		<![CDATA[ AND FTP_SIZE = #{ftpSize} ]]>
+		<![CDATA[ AND FTP_IP = #{ftpIp} ]]>
+		<![CDATA[ AND FTP_PORT = #{ftpPort} ]]>
+		<![CDATA[ AND FTP_USER = #{ftpUser} ]]>
+		<![CDATA[ AND FTP_PASS = #{ftpPass} ]]>
+		<![CDATA[ AND FTP_PATH = #{ftpPath} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+		<![CDATA[ AND APP_TIME = #{appTime} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BUSS_IT_RESOURCE WHERE 
+		RESOURE_ID IN (#{resoureId})
+		]]>
+	</delete>
+	<!-- ===================================selectByBussId=========================================== -->
+	<select id="selectByBussId" parameterType="java.lang.String" resultMap="bussItResourceResultMap">
+		<![CDATA[ SELECT * FROM BUSS_IT_RESOURCE t WHERE
+				t.BUSS_ID=#{bussId}
+		]]>
+	</select>
+</mapper>

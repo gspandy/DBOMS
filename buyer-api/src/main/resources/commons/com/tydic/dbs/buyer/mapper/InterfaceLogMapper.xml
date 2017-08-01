@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="INTERFACE_LOG">
+	<resultMap type="InterfaceLog" id="interfaceLogResultMap">
+		<id property="logId" column="LOG_ID"/>   
+		<result property="serialNum" column="SERIAL_NUM"/>
+		<result property="busiType" column="BUSI_TYPE"/>
+		<result property="paramIn" column="PARAM_IN"/>
+		<result property="resultContent" column="RESULT_CONTENT"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	<sql id="conditionByParams">  
+		<if test="logId != null"><![CDATA[ AND t.LOG_ID = #{logId} ]]></if>
+		<if test="logIdLike != null"><![CDATA[ AND t.LOG_ID LIKE '%' || #{logIdLike} || '%' ]]></if>
+		<if test="logIdStart != null"><![CDATA[ AND t.LOG_ID LIKE #{logIdStart} || '%' ]]></if>
+		<if test="logIdEnd != null"><![CDATA[ AND t.LOG_ID LIKE '%' || #{logIdEnd} ]]></if>
+		<if test="logIdIn != null"><![CDATA[ AND t.LOG_ID IN ]]><foreach item="item" index="index" collection="logIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="serialNumLike != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumLike} || '%' ]]></if>
+		<if test="serialNumStart != null"><![CDATA[ AND t.SERIAL_NUM LIKE #{serialNumStart} || '%' ]]></if>
+		<if test="serialNumEnd != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumEnd} ]]></if>
+		<if test="serialNumIn != null"><![CDATA[ AND t.SERIAL_NUM IN ]]><foreach item="item" index="index" collection="serialNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="busiType != null"><![CDATA[ AND t.BUSI_TYPE = #{busiType} ]]></if>
+		<if test="busiTypeLike != null"><![CDATA[ AND t.BUSI_TYPE LIKE '%' || #{busiTypeLike} || '%' ]]></if>
+		<if test="busiTypeStart != null"><![CDATA[ AND t.BUSI_TYPE LIKE #{busiTypeStart} || '%' ]]></if>
+		<if test="busiTypeEnd != null"><![CDATA[ AND t.BUSI_TYPE LIKE '%' || #{busiTypeEnd} ]]></if>
+		<if test="busiTypeIn != null"><![CDATA[ AND t.BUSI_TYPE IN ]]><foreach item="item" index="index" collection="busiTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="paramIn != null"><![CDATA[ AND t.PARAM_IN = #{paramIn} ]]></if>
+		<if test="paramInLike != null"><![CDATA[ AND t.PARAM_IN LIKE '%' || #{paramInLike} || '%' ]]></if>
+		<if test="paramInStart != null"><![CDATA[ AND t.PARAM_IN LIKE #{paramInStart} || '%' ]]></if>
+		<if test="paramInEnd != null"><![CDATA[ AND t.PARAM_IN LIKE '%' || #{paramInEnd} ]]></if>
+		<if test="paramInIn != null"><![CDATA[ AND t.PARAM_IN IN ]]><foreach item="item" index="index" collection="paramInIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="resultContent != null"><![CDATA[ AND t.RESULT_CONTENT = #{resultContent} ]]></if>
+		<if test="resultContentLike != null"><![CDATA[ AND t.RESULT_CONTENT LIKE '%' || #{resultContentLike} || '%' ]]></if>
+		<if test="resultContentStart != null"><![CDATA[ AND t.RESULT_CONTENT LIKE #{resultContentStart} || '%' ]]></if>
+		<if test="resultContentEnd != null"><![CDATA[ AND t.RESULT_CONTENT LIKE '%' || #{resultContentEnd} ]]></if>
+		<if test="resultContentIn != null"><![CDATA[ AND t.RESULT_CONTENT IN ]]><foreach item="item" index="index" collection="resultContentIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="logId != null"><![CDATA[ AND t.LOG_ID = #{logId} ]]></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="busiType != null"><![CDATA[ AND t.BUSI_TYPE = #{busiType} ]]></if>
+		<if test="paramIn != null"><![CDATA[ AND t.PARAM_IN = #{paramIn} ]]></if>
+		<if test="resultContent != null"><![CDATA[ AND t.RESULT_CONTENT = #{resultContent} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'logIdAsc'"><![CDATA[ t.LOG_ID asc ]]></if>
+	  			<if test="item == 'logIdDesc'"><![CDATA[ t.LOG_ID desc ]]></if>
+	  			<if test="item == 'serialNumAsc'"><![CDATA[ t.SERIAL_NUM asc ]]></if>
+	  			<if test="item == 'serialNumDesc'"><![CDATA[ t.SERIAL_NUM desc ]]></if>
+	  			<if test="item == 'busiTypeAsc'"><![CDATA[ t.BUSI_TYPE asc ]]></if>
+	  			<if test="item == 'busiTypeDesc'"><![CDATA[ t.BUSI_TYPE desc ]]></if>
+	  			<if test="item == 'paramInAsc'"><![CDATA[ t.PARAM_IN asc ]]></if>
+	  			<if test="item == 'paramInDesc'"><![CDATA[ t.PARAM_IN desc ]]></if>
+	  			<if test="item == 'resultContentAsc'"><![CDATA[ t.RESULT_CONTENT asc ]]></if>
+	  			<if test="item == 'resultContentDesc'"><![CDATA[ t.RESULT_CONTENT desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="interfaceLogResultMap">
+		<![CDATA[ SELECT * FROM INTERFACE_LOG t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM INTERFACE_LOG t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="interfaceLogResultMap">
+		<![CDATA[ SELECT * FROM INTERFACE_LOG t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM INTERFACE_LOG t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="InterfaceLog" resultMap="interfaceLogResultMap">
+   	<![CDATA[ SELECT * FROM INTERFACE_LOG t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="InterfaceLog" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM INTERFACE_LOG t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="interfaceLogResultMap">
+    <![CDATA[ SELECT * FROM INTERFACE_LOG WHERE  
+				LOG_ID=#{logId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="InterfaceLog" useGeneratedKeys="true" keyProperty="logId" >
+
+
+		<![CDATA[
+		    INSERT INTO INTERFACE_LOG
+		      (
+		      SERIAL_NUM,
+		      BUSI_TYPE,
+		      PARAM_IN,
+		      RESULT_CONTENT,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (
+					#{serialNum,jdbcType=VARCHAR}
+				,
+					#{busiType,jdbcType=VARCHAR}
+				,
+					#{paramIn,jdbcType=LONGVARCHAR}
+				,
+					#{resultContent,jdbcType=LONGVARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="InterfaceLog">
+    <![CDATA[ UPDATE INTERFACE_LOG ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SERIAL_NUM = #{serialNum,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSI_TYPE = #{busiType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					PARAM_IN = #{paramIn,jdbcType=LONGVARCHAR},
+    		]]>
+    		<![CDATA[ 
+					RESULT_CONTENT = #{resultContent,jdbcType=LONGVARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE LOG_ID=#{logId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="InterfaceLog">
+    <![CDATA[ UPDATE INTERFACE_LOG ]]>
+	    <set>  		
+    		<if test="serialNum != null"><![CDATA[ SERIAL_NUM = #{serialNum}, ]]></if>
+    		<if test="busiType != null"><![CDATA[ BUSI_TYPE = #{busiType}, ]]></if>
+    		<if test="paramIn != null"><![CDATA[ PARAM_IN = #{paramIn}, ]]></if>
+    		<if test="resultContent != null"><![CDATA[ RESULT_CONTENT = #{resultContent}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE LOG_ID=#{logId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE INTERFACE_LOG ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE LOG_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM INTERFACE_LOG  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="InterfaceLog">
+   <![CDATA[ DELETE FROM INTERFACE_LOG WHERE 1=1  ]]>    			
+		<![CDATA[ AND LOG_ID = #{logId} ]]>
+		<![CDATA[ AND SERIAL_NUM = #{serialNum} ]]>
+		<![CDATA[ AND BUSI_TYPE = #{busiType} ]]>
+		<![CDATA[ AND PARAM_IN = #{paramIn} ]]>
+		<![CDATA[ AND RESULT_CONTENT = #{resultContent} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM INTERFACE_LOG WHERE 
+		LOG_ID IN (#{logId})
+		]]>
+	</delete>
+  
+</mapper>

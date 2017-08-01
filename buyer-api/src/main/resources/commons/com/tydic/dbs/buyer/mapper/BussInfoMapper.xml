@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BUSS_INFO">
+	<resultMap type="BussInfo" id="bussInfoResultMap">
+		<id property="bussId" column="BUSS_ID"/>   
+		<result property="bussAccount" column="BUSS_ACCOUNT"/>
+		<result property="bussPasswd" column="BUSS_PASSWD"/>
+		<result property="bussType" column="BUSS_TYPE"/>
+		<result property="bussName" column="BUSS_NAME"/>
+		<result property="bussSex" column="BUSS_SEX"/>
+		<result property="bussCredNo" column="BUSS_CRED_NO"/>
+		<result property="bussMobileNo" column="BUSS_MOBILE_NO"/>
+		<result property="bussTeleNo" column="BUSS_TELE_NO"/>
+		<result property="orgName" column="ORG_NAME"/>
+		<result property="orgAddress" column="ORG_ADDRESS"/>
+		<result property="bussinessNum" column="BUSSINESS_NUM"/>
+		<result property="bussEmail" column="BUSS_EMAIL"/>
+		<result property="bussAddress" column="BUSS_ADDRESS"/>
+		<result property="fileId" column="FILE_ID"/>
+		<result property="bussStatus" column="BUSS_STATUS"/>
+		<result property="configureStatus" column="CONFIGURE_STATUS"/>
+		<result property="suggestion" column="SUGGESTION"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="remark" column="REMARK"/>
+		<result property="bussDataType" column="BUSS_DATA_TYPE"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussAccount != null"><![CDATA[ AND t.BUSS_ACCOUNT = #{bussAccount} ]]></if>
+		<if test="bussAccountLike != null"><![CDATA[ AND t.BUSS_ACCOUNT LIKE '%' || #{bussAccountLike} || '%' ]]></if>
+		<if test="bussAccountStart != null"><![CDATA[ AND t.BUSS_ACCOUNT LIKE #{bussAccountStart} || '%' ]]></if>
+		<if test="bussAccountEnd != null"><![CDATA[ AND t.BUSS_ACCOUNT LIKE '%' || #{bussAccountEnd} ]]></if>
+		<if test="bussAccountIn != null"><![CDATA[ AND t.BUSS_ACCOUNT IN ]]><foreach item="item" index="index" collection="bussAccountIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussPasswd != null"><![CDATA[ AND t.BUSS_PASSWD = #{bussPasswd} ]]></if>
+		<if test="bussPasswdLike != null"><![CDATA[ AND t.BUSS_PASSWD LIKE '%' || #{bussPasswdLike} || '%' ]]></if>
+		<if test="bussPasswdStart != null"><![CDATA[ AND t.BUSS_PASSWD LIKE #{bussPasswdStart} || '%' ]]></if>
+		<if test="bussPasswdEnd != null"><![CDATA[ AND t.BUSS_PASSWD LIKE '%' || #{bussPasswdEnd} ]]></if>
+		<if test="bussPasswdIn != null"><![CDATA[ AND t.BUSS_PASSWD IN ]]><foreach item="item" index="index" collection="bussPasswdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussType != null"><![CDATA[ AND t.BUSS_TYPE = #{bussType} ]]></if>
+		<if test="bussTypeLike != null"><![CDATA[ AND t.BUSS_TYPE LIKE '%' || #{bussTypeLike} || '%' ]]></if>
+		<if test="bussTypeStart != null"><![CDATA[ AND t.BUSS_TYPE LIKE #{bussTypeStart} || '%' ]]></if>
+		<if test="bussTypeEnd != null"><![CDATA[ AND t.BUSS_TYPE LIKE '%' || #{bussTypeEnd} ]]></if>
+		<if test="bussTypeIn != null"><![CDATA[ AND t.BUSS_TYPE IN ]]><foreach item="item" index="index" collection="bussTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussName != null"><![CDATA[ AND t.BUSS_NAME = #{bussName} ]]></if>
+		<if test="bussNameLike != null"><![CDATA[ AND t.BUSS_NAME LIKE '%' || #{bussNameLike} || '%' ]]></if>
+		<if test="bussNameStart != null"><![CDATA[ AND t.BUSS_NAME LIKE #{bussNameStart} || '%' ]]></if>
+		<if test="bussNameEnd != null"><![CDATA[ AND t.BUSS_NAME LIKE '%' || #{bussNameEnd} ]]></if>
+		<if test="bussNameIn != null"><![CDATA[ AND t.BUSS_NAME IN ]]><foreach item="item" index="index" collection="bussNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussSex != null"><![CDATA[ AND t.BUSS_SEX = #{bussSex} ]]></if>
+		<if test="bussSexLike != null"><![CDATA[ AND t.BUSS_SEX LIKE '%' || #{bussSexLike} || '%' ]]></if>
+		<if test="bussSexStart != null"><![CDATA[ AND t.BUSS_SEX LIKE #{bussSexStart} || '%' ]]></if>
+		<if test="bussSexEnd != null"><![CDATA[ AND t.BUSS_SEX LIKE '%' || #{bussSexEnd} ]]></if>
+		<if test="bussSexIn != null"><![CDATA[ AND t.BUSS_SEX IN ]]><foreach item="item" index="index" collection="bussSexIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussCredNo != null"><![CDATA[ AND t.BUSS_CRED_NO = #{bussCredNo} ]]></if>
+		<if test="bussCredNoLike != null"><![CDATA[ AND t.BUSS_CRED_NO LIKE '%' || #{bussCredNoLike} || '%' ]]></if>
+		<if test="bussCredNoStart != null"><![CDATA[ AND t.BUSS_CRED_NO LIKE #{bussCredNoStart} || '%' ]]></if>
+		<if test="bussCredNoEnd != null"><![CDATA[ AND t.BUSS_CRED_NO LIKE '%' || #{bussCredNoEnd} ]]></if>
+		<if test="bussCredNoIn != null"><![CDATA[ AND t.BUSS_CRED_NO IN ]]><foreach item="item" index="index" collection="bussCredNoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussMobileNo != null"><![CDATA[ AND t.BUSS_MOBILE_NO = #{bussMobileNo} ]]></if>
+		<if test="bussMobileNoLike != null"><![CDATA[ AND t.BUSS_MOBILE_NO LIKE '%' || #{bussMobileNoLike} || '%' ]]></if>
+		<if test="bussMobileNoStart != null"><![CDATA[ AND t.BUSS_MOBILE_NO LIKE #{bussMobileNoStart} || '%' ]]></if>
+		<if test="bussMobileNoEnd != null"><![CDATA[ AND t.BUSS_MOBILE_NO LIKE '%' || #{bussMobileNoEnd} ]]></if>
+		<if test="bussMobileNoIn != null"><![CDATA[ AND t.BUSS_MOBILE_NO IN ]]><foreach item="item" index="index" collection="bussMobileNoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussTeleNo != null"><![CDATA[ AND t.BUSS_TELE_NO = #{bussTeleNo} ]]></if>
+		<if test="bussTeleNoLike != null"><![CDATA[ AND t.BUSS_TELE_NO LIKE '%' || #{bussTeleNoLike} || '%' ]]></if>
+		<if test="bussTeleNoStart != null"><![CDATA[ AND t.BUSS_TELE_NO LIKE #{bussTeleNoStart} || '%' ]]></if>
+		<if test="bussTeleNoEnd != null"><![CDATA[ AND t.BUSS_TELE_NO LIKE '%' || #{bussTeleNoEnd} ]]></if>
+		<if test="bussTeleNoIn != null"><![CDATA[ AND t.BUSS_TELE_NO IN ]]><foreach item="item" index="index" collection="bussTeleNoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="orgName != null"><![CDATA[ AND t.ORG_NAME = #{orgName} ]]></if>
+		<if test="orgNameLike != null"><![CDATA[ AND t.ORG_NAME LIKE '%' || #{orgNameLike} || '%' ]]></if>
+		<if test="orgNameStart != null"><![CDATA[ AND t.ORG_NAME LIKE #{orgNameStart} || '%' ]]></if>
+		<if test="orgNameEnd != null"><![CDATA[ AND t.ORG_NAME LIKE '%' || #{orgNameEnd} ]]></if>
+		<if test="orgNameIn != null"><![CDATA[ AND t.ORG_NAME IN ]]><foreach item="item" index="index" collection="orgNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="orgAddress != null"><![CDATA[ AND t.ORG_ADDRESS = #{orgAddress} ]]></if>
+		<if test="orgAddressLike != null"><![CDATA[ AND t.ORG_ADDRESS LIKE '%' || #{orgAddressLike} || '%' ]]></if>
+		<if test="orgAddressStart != null"><![CDATA[ AND t.ORG_ADDRESS LIKE #{orgAddressStart} || '%' ]]></if>
+		<if test="orgAddressEnd != null"><![CDATA[ AND t.ORG_ADDRESS LIKE '%' || #{orgAddressEnd} ]]></if>
+		<if test="orgAddressIn != null"><![CDATA[ AND t.ORG_ADDRESS IN ]]><foreach item="item" index="index" collection="orgAddressIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussinessNum != null"><![CDATA[ AND t.BUSSINESS_NUM = #{bussinessNum} ]]></if>
+		<if test="bussinessNumLike != null"><![CDATA[ AND t.BUSSINESS_NUM LIKE '%' || #{bussinessNumLike} || '%' ]]></if>
+		<if test="bussinessNumStart != null"><![CDATA[ AND t.BUSSINESS_NUM LIKE #{bussinessNumStart} || '%' ]]></if>
+		<if test="bussinessNumEnd != null"><![CDATA[ AND t.BUSSINESS_NUM LIKE '%' || #{bussinessNumEnd} ]]></if>
+		<if test="bussinessNumIn != null"><![CDATA[ AND t.BUSSINESS_NUM IN ]]><foreach item="item" index="index" collection="bussinessNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussEmail != null"><![CDATA[ AND t.BUSS_EMAIL = #{bussEmail} ]]></if>
+		<if test="bussEmailLike != null"><![CDATA[ AND t.BUSS_EMAIL LIKE '%' || #{bussEmailLike} || '%' ]]></if>
+		<if test="bussEmailStart != null"><![CDATA[ AND t.BUSS_EMAIL LIKE #{bussEmailStart} || '%' ]]></if>
+		<if test="bussEmailEnd != null"><![CDATA[ AND t.BUSS_EMAIL LIKE '%' || #{bussEmailEnd} ]]></if>
+		<if test="bussEmailIn != null"><![CDATA[ AND t.BUSS_EMAIL IN ]]><foreach item="item" index="index" collection="bussEmailIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussAddress != null"><![CDATA[ AND t.BUSS_ADDRESS = #{bussAddress} ]]></if>
+		<if test="bussAddressLike != null"><![CDATA[ AND t.BUSS_ADDRESS LIKE '%' || #{bussAddressLike} || '%' ]]></if>
+		<if test="bussAddressStart != null"><![CDATA[ AND t.BUSS_ADDRESS LIKE #{bussAddressStart} || '%' ]]></if>
+		<if test="bussAddressEnd != null"><![CDATA[ AND t.BUSS_ADDRESS LIKE '%' || #{bussAddressEnd} ]]></if>
+		<if test="bussAddressIn != null"><![CDATA[ AND t.BUSS_ADDRESS IN ]]><foreach item="item" index="index" collection="bussAddressIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="fileIdLike != null"><![CDATA[ AND t.FILE_ID LIKE '%' || #{fileIdLike} || '%' ]]></if>
+		<if test="fileIdStart != null"><![CDATA[ AND t.FILE_ID LIKE #{fileIdStart} || '%' ]]></if>
+		<if test="fileIdEnd != null"><![CDATA[ AND t.FILE_ID LIKE '%' || #{fileIdEnd} ]]></if>
+		<if test="fileIdIn != null"><![CDATA[ AND t.FILE_ID IN ]]><foreach item="item" index="index" collection="fileIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussStatus != null"><![CDATA[ AND t.BUSS_STATUS = #{bussStatus} ]]></if>
+		<if test="bussStatusLike != null"><![CDATA[ AND t.BUSS_STATUS LIKE '%' || #{bussStatusLike} || '%' ]]></if>
+		<if test="bussStatusStart != null"><![CDATA[ AND t.BUSS_STATUS LIKE #{bussStatusStart} || '%' ]]></if>
+		<if test="bussStatusEnd != null"><![CDATA[ AND t.BUSS_STATUS LIKE '%' || #{bussStatusEnd} ]]></if>
+		<if test="bussStatusIn != null"><![CDATA[ AND t.BUSS_STATUS IN ]]><foreach item="item" index="index" collection="bussStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="configureStatus != null"><![CDATA[ AND t.CONFIGURE_STATUS = #{configureStatus} ]]></if>
+		<if test="configureStatusLike != null"><![CDATA[ AND t.CONFIGURE_STATUS LIKE '%' || #{configureStatusLike} || '%' ]]></if>
+		<if test="configureStatusStart != null"><![CDATA[ AND t.CONFIGURE_STATUS LIKE #{configureStatusStart} || '%' ]]></if>
+		<if test="configureStatusEnd != null"><![CDATA[ AND t.CONFIGURE_STATUS LIKE '%' || #{configureStatusEnd} ]]></if>
+		<if test="configureStatusIn != null"><![CDATA[ AND t.CONFIGURE_STATUS IN ]]><foreach item="item" index="index" collection="configureStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="suggestion != null"><![CDATA[ AND t.SUGGESTION = #{suggestion} ]]></if>
+		<if test="suggestionLike != null"><![CDATA[ AND t.SUGGESTION LIKE '%' || #{suggestionLike} || '%' ]]></if>
+		<if test="suggestionStart != null"><![CDATA[ AND t.SUGGESTION LIKE #{suggestionStart} || '%' ]]></if>
+		<if test="suggestionEnd != null"><![CDATA[ AND t.SUGGESTION LIKE '%' || #{suggestionEnd} ]]></if>
+		<if test="suggestionIn != null"><![CDATA[ AND t.SUGGESTION IN ]]><foreach item="item" index="index" collection="suggestionIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussDataType != null"><![CDATA[ AND t.BUSS_DATA_TYPE = #{bussDataType} ]]></if>
+		<if test="bussDataTypeLike != null"><![CDATA[ AND t.BUSS_DATA_TYPE LIKE '%' || #{bussDataTypeLike} || '%' ]]></if>
+		<if test="bussDataTypeStart != null"><![CDATA[ AND t.BUSS_DATA_TYPE LIKE #{bussDataTypeStart} || '%' ]]></if>
+		<if test="bussDataTypeEnd != null"><![CDATA[ AND t.BUSS_DATA_TYPE LIKE '%' || #{bussDataTypeEnd} ]]></if>
+		<if test="bussDataTypeIn != null"><![CDATA[ AND t.BUSS_DATA_TYPE IN ]]><foreach item="item" index="index" collection="bussDataTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussAccount != null"><![CDATA[ AND t.BUSS_ACCOUNT = #{bussAccount} ]]></if>
+		<if test="bussPasswd != null"><![CDATA[ AND t.BUSS_PASSWD = #{bussPasswd} ]]></if>
+		<if test="bussType != null"><![CDATA[ AND t.BUSS_TYPE = #{bussType} ]]></if>
+		<if test="bussName != null"><![CDATA[ AND t.BUSS_NAME = #{bussName} ]]></if>
+		<if test="bussSex != null"><![CDATA[ AND t.BUSS_SEX = #{bussSex} ]]></if>
+		<if test="bussCredNo != null"><![CDATA[ AND t.BUSS_CRED_NO = #{bussCredNo} ]]></if>
+		<if test="bussMobileNo != null"><![CDATA[ AND t.BUSS_MOBILE_NO = #{bussMobileNo} ]]></if>
+		<if test="bussTeleNo != null"><![CDATA[ AND t.BUSS_TELE_NO = #{bussTeleNo} ]]></if>
+		<if test="orgName != null"><![CDATA[ AND t.ORG_NAME = #{orgName} ]]></if>
+		<if test="orgAddress != null"><![CDATA[ AND t.ORG_ADDRESS = #{orgAddress} ]]></if>
+		<if test="bussinessNum != null"><![CDATA[ AND t.BUSSINESS_NUM = #{bussinessNum} ]]></if>
+		<if test="bussEmail != null"><![CDATA[ AND t.BUSS_EMAIL = #{bussEmail} ]]></if>
+		<if test="bussAddress != null"><![CDATA[ AND t.BUSS_ADDRESS = #{bussAddress} ]]></if>
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="bussStatus != null"><![CDATA[ AND t.BUSS_STATUS = #{bussStatus} ]]></if>
+		<if test="configureStatus != null"><![CDATA[ AND t.CONFIGURE_STATUS = #{configureStatus} ]]></if>
+		<if test="suggestion != null"><![CDATA[ AND t.SUGGESTION = #{suggestion} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="bussDataType != null"><![CDATA[ AND t.BUSS_DATA_TYPE = #{bussDataType} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'bussAccountAsc'"><![CDATA[ t.BUSS_ACCOUNT asc ]]></if>
+	  			<if test="item == 'bussAccountDesc'"><![CDATA[ t.BUSS_ACCOUNT desc ]]></if>
+	  			<if test="item == 'bussPasswdAsc'"><![CDATA[ t.BUSS_PASSWD asc ]]></if>
+	  			<if test="item == 'bussPasswdDesc'"><![CDATA[ t.BUSS_PASSWD desc ]]></if>
+	  			<if test="item == 'bussTypeAsc'"><![CDATA[ t.BUSS_TYPE asc ]]></if>
+	  			<if test="item == 'bussTypeDesc'"><![CDATA[ t.BUSS_TYPE desc ]]></if>
+	  			<if test="item == 'bussNameAsc'"><![CDATA[ t.BUSS_NAME asc ]]></if>
+	  			<if test="item == 'bussNameDesc'"><![CDATA[ t.BUSS_NAME desc ]]></if>
+	  			<if test="item == 'bussSexAsc'"><![CDATA[ t.BUSS_SEX asc ]]></if>
+	  			<if test="item == 'bussSexDesc'"><![CDATA[ t.BUSS_SEX desc ]]></if>
+	  			<if test="item == 'bussCredNoAsc'"><![CDATA[ t.BUSS_CRED_NO asc ]]></if>
+	  			<if test="item == 'bussCredNoDesc'"><![CDATA[ t.BUSS_CRED_NO desc ]]></if>
+	  			<if test="item == 'bussMobileNoAsc'"><![CDATA[ t.BUSS_MOBILE_NO asc ]]></if>
+	  			<if test="item == 'bussMobileNoDesc'"><![CDATA[ t.BUSS_MOBILE_NO desc ]]></if>
+	  			<if test="item == 'bussTeleNoAsc'"><![CDATA[ t.BUSS_TELE_NO asc ]]></if>
+	  			<if test="item == 'bussTeleNoDesc'"><![CDATA[ t.BUSS_TELE_NO desc ]]></if>
+	  			<if test="item == 'orgNameAsc'"><![CDATA[ t.ORG_NAME asc ]]></if>
+	  			<if test="item == 'orgNameDesc'"><![CDATA[ t.ORG_NAME desc ]]></if>
+	  			<if test="item == 'orgAddressAsc'"><![CDATA[ t.ORG_ADDRESS asc ]]></if>
+	  			<if test="item == 'orgAddressDesc'"><![CDATA[ t.ORG_ADDRESS desc ]]></if>
+	  			<if test="item == 'bussinessNumAsc'"><![CDATA[ t.BUSSINESS_NUM asc ]]></if>
+	  			<if test="item == 'bussinessNumDesc'"><![CDATA[ t.BUSSINESS_NUM desc ]]></if>
+	  			<if test="item == 'bussEmailAsc'"><![CDATA[ t.BUSS_EMAIL asc ]]></if>
+	  			<if test="item == 'bussEmailDesc'"><![CDATA[ t.BUSS_EMAIL desc ]]></if>
+	  			<if test="item == 'bussAddressAsc'"><![CDATA[ t.BUSS_ADDRESS asc ]]></if>
+	  			<if test="item == 'bussAddressDesc'"><![CDATA[ t.BUSS_ADDRESS desc ]]></if>
+	  			<if test="item == 'fileIdAsc'"><![CDATA[ t.FILE_ID asc ]]></if>
+	  			<if test="item == 'fileIdDesc'"><![CDATA[ t.FILE_ID desc ]]></if>
+	  			<if test="item == 'bussStatusAsc'"><![CDATA[ t.BUSS_STATUS asc ]]></if>
+	  			<if test="item == 'bussStatusDesc'"><![CDATA[ t.BUSS_STATUS desc ]]></if>
+	  			<if test="item == 'configureStatusAsc'"><![CDATA[ t.CONFIGURE_STATUS asc ]]></if>
+	  			<if test="item == 'configureStatusDesc'"><![CDATA[ t.CONFIGURE_STATUS desc ]]></if>
+	  			<if test="item == 'suggestionAsc'"><![CDATA[ t.SUGGESTION asc ]]></if>
+	  			<if test="item == 'suggestionDesc'"><![CDATA[ t.SUGGESTION desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+	  			<if test="item == 'bussDataTypeAsc'"><![CDATA[ t.BUSS_DATA_TYPE asc ]]></if>
+	  			<if test="item == 'bussDataTypeDesc'"><![CDATA[ t.BUSS_DATA_TYPE desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="bussInfoResultMap">
+		<![CDATA[ SELECT * FROM BUSS_INFO t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BUSS_INFO t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="bussInfoResultMap">
+		<![CDATA[ SELECT * FROM BUSS_INFO t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_INFO t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BussInfo" resultMap="bussInfoResultMap">
+   	<![CDATA[ SELECT * FROM BUSS_INFO t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BussInfo" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_INFO t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="bussInfoResultMap">
+    <![CDATA[ SELECT * FROM BUSS_INFO WHERE  
+				BUSS_ID=#{bussId}
+		]]>
+	</select>
+  	  <!-- (3-3)============================= selectBuPk =================================== -->
+  <select id="selectBuPk" parameterType="java.lang.String" resultMap="bussInfoResultMap">
+    <![CDATA[ SELECT * FROM  BUSS_INFO WHERE  
+				BUSS_ACCOUNT=#{bussAccount}
+		]]>
+	</select>
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BussInfo">
+
+		<![CDATA[
+		    INSERT INTO BUSS_INFO
+		      (
+		      BUSS_ID,
+		      BUSS_ACCOUNT,
+		      BUSS_PASSWD,
+		      BUSS_TYPE,
+		      BUSS_NAME,
+		      BUSS_SEX,
+		      BUSS_CRED_NO,
+		      BUSS_MOBILE_NO,
+		      BUSS_TELE_NO,
+		      ORG_NAME,
+		      ORG_ADDRESS,
+		      BUSSINESS_NUM,
+		      BUSS_EMAIL,
+		      BUSS_ADDRESS,
+		      FILE_ID,
+		      BUSS_STATUS,
+		      CONFIGURE_STATUS,
+		      SUGGESTION,
+		      CREATE_TIME,
+		      MODIFY_TIME,
+		      REMARK,
+		      BUSS_DATA_TYPE
+		      )
+		    VALUES
+		      (			  
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{bussAccount,jdbcType=VARCHAR}
+				,
+					#{bussPasswd,jdbcType=VARCHAR}
+				,
+					#{bussType,jdbcType=VARCHAR}
+				,
+					#{bussName,jdbcType=VARCHAR}
+				,
+					#{bussSex,jdbcType=VARCHAR}
+				,
+					#{bussCredNo,jdbcType=VARCHAR}
+				,
+					#{bussMobileNo,jdbcType=VARCHAR}
+				,
+					#{bussTeleNo,jdbcType=VARCHAR}
+				,
+					#{orgName,jdbcType=VARCHAR}
+				,
+					#{orgAddress,jdbcType=VARCHAR}
+				,
+					#{bussinessNum,jdbcType=VARCHAR}
+				,
+					#{bussEmail,jdbcType=VARCHAR}
+				,
+					#{bussAddress,jdbcType=VARCHAR}
+				,
+					#{fileId,jdbcType=VARCHAR}
+				,
+					#{bussStatus,jdbcType=VARCHAR}
+				,
+					#{configureStatus,jdbcType=VARCHAR}
+				,
+					#{suggestion,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				,
+					#{bussDataType,jdbcType=VARCHAR}
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BussInfo">
+    <![CDATA[ UPDATE BUSS_INFO ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ACCOUNT = #{bussAccount,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_PASSWD = #{bussPasswd,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_TYPE = #{bussType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_NAME = #{bussName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_SEX = #{bussSex,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_CRED_NO = #{bussCredNo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_MOBILE_NO = #{bussMobileNo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_TELE_NO = #{bussTeleNo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORG_NAME = #{orgName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORG_ADDRESS = #{orgAddress,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSSINESS_NUM = #{bussinessNum,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_EMAIL = #{bussEmail,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_ADDRESS = #{bussAddress,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_ID = #{fileId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_STATUS = #{bussStatus,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CONFIGURE_STATUS = #{configureStatus,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					SUGGESTION = #{suggestion,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_DATA_TYPE = #{bussDataType,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE BUSS_ID=#{bussId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="BussInfo">
+    <![CDATA[ UPDATE BUSS_INFO ]]>
+	    <set>  		
+    		<if test="bussAccount != null"><![CDATA[ BUSS_ACCOUNT = #{bussAccount}, ]]></if>
+    		<if test="bussPasswd != null"><![CDATA[ BUSS_PASSWD = #{bussPasswd}, ]]></if>
+    		<if test="bussType != null"><![CDATA[ BUSS_TYPE = #{bussType}, ]]></if>
+    		<if test="bussName != null"><![CDATA[ BUSS_NAME = #{bussName}, ]]></if>
+    		<if test="bussSex != null"><![CDATA[ BUSS_SEX = #{bussSex}, ]]></if>
+    		<if test="bussCredNo != null"><![CDATA[ BUSS_CRED_NO = #{bussCredNo}, ]]></if>
+    		<if test="bussMobileNo != null"><![CDATA[ BUSS_MOBILE_NO = #{bussMobileNo}, ]]></if>
+    		<if test="bussTeleNo != null"><![CDATA[ BUSS_TELE_NO = #{bussTeleNo}, ]]></if>
+    		<if test="orgName != null"><![CDATA[ ORG_NAME = #{orgName}, ]]></if>
+    		<if test="orgAddress != null"><![CDATA[ ORG_ADDRESS = #{orgAddress}, ]]></if>
+    		<if test="bussinessNum != null"><![CDATA[ BUSSINESS_NUM = #{bussinessNum}, ]]></if>
+    		<if test="bussEmail != null"><![CDATA[ BUSS_EMAIL = #{bussEmail}, ]]></if>
+    		<if test="bussAddress != null"><![CDATA[ BUSS_ADDRESS = #{bussAddress}, ]]></if>
+    		<if test="fileId != null"><![CDATA[ FILE_ID = #{fileId}, ]]></if>
+    		<if test="bussStatus != null"><![CDATA[ BUSS_STATUS = #{bussStatus}, ]]></if>
+    		<if test="configureStatus != null"><![CDATA[ CONFIGURE_STATUS = #{configureStatus}, ]]></if>
+    		<if test="suggestion != null"><![CDATA[ SUGGESTION = #{suggestion}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark}, ]]></if>
+    		<if test="bussDataType != null"><![CDATA[ BUSS_DATA_TYPE = #{bussDataType} ]]></if>
+	    </set>  
+			WHERE BUSS_ID=#{bussId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE BUSS_INFO ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE BUSS_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BUSS_INFO  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BussInfo">
+   <![CDATA[ DELETE FROM BUSS_INFO WHERE 1=1  ]]>    			
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND BUSS_ACCOUNT = #{bussAccount} ]]>
+		<![CDATA[ AND BUSS_PASSWD = #{bussPasswd} ]]>
+		<![CDATA[ AND BUSS_TYPE = #{bussType} ]]>
+		<![CDATA[ AND BUSS_NAME = #{bussName} ]]>
+		<![CDATA[ AND BUSS_SEX = #{bussSex} ]]>
+		<![CDATA[ AND BUSS_CRED_NO = #{bussCredNo} ]]>
+		<![CDATA[ AND BUSS_MOBILE_NO = #{bussMobileNo} ]]>
+		<![CDATA[ AND BUSS_TELE_NO = #{bussTeleNo} ]]>
+		<![CDATA[ AND ORG_NAME = #{orgName} ]]>
+		<![CDATA[ AND ORG_ADDRESS = #{orgAddress} ]]>
+		<![CDATA[ AND BUSSINESS_NUM = #{bussinessNum} ]]>
+		<![CDATA[ AND BUSS_EMAIL = #{bussEmail} ]]>
+		<![CDATA[ AND BUSS_ADDRESS = #{bussAddress} ]]>
+		<![CDATA[ AND FILE_ID = #{fileId} ]]>
+		<![CDATA[ AND BUSS_STATUS = #{bussStatus} ]]>
+		<![CDATA[ AND CONFIGURE_STATUS = #{configureStatus} ]]>
+		<![CDATA[ AND SUGGESTION = #{suggestion} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+		<![CDATA[ AND BUSS_DATA_TYPE = #{bussDataType} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BUSS_INFO WHERE 
+		BUSS_ID IN (#{bussId})
+		]]>
+	</delete>
+  
+</mapper>

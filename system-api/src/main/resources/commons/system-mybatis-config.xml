@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "${env.mybatis.url}">
+<configuration>
+	<properties>
+       	<property name="dialect" value="mysql"/>
+    </properties>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="SysMenu" type="com.tydic.dbs.system.menu.mapper.SysMenu"/>
+		<typeAlias alias="SysOperator" type="com.tydic.dbs.system.operator.mapper.SysOperator"/>
+		<typeAlias alias="SysOperGroup" type="com.tydic.dbs.system.userGroup.mapper.SysOperGroup"/>
+		<typeAlias alias="SysLoginLog" type="com.tydic.dbs.system.log.mapper.SysLoginLog"/>
+		<typeAlias alias="SysFunOperate" type="com.tydic.dbs.system.menu.mapper.SysFunOperate"/>
+		<typeAlias alias="SysOrganize" type="com.tydic.dbs.system.organize.mapper.SysOrganize"/>
+		<typeAlias alias="SysRole" type="com.tydic.dbs.system.role.mapper.SysRole"/>
+		<typeAlias alias="SysRoleMenu" type="com.tydic.dbs.system.role.mapper.SysRoleMenu"/>
+		<typeAlias alias="SysUserGroup" type="com.tydic.dbs.system.userGroup.mapper.SysUserGroup"/>
+		<typeAlias alias="SysUserGroupRole" type="com.tydic.dbs.system.userGroup.mapper.SysUserGroupRole"/>
+		<typeAlias alias="SysChanOperRel" type="com.tydic.dbs.system.operator.mapper.SysChanOperRel"/>
+		<typeAlias alias="SysPermission" type="com.tydic.dbs.system.role.mapper.SysPermission"/>
+		<typeAlias alias="SysDataPermission" type="com.tydic.dbs.system.role.mapper.SysDataPermission"/>
+		<typeAlias alias="SysUploadFile" type="com.tydic.dbs.system.sysUploadFile.mapper.SysUploadFile"/>
+		<typeAlias alias="SysLoginSms" type="com.tydic.dbs.system.SysLoginSms.mapper.SysLoginSms"/>
+		<typeAlias alias="SysSms" type="com.tydic.dbs.system.sms.mapper.SysSms"/>
+		<typeAlias alias="basRegion" type="com.tydic.dbs.system.basRegion.mapper.BasRegion"/>
+		<typeAlias alias="SysOperRole" type="com.tydic.dbs.system.role.mapper.SysOperRole"/>
+		<typeAlias alias="InfFileLog" type="com.tydic.dbs.system.log.mapper.InfFileLog"/>
+		<typeAlias alias="InfIndent" type="com.tydic.dbs.system.log.mapper.InfIndent"/>
+		<typeAlias alias="UploadFile" type="com.tydic.dbs.system.log.mapper.UploadFile"/>
+		<typeAlias alias="SysRoleOperate" type="com.tydic.dbs.system.role.mapper.SysRoleOperate"/>
+	</typeAliases>
+	<plugins>
+       	<plugin interceptor="com.tydic.commons.dao.PaginationInterceptor"/>
+    </plugins>
+	<mappers>
+		<mapper resource="com/tydic/dbs/system/menu/mapper/SysMenuMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/operator/mapper/SysOperatorMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/userGroup/mapper/SysOperGroupMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/log/mapper/SysLoginLogMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/menu/mapper/SysFunOperateMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/organize/mapper/SysOrganizeMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/role/mapper/SysRoleMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/role/mapper/SysRoleMenuMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/userGroup/mapper/SysUserGroupMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/userGroup/mapper/SysUserGroupRoleMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/operator/mapper/SysChanOperRelMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/sysUploadFile/mapper/SysUploadFileMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/sms/mapper/SysLoginSmsMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/sms/mapper/SysSmsMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/basRegion/mapper/BasRegionMapper.xml" />
+		<mapper resource="com/tydic/dbs/system/log/mapper/InfFileLogMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/log/mapper/InfIndentMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/log/mapper/UploadFileMapper.xml"/>
+		<mapper resource="com/tydic/dbs/system/menu/mapper/SysRoleOperateMapper.xml"/>
+	</mappers>
+</configuration>

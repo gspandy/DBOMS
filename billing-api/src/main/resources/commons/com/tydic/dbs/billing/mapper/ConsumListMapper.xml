@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CONSUM_LIST">
+	<resultMap type="ConsumList" id="consumListResultMap">
+		<id property="consumId" column="CONSUM_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="workNo" column="WORK_NO"/>
+		<result property="rowNum" column="ROW_NUM"/>
+		<result property="dataSize" column="DATA_SIZE"/>
+		<result property="consumTime" column="CONSUM_TIME"/>
+		<result property="billingId" column="BILLING_ID"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="consumId != null"><![CDATA[ AND t.CONSUM_ID = #{consumId} ]]></if>
+		<if test="consumIdLike != null"><![CDATA[ AND t.CONSUM_ID LIKE '%' || #{consumIdLike} || '%' ]]></if>
+		<if test="consumIdStart != null"><![CDATA[ AND t.CONSUM_ID LIKE #{consumIdStart} || '%' ]]></if>
+		<if test="consumIdEnd != null"><![CDATA[ AND t.CONSUM_ID LIKE '%' || #{consumIdEnd} ]]></if>
+		<if test="consumIdIn != null"><![CDATA[ AND t.CONSUM_ID IN ]]><foreach item="item" index="index" collection="consumIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="workNo != null"><![CDATA[ AND t.WORK_NO = #{workNo} ]]></if>
+		<if test="workNoLike != null"><![CDATA[ AND t.WORK_NO LIKE '%' || #{workNoLike} || '%' ]]></if>
+		<if test="workNoStart != null"><![CDATA[ AND t.WORK_NO LIKE #{workNoStart} || '%' ]]></if>
+		<if test="workNoEnd != null"><![CDATA[ AND t.WORK_NO LIKE '%' || #{workNoEnd} ]]></if>
+		<if test="workNoIn != null"><![CDATA[ AND t.WORK_NO IN ]]><foreach item="item" index="index" collection="workNoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="rowNum != null"><![CDATA[ AND t.ROW_NUM = #{rowNum} ]]></if>
+		<if test="rowNumLike != null"><![CDATA[ AND t.ROW_NUM LIKE '%' || #{rowNumLike} || '%' ]]></if>
+		<if test="rowNumStart != null"><![CDATA[ AND t.ROW_NUM LIKE #{rowNumStart} || '%' ]]></if>
+		<if test="rowNumEnd != null"><![CDATA[ AND t.ROW_NUM LIKE '%' || #{rowNumEnd} ]]></if>
+		<if test="rowNumIn != null"><![CDATA[ AND t.ROW_NUM IN ]]><foreach item="item" index="index" collection="rowNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataSize != null"><![CDATA[ AND t.DATA_SIZE = #{dataSize} ]]></if>
+		<if test="dataSizeLike != null"><![CDATA[ AND t.DATA_SIZE LIKE '%' || #{dataSizeLike} || '%' ]]></if>
+		<if test="dataSizeStart != null"><![CDATA[ AND t.DATA_SIZE LIKE #{dataSizeStart} || '%' ]]></if>
+		<if test="dataSizeEnd != null"><![CDATA[ AND t.DATA_SIZE LIKE '%' || #{dataSizeEnd} ]]></if>
+		<if test="dataSizeIn != null"><![CDATA[ AND t.DATA_SIZE IN ]]><foreach item="item" index="index" collection="dataSizeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="consumTime != null"><![CDATA[ AND t.CONSUM_TIME = #{consumTime} ]]></if>
+		<if test="consumTimeLike != null"><![CDATA[ AND t.CONSUM_TIME LIKE '%' || #{consumTimeLike} || '%' ]]></if>
+		<if test="consumTimeStart != null"><![CDATA[ AND t.CONSUM_TIME LIKE #{consumTimeStart} || '%' ]]></if>
+		<if test="consumTimeEnd != null"><![CDATA[ AND t.CONSUM_TIME LIKE '%' || #{consumTimeEnd} ]]></if>
+		<if test="consumTimeIn != null"><![CDATA[ AND t.CONSUM_TIME IN ]]><foreach item="item" index="index" collection="consumTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="billingId != null"><![CDATA[ AND t.BILLING_ID = #{billingId} ]]></if>
+		<if test="billingIdLike != null"><![CDATA[ AND t.BILLING_ID LIKE '%' || #{billingIdLike} || '%' ]]></if>
+		<if test="billingIdStart != null"><![CDATA[ AND t.BILLING_ID LIKE #{billingIdStart} || '%' ]]></if>
+		<if test="billingIdEnd != null"><![CDATA[ AND t.BILLING_ID LIKE '%' || #{billingIdEnd} ]]></if>
+		<if test="billingIdIn != null"><![CDATA[ AND t.BILLING_ID IN ]]><foreach item="item" index="index" collection="billingIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="consumId != null"><![CDATA[ AND t.CONSUM_ID = #{consumId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="workNo != null"><![CDATA[ AND t.WORK_NO = #{workNo} ]]></if>
+		<if test="rowNum != null"><![CDATA[ AND t.ROW_NUM = #{rowNum} ]]></if>
+		<if test="dataSize != null"><![CDATA[ AND t.DATA_SIZE = #{dataSize} ]]></if>
+		<if test="consumTime != null"><![CDATA[ AND t.CONSUM_TIME = #{consumTime} ]]></if>
+		<if test="billingId != null"><![CDATA[ AND t.BILLING_ID = #{billingId} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'consumIdAsc'"><![CDATA[ t.CONSUM_ID asc ]]></if>
+	  			<if test="item == 'consumIdDesc'"><![CDATA[ t.CONSUM_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'workNoAsc'"><![CDATA[ t.WORK_NO asc ]]></if>
+	  			<if test="item == 'workNoDesc'"><![CDATA[ t.WORK_NO desc ]]></if>
+	  			<if test="item == 'rowNumAsc'"><![CDATA[ t.ROW_NUM asc ]]></if>
+	  			<if test="item == 'rowNumDesc'"><![CDATA[ t.ROW_NUM desc ]]></if>
+	  			<if test="item == 'dataSizeAsc'"><![CDATA[ t.DATA_SIZE asc ]]></if>
+	  			<if test="item == 'dataSizeDesc'"><![CDATA[ t.DATA_SIZE desc ]]></if>
+	  			<if test="item == 'consumTimeAsc'"><![CDATA[ t.CONSUM_TIME asc ]]></if>
+	  			<if test="item == 'consumTimeDesc'"><![CDATA[ t.CONSUM_TIME desc ]]></if>
+	  			<if test="item == 'billingIdAsc'"><![CDATA[ t.BILLING_ID asc ]]></if>
+	  			<if test="item == 'billingIdDesc'"><![CDATA[ t.BILLING_ID desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="consumListResultMap">
+		<![CDATA[ SELECT * FROM CONSUM_LIST t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM CONSUM_LIST t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="consumListResultMap">
+		<![CDATA[ SELECT * FROM CONSUM_LIST t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM CONSUM_LIST t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="ConsumList" resultMap="consumListResultMap">
+   	<![CDATA[ SELECT * FROM CONSUM_LIST t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="ConsumList" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM CONSUM_LIST t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="consumListResultMap">
+    <![CDATA[ SELECT * FROM CONSUM_LIST WHERE  
+				CONSUM_ID=#{consumId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="ConsumList">
+
+		<![CDATA[
+		    INSERT INTO CONSUM_LIST
+		      (
+		      CONSUM_ID,
+		      BUSS_ID,
+		      WORK_NO,
+		      ROW_NUM,
+		      DATA_SIZE,
+		      CONSUM_TIME,
+		      BILLING_ID,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{consumId,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{workNo,jdbcType=VARCHAR}
+				,
+					#{rowNum,jdbcType=DECIMAL}
+				,
+					#{dataSize,jdbcType=DECIMAL}
+				,
+					#{consumTime,jdbcType=TIMESTAMP}
+				,
+					#{billingId,jdbcType=VARCHAR}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="ConsumList">
+    <![CDATA[ UPDATE CONSUM_LIST ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					WORK_NO = #{workNo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ROW_NUM = #{rowNum,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					DATA_SIZE = #{dataSize,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					CONSUM_TIME = #{consumTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					BILLING_ID = #{billingId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE CONSUM_ID=#{consumId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="ConsumList">
+    <![CDATA[ UPDATE CONSUM_LIST ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="workNo != null"><![CDATA[ WORK_NO = #{workNo}, ]]></if>
+    		<if test="rowNum != null"><![CDATA[ ROW_NUM = #{rowNum}, ]]></if>
+    		<if test="dataSize != null"><![CDATA[ DATA_SIZE = #{dataSize}, ]]></if>
+    		<if test="consumTime != null"><![CDATA[ CONSUM_TIME = #{consumTime}, ]]></if>
+    		<if test="billingId != null"><![CDATA[ BILLING_ID = #{billingId}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE CONSUM_ID=#{consumId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE CONSUM_LIST ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE CONSUM_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM CONSUM_LIST  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="ConsumList">
+   <![CDATA[ DELETE FROM CONSUM_LIST WHERE 1=1  ]]>    			
+		<![CDATA[ AND CONSUM_ID = #{consumId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND WORK_NO = #{workNo} ]]>
+		<![CDATA[ AND ROW_NUM = #{rowNum} ]]>
+		<![CDATA[ AND DATA_SIZE = #{dataSize} ]]>
+		<![CDATA[ AND CONSUM_TIME = #{consumTime} ]]>
+		<![CDATA[ AND BILLING_ID = #{billingId} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM CONSUM_LIST WHERE 
+		CONSUM_ID IN (#{consumId})
+		]]>
+	</delete>
+  
+</mapper>

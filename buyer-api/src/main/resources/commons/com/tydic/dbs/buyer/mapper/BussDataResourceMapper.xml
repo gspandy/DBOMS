@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BUSS_DATA_RESOURCE">
+	<resultMap type="BussDataResource" id="bussDataResourceResultMap">
+		<id property="resoureId" column="RESOURE_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="serviceName" column="SERVICE_NAME"/>
+		<result property="appStatus" column="APP_STATUS"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+		<if test="resoureIdLike != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdLike} || '%' ]]></if>
+		<if test="resoureIdStart != null"><![CDATA[ AND t.RESOURE_ID LIKE #{resoureIdStart} || '%' ]]></if>
+		<if test="resoureIdEnd != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdEnd} ]]></if>
+		<if test="resoureIdIn != null"><![CDATA[ AND t.RESOURE_ID IN ]]><foreach item="item" index="index" collection="resoureIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="serviceName != null"><![CDATA[ AND t.SERVICE_NAME = #{serviceName} ]]></if>
+		<if test="serviceNameLike != null"><![CDATA[ AND t.SERVICE_NAME LIKE '%' || #{serviceNameLike} || '%' ]]></if>
+		<if test="serviceNameStart != null"><![CDATA[ AND t.SERVICE_NAME LIKE #{serviceNameStart} || '%' ]]></if>
+		<if test="serviceNameEnd != null"><![CDATA[ AND t.SERVICE_NAME LIKE '%' || #{serviceNameEnd} ]]></if>
+		<if test="serviceNameIn != null"><![CDATA[ AND t.SERVICE_NAME IN ]]><foreach item="item" index="index" collection="serviceNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appStatus != null"><![CDATA[ AND t.APP_STATUS = #{appStatus} ]]></if>
+		<if test="appStatusLike != null"><![CDATA[ AND t.APP_STATUS LIKE '%' || #{appStatusLike} || '%' ]]></if>
+		<if test="appStatusStart != null"><![CDATA[ AND t.APP_STATUS LIKE #{appStatusStart} || '%' ]]></if>
+		<if test="appStatusEnd != null"><![CDATA[ AND t.APP_STATUS LIKE '%' || #{appStatusEnd} ]]></if>
+		<if test="appStatusIn != null"><![CDATA[ AND t.APP_STATUS IN ]]><foreach item="item" index="index" collection="appStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="serviceName != null"><![CDATA[ AND t.SERVICE_NAME = #{serviceName} ]]></if>
+		<if test="appStatus != null"><![CDATA[ AND t.APP_STATUS = #{appStatus} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'resoureIdAsc'"><![CDATA[ t.RESOURE_ID asc ]]></if>
+	  			<if test="item == 'resoureIdDesc'"><![CDATA[ t.RESOURE_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'serviceNameAsc'"><![CDATA[ t.SERVICE_NAME asc ]]></if>
+	  			<if test="item == 'serviceNameDesc'"><![CDATA[ t.SERVICE_NAME desc ]]></if>
+	  			<if test="item == 'appStatusAsc'"><![CDATA[ t.APP_STATUS asc ]]></if>
+	  			<if test="item == 'appStatusDesc'"><![CDATA[ t.APP_STATUS desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="bussDataResourceResultMap">
+		<![CDATA[ SELECT * FROM BUSS_DATA_RESOURCE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BUSS_DATA_RESOURCE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="bussDataResourceResultMap">
+		<![CDATA[ SELECT * FROM BUSS_DATA_RESOURCE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_DATA_RESOURCE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BussDataResource" resultMap="bussDataResourceResultMap">
+   	<![CDATA[ SELECT * FROM BUSS_DATA_RESOURCE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BussDataResource" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_DATA_RESOURCE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="bussDataResourceResultMap">
+    <![CDATA[ SELECT * FROM BUSS_DATA_RESOURCE WHERE  
+				RESOURE_ID=#{resoureId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BussDataResource">
+
+		<![CDATA[
+		    INSERT INTO BUSS_DATA_RESOURCE
+		      (
+		      RESOURE_ID,
+		      BUSS_ID,
+		      SERVICE_NAME,
+		      APP_STATUS,
+		      CREATE_TIME,
+		      MODIFY_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{resoureId,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{serviceName,jdbcType=VARCHAR}
+				,
+					#{appStatus,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BussDataResource">
+    <![CDATA[ UPDATE BUSS_DATA_RESOURCE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					SERVICE_NAME = #{serviceName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_STATUS = #{appStatus,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE RESOURE_ID=#{resoureId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="BussDataResource">
+    <![CDATA[ UPDATE BUSS_DATA_RESOURCE ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="serviceName != null"><![CDATA[ SERVICE_NAME = #{serviceName}, ]]></if>
+    		<if test="appStatus != null"><![CDATA[ APP_STATUS = #{appStatus}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE RESOURE_ID=#{resoureId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE BUSS_DATA_RESOURCE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE RESOURE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BUSS_DATA_RESOURCE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BussDataResource">
+   <![CDATA[ DELETE FROM BUSS_DATA_RESOURCE WHERE 1=1  ]]>    			
+		<![CDATA[ AND RESOURE_ID = #{resoureId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND SERVICE_NAME = #{serviceName} ]]>
+		<![CDATA[ AND APP_STATUS = #{appStatus} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BUSS_DATA_RESOURCE WHERE 
+		RESOURE_ID IN (#{resoureId})
+		]]>
+	</delete>
+  
+</mapper>

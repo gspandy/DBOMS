@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DATA_PERMISSON_CFG">
+	<resultMap type="DataPermissonCfg" id="dataPermissonCfgResultMap">
+		<id property="id" column="ID"/>   
+		<result property="name" column="NAME"/>
+		<result property="parentId" column="PARENT_ID"/>
+	</resultMap>
+	
+	<resultMap type="DataPermissonCfg" id="dataPerCfgResultMap">
+		<id property="id" column="ID"/>   
+		<result property="name" column="NAME"/>
+		<result property="parentId" column="PARENT_ID"/>
+		<result property="type" column="TYPE"/>
+	</resultMap>
+	
+	<resultMap type="DataPermissonCfg" id="dataColumnsCfgResultMap">
+		<id property="id" column="ID"/>   
+		<result property="name" column="NAME"/>
+		<result property="parentId" column="PARENT_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="columns" column="COLUMNS"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="id != null"><![CDATA[ AND t.ID = #{id} ]]></if>
+		<if test="idLike != null"><![CDATA[ AND t.ID LIKE '%' || #{idLike} || '%' ]]></if>
+		<if test="idStart != null"><![CDATA[ AND t.ID LIKE #{idStart} || '%' ]]></if>
+		<if test="idEnd != null"><![CDATA[ AND t.ID LIKE '%' || #{idEnd} ]]></if>
+		<if test="idIn != null"><![CDATA[ AND t.ID IN ]]><foreach item="item" index="index" collection="idIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="name != null"><![CDATA[ AND t.NAME = #{name} ]]></if>
+		<if test="nameLike != null"><![CDATA[ AND t.NAME LIKE CONCAT(CONCAT('%', #{nameLike}), '%') ]]></if>
+		<if test="nameStart != null"><![CDATA[ AND t.NAME LIKE #{nameStart} || '%' ]]></if>
+		<if test="nameEnd != null"><![CDATA[ AND t.NAME LIKE '%' || #{nameEnd} ]]></if>
+		<if test="nameIn != null"><![CDATA[ AND t.NAME IN ]]><foreach item="item" index="index" collection="nameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="parentId != null"><![CDATA[ AND t.PARENT_ID = #{parentId} ]]></if>
+		<if test="parentIdLike != null"><![CDATA[ AND t.PARENT_ID LIKE '%' || #{parentIdLike} || '%' ]]></if>
+		<if test="parentIdStart != null"><![CDATA[ AND t.PARENT_ID LIKE #{parentIdStart} || '%' ]]></if>
+		<if test="parentIdEnd != null"><![CDATA[ AND t.PARENT_ID LIKE '%' || #{parentIdEnd} ]]></if>
+		<if test="parentIdIn != null"><![CDATA[ AND t.PARENT_ID IN ]]><foreach item="item" index="index" collection="parentIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="id != null"><![CDATA[ AND t.ID = #{id} ]]></if>
+		<if test="name != null"><![CDATA[ AND t.NAME = #{name} ]]></if>
+		<if test="parentId != null"><![CDATA[ AND t.PARENT_ID = #{parentId} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'idAsc'"><![CDATA[ t.ID asc ]]></if>
+	  			<if test="item == 'idDesc'"><![CDATA[ t.ID desc ]]></if>
+	  			<if test="item == 'nameAsc'"><![CDATA[ t.NAME asc ]]></if>
+	  			<if test="item == 'nameDesc'"><![CDATA[ t.NAME desc ]]></if>
+	  			<if test="item == 'parentIdAsc'"><![CDATA[ t.PARENT_ID asc ]]></if>
+	  			<if test="item == 'parentIdDesc'"><![CDATA[ t.PARENT_ID desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="dataPermissonCfgResultMap">
+		<![CDATA[ SELECT * FROM DATA_PERMISSON_CFG t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM DATA_PERMISSON_CFG t ]]>
+		<where>  
+			<![CDATA[ 1=1 and t.PARENT_ID IN (SELECT id FROM DATA_PERMISSON_CFG a WHERE	a.PARENT_ID = - 1) ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="dataPerCfgResultMap">
+		<![CDATA[ SELECT t.ID,t.PARENT_ID,t.`NAME`,a.`NAME` TYPE FROM DATA_PERMISSON_CFG t left join DATA_PERMISSON_CFG a on t.PARENT_ID = a.ID]]>
+		<where>  
+			<![CDATA[ 1=1 and t.PARENT_ID IN (SELECT id FROM DATA_PERMISSON_CFG a WHERE	a.PARENT_ID = - 1) ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM DATA_PERMISSON_CFG t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 and t.PARENT_ID IN (SELECT id FROM DATA_PERMISSON_CFG a WHERE	a.PARENT_ID = - 1)]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="DataPermissonCfg" resultMap="dataPermissonCfgResultMap">
+   	<![CDATA[ SELECT * FROM DATA_PERMISSON_CFG t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="DataPermissonCfg" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM DATA_PERMISSON_CFG t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="dataColumnsCfgResultMap">
+    <![CDATA[ SELECT t.ID,t.PARENT_ID,t.`NAME`,a.`NAME` TYPE,group_concat(b.`NAME`) COLUMNS FROM DATA_PERMISSON_CFG t left join DATA_PERMISSON_CFG a on t.PARENT_ID = a.ID left join DATA_PERMISSON_CFG b on t.ID = b.PARENT_ID WHERE  
+				t.ID=#{id}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="DataPermissonCfg">
+
+		<![CDATA[
+		    INSERT INTO DATA_PERMISSON_CFG
+		      (
+		      ID,
+		      NAME,
+		      PARENT_ID
+		      )
+		    VALUES
+		      (			  
+					#{id,jdbcType=BIGINT}
+				,
+					#{name,jdbcType=VARCHAR}
+				,
+					#{parentId,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="DataPermissonCfg">
+    <![CDATA[ UPDATE DATA_PERMISSON_CFG ]]>
+	    <set>  		
+    		<![CDATA[ 
+					NAME = #{name,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					PARENT_ID = #{parentId,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE ID=#{id}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="DataPermissonCfg">
+    <![CDATA[ UPDATE DATA_PERMISSON_CFG ]]>
+	    <set>  		
+    		<if test="name != null"><![CDATA[ NAME = #{name}, ]]></if>
+    		<if test="parentId != null"><![CDATA[ PARENT_ID = #{parentId} ]]></if>
+	    </set>  
+			WHERE ID=#{id}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE DATA_PERMISSON_CFG ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM DATA_PERMISSON_CFG  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="DataPermissonCfg">
+   <![CDATA[ DELETE FROM DATA_PERMISSON_CFG WHERE 1=1  ]]>    			
+		<![CDATA[ AND ID = #{id} ]]>
+		<![CDATA[ AND NAME = #{name} ]]>
+		<![CDATA[ AND PARENT_ID = #{parentId} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM DATA_PERMISSON_CFG  WHERE 
+		ID = #{id}
+		]]>
+		<![CDATA[ OR PARENT_ID = #{id} ]]>
+	</delete>
+	
+	<!-- (8)============================= deleteChildByPk =================================== -->
+	<delete id="deleteChildByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM DATA_PERMISSON_CFG  WHERE 
+		PARENT_ID = #{id}
+		]]>		
+	</delete>
+
+	<select id="qryChildById" parameterType="map" resultType="DataPermissonCfg">
+		<![CDATA[ 
+				SELECT * FROM DATA_PERMISSON_CFG t  where 1=1
+						
+		]]>
+		<if test="parentId != null">
+			AND PARENT_ID IN
+			<foreach item="item" index="index" collection="pids" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	</select>
+  
+  	<select id="getMaxId" parameterType="map" resultType="long">
+		<![CDATA[ SELECT max(ID) FROM DATA_PERMISSON_CFG t  ]]>
+		
+	</select>
+	
+</mapper>

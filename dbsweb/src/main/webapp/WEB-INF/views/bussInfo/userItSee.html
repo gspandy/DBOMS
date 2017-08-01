@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户配置页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <link rel="Bookmark" href="${ctx}/img/favorite.png" >
+    <link rel="Shortcut Icon" href="${ctx}/img/favorite.png" />
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="${ctx}/css/reset.css">
+    <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${ctx}/css/general.css">
+    <link rel="stylesheet" href="${ctx}/css/layout.css">
+    <link rel="stylesheet" href="${ctx}/css/core.css">
+    <link rel="stylesheet" href="${ctx}/css/components.css">
+    <link rel="stylesheet" href="${ctx}/js/kkpager/kkpager_blue.css">
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/additional-methods.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/messages_zh.js"></script>
+    <script type="text/javascript" src="${ctx}/js/kkpager/kkpager.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modalmanager.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    
+    <!--[if IE 6]>
+    <script type="text/javascript" src="${ctx}/Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('.pngfix,.icon');</script>
+    <![endif]-->
+</head>
+<script type="text/javascript">
+var  resId="${resoureId?if_exists}";
+var rootPath ="${ctx}";
+var buss_id="${bussId?if_exists}";
+var pageSize="0";
+var pageMaxSize="${pageMaxSize?if_exists}";
+var statusType="${statusType?if_exists}";
+$(function () {
+    $("#menu2").parent(".info").show();
+    $("#menu2").addClass("active").siblings().removeClass("active");
+    if (statusType=="1"){
+    	//$("#aaa").attr("disabled",true);
+    	 $("#cpu").attr("disabled",true);//cpu
+    	 $("#ram").attr("disabled",true);//ram
+    	 $("#storage").attr("disabled",true);//storage
+    	 $("#ftp").attr("disabled",true);//ftp
+    	 document.getElementById("btnSave").style.display = "none";
+    }
+    getBussTenant();
+    getItResource(statusType);
+    getDataPemissionDictsList();
+    getDataPemissionDeatil()
+   
+});
+
+function getDataPemissionDictsList() {
+    $.ajax({
+        url : rootPath+"/author/userSetting/getDatapemissionDict",
+        type : "post",
+        dataType : "json",
+        success : function (data) {
+            var list=data.dataPemissionDictsList;
+            var parnetHtml="";
+            $("#parnet_menu").html("");
+            var flag=true;
+            var flag1=true;
+            for(var i=0;i<list.length;i++){
+                if(list[i].parentCode =="-1"){
+                    var chiList=list[i].childList;
+                    var childSize
+                    if(chiList!=null){
+                        childSize =chiList.length;
+                    }else {
+                        childSize="0";
+                    }
+
+                    if(flag){
+                        parnetHtml +='<li class="cur" onclick="changeBox(\''+list[i].code+'\',\''+childSize+'\')" id=\'par_'+list[i].code+'\'>'+list[i].name+'<b></b></li>';
+                        flag=false;
+                    }else{
+                        parnetHtml +='<li id=\'par_'+list[i].code+'\' onclick="changeBox(\''+list[i].code+'\',\''+childSize+'\')">'+list[i].name+'<b></b></li>';
+                    }
+                }
+
+                if(list[i].childFlag=="true"){
+                    var childList=list[i].childList;
+                    var childHtml="";
+                    //$("#chileBox").html("");
+                    if (flag1){
+                        childHtml +="<div id=chil_"+list[i].code+" class='box open-box' style='display:block;'>";
+                        flag1=false;
+                    }else{
+                        childHtml +="<div id=chil_"+list[i].code+" class='box'>";
+                    }
+                    for (var chi =0;chi<childList.length;chi++){
+                        childHtml +="<span class='btn' id="+childList[chi].code+" data-value="+childList[chi].code+">"+childList[chi].name+"<b></b></span>";
+                    }
+                    childHtml +="</div>";
+                    $("#chileBox").append(childHtml);
+                }
+
+            }
+            $("#parnet_menu").html(parnetHtml);
+        },
+        error : function () {
+            return false;
+        }
+    });
+}
+
+function getDataPemissionDeatil() {
+    $.ajax({
+        url : rootPath+"/author/userSetting/getPemissionDetail",
+        type : 'post',
+        dataType : 'json',
+        success : function (data) {
+            var list=data.dictList;
+            if (list.length>0){
+                for (var  m in list){
+                    if(list[m].childFlag=="true"){
+                        var chiList=list[m].childList;
+                        for (var k in chiList){
+                            $("#"+chiList[k].code).addClass("active");
+                        }
+                    }
+                }
+            }
+        },
+        error : function () {
+            return false;
+        }
+    });
+}
+function  getItResource(statusType) {
+    $.ajax({
+        url : rootPath+"/author/userSetting/getItResource?statusType="+statusType,
+        type : "post" ,
+        dataType : "json",
+        success : function (data) {
+            var itList=data.itList;
+            if(itList.length>0){
+            	debugger;
+                /* var cupType=itList[0].cupType;//cpu
+                var memorySize=itList[0].memorySize;//内存 */
+                var diskSize=itList[0].diskSize;//存储
+                var ftpSize=itList[0].ftpSize;//ftp
+
+               /*  var cpu=document.getElementById("cpu");
+                var cupOpt=cpu.options;
+                for(var  cp in  cupOpt){
+                    if(cupOpt[cp].value==cupType){
+                        $("#cpu option[value="+cupType+"]").prop("selected","true");
+                    }
+                }
+                var ram=document.getElementById("ram");
+                var ramOpt=ram.options;
+                for(var  ra in  ramOpt){
+                    if(ramOpt[ra].value==memorySize){
+                        $("#ram option[value="+memorySize+"]").prop("selected","true");
+                    }
+                } */
+                var storage=document.getElementById("storage");
+                var storageOpt=storage.options;
+                for(var  st in  storageOpt){
+                    if(storageOpt[st].value==diskSize){
+                        $("#storage option[value="+diskSize+"]").prop("selected","true");
+                    }
+                }
+                /* var ftp=document.getElementById("ftp");
+                var ftpOpt=ftp.options;
+                for(var  ft in  ftpOpt){
+                	debugger;
+                    if(ftpOpt[ft].value==ftpSize){
+                        $("#ftp option[value="+ftpSize+"]").prop("selected","true");
+                    }
+                } */
+            }
+        },
+        error : function () {
+            alert("查询it资源失败！");
+            return false;
+        }
+    });
+}
+
+function saveRole() {
+    changeTip();
+    var  name=$.trim($("#name").val());
+    var idCard=$.trim($("#idCard").val());
+    var phoneNum=$.trim($("#phoneNum").val());
+    var emial=$.trim($("#email").val());
+    var roles=[];//权限
+    $('input[name="role"]:checked').each(function(){
+        roles.push($(this).val());
+    });
+    $.ajax({
+        url : rootPath+"/author/bussTenant/save?operType=1",
+        data : {"tenantName" : name,
+                "mobile" : phoneNum,
+                "roleId" : roles.join(","),
+                "idCard" : idCard,
+                "email" : emial,
+                "bussId" : buss_id},
+        type : 'post',
+        dataType : 'json',
+        success : function (data) {
+            if(data.flag=="1"){
+                alert("新增成功！");
+                $(".modal-scrollable,.modal-backdrop").hide();
+                getBussTenant();
+            }else{
+                var message=data.message;
+                alert("新增失败："+message);
+                return false;
+            }
+        },
+        error : function () {
+            alert("新增失败");
+            return false;
+        }
+    });
+}
+
+function changeVal(type) {
+    if(parseInt(type)<parseInt(4)){
+        if($("#data"+type).hasClass("active")){
+            $("#data"+type).removeClass("active");
+            $("#role"+type).removeAttr("checked");
+        }else{
+            $("#data"+type).addClass("active");
+            $("#role"+type).prop("checked","checked");
+        }
+        changeTip();
+    }else {
+        if($("#edit"+type).hasClass("active")){
+            $("#edit"+type).removeClass("active");
+            $("#role"+type).removeAttr("checked");
+        }else{
+            $("#edit"+type).addClass("active");
+            $("#role"+type).prop("checked","checked");
+        }
+        changeEditTip();
+    }
+
+
+}
+
+function  getBussTenant(type) {
+    if(parseInt(pageSize)<=parseInt(0)){
+        $("#prev").attr("style","display:none");
+    }else {
+        $("#prev").removeAttr("style");
+    }
+    if(parseInt(pageSize)>=parseInt(pageMaxSize)){
+        $("#next").attr("style","display:none");
+    }else {
+        $("#next").removeAttr("style");
+    }
+    if(parseInt(pageMaxSize)<=parseInt(5)){
+        $("#next").attr("style","display:none");
+    }else {
+        $("#next").removeAttr("style");
+    }
+    if(type=="0"){//下一页
+        pageSize=parseInt(pageSize)+parseInt(5);
+        if(parseInt(pageSize)<=parseInt(0)){
+            $("#prev").attr("style","display:none");
+        }else {
+            $("#prev").removeAttr("style");
+        }
+        var  temp=parseInt(pageSize)+parseInt(5);
+        if(parseInt(temp)>=parseInt(pageMaxSize)){
+            $("#next").attr("style","display:none");
+        }else {
+            $("#next").removeAttr("style");
+        }
+    }else if (type=="1"){//上一页
+        pageSize=parseInt(pageSize)-parseInt(5);
+        if(parseInt(pageSize)<=parseInt(0)){
+            $("#prev").attr("style","display:none");
+        }else {
+            $("#prev").removeAttr("style");
+        }
+        if(parseInt(pageSize)>=parseInt(pageMaxSize)){
+            $("#next").attr("style","display:none");
+        }else {
+            $("#next").removeAttr("style");
+        }
+    }
+    $.ajax({
+        url : rootPath+"/author/userSetting/getBussTenant",
+        type : "post",
+        data : {pageSize : pageSize },
+        dataType : "json",
+        success:function(result) {
+            var roleMes=result.bussTenant;
+            var  html="";
+            $("#roleList").html("");
+            for (var i=0;i<roleMes.length;i++){
+                var tenant_id=roleMes[i].tenantId;
+                var auditStatus=roleMes[i].auditStatus;
+                html +="<tr>";
+                html +="<td>"+roleMes[i].tenantId+"</td>";
+                html +="<td>"+roleMes[i].tenantName+"</td>";
+                html +="<td>"+roleMes[i].mobile+"</td>";
+                html +="<td>"+roleMes[i].email+"</td>";
+                var  busstenMes=result.tenantRole;
+                var  temp="";
+                for(var  j=0 ;j<busstenMes.length;j++){
+                    if (busstenMes[j].tenantId==roleMes[i].tenantId){
+                        if(busstenMes[j].roleId=="1"){
+                            temp = temp +"，数据加工角色";
+                        }else if (busstenMes[j].roleId=="2"){
+                            temp = temp +"，数据建模角色";
+                        }else if (busstenMes[j].roleId=="3"){
+                            temp = temp +"，数据审核角色";
+                        }
+                    }
+                }
+                if(temp.substr(0,1)=="," || temp.substr(0,1)=="，" ){
+                    temp=temp.substr(1);
+                }
+                html += "<td>"+temp+"</td>";
+                if(auditStatus=="0"){
+                    html += '<td>'
+                            +'<a class="c-999" title="修改" data-toggle="modal" onclick="setTenantId(\''+tenant_id+'\',\'1\',\''+auditStatus+'\')" ><i class="fa fa-edit"></i></a>'
+                            +' <a class="c-999 ml-15" title="删除" data-toggle="modal" onclick="setTenantId(\''+tenant_id+'\',\'0\',\''+auditStatus+'\')" ><i class="fa fa-trash"></i></a>'
+                            +'</td>';
+                }else{
+                    html += '<td>'
+                            +'<a class="c-999" title="修改" data-toggle="modal" onclick="setTenantId(\''+tenant_id+'\',\'1\',\''+auditStatus+'\')" href="#modal-upowerEdit"><i class="fa fa-edit"></i></a>'
+                            +' <a class="c-999 ml-15" title="删除" data-toggle="modal" onclick="setTenantId(\''+tenant_id+'\',\'0\',\''+auditStatus+'\')" href="#modal-upowerDelete"><i class="fa fa-trash"></i></a>'
+                            +'</td>';
+                }
+                html +="</tr>";
+            }
+            $("#roleList").append(html);
+        },
+        error:function() {
+            $(".modal-srollable,.modal-backdrop").show();
+            return false;
+        }
+    });
+}
+
+function setTenantId(id,type,auditStatus) {
+    if(auditStatus=="0" && type=="1"){
+        alert("该操作员处于待审核状态，暂时不能修改！");
+    }else if(auditStatus=="0" && type=="0"){
+        alert("该操作员处于待审核状态，暂时不能删除！");
+    }else{
+        $("#tenantId").val(id);
+        if(type=="1"){//修改
+            $.ajax({
+                url : rootPath+"/author/userSetting/getRoleMessage?tenantId="+id,
+                type : 'post',
+                dataType : 'json',
+                success : function (data) {
+                    var  roleMessage=data.roleMessage;
+                    for (var i=0;i<roleMessage.length;i++){
+                        if (roleMessage[i].tenantId==id){
+                            $("#editName").val(roleMessage[i].tenantName);//姓名
+                            $("#editPhone").val(roleMessage[i].mobile);//电话
+                            $("#editIdCard").val(roleMessage[i].idCard);//身份证号码
+                            $("#editEmail").val(roleMessage[i].email);//邮箱
+                        }
+                    }
+
+                    $("#edit4").removeClass("active");
+                    $("#edit5").removeClass("active");
+                    $("#edit6").removeClass("active");
+                    $("#role4").removeAttr("checked");
+                    $("#role5").removeAttr("checked");
+                    $("#role6").removeAttr("checked");
+                    var tenantMessage=data.tenantMessage;
+                    for (var j=0;j<tenantMessage.length;j++){
+                        if(tenantMessage[j].tenantId==id){
+                            if (tenantMessage[j].roleId=="1"){
+                                $("#edit4").addClass("active");
+                                $("#role4").prop("checked","checked");
+                            }else  if (tenantMessage[j].roleId=="2"){
+                                $("#edit5").addClass("active");
+                                $("#role5").prop("checked","checked");
+                            }else  if(tenantMessage[j].roleId=="3"){
+                                $("#edit6").addClass("active");
+                                $("#role6").prop("checked","checked");
+                            }
+                        }
+                    }
+                },
+                error : function () {
+                    alert("查询失败");
+                    return false;
+                }
+            });
+        }
+    }
+}
+
+function deleteRole() {
+    var tenantId=$("#tenantId").val();
+    var roleIds=$("#roleIds").val();
+    $.ajax({
+        url :  rootPath+"/author/bussTenant/deleteByTenantId?tenantId="+tenantId+"&operType=3",
+        type : 'post',
+        dataType : 'json',
+        success : function (data) {
+            if(data.success==true){
+                alert("删除成功！");
+                getBussTenant();
+            }else {
+                alert("删除失败！");
+                return false;
+            }
+        },
+        error : function () {
+            alert("删除失败！");
+            return false;
+        }
+    });
+}
+
+function editRoleMesage() {
+    changeEditTip();
+    var name=$("#editName").val();
+    var mobile=$("#editPhone").val();
+    var email=$("#editEmail").val();
+    var idCard=$("#editIdCard").val();
+    var tenantId=$("#tenantId").val();
+    var roleIds=[];//权限
+    $('input[name="editRoleId"]:checked').each(function(){
+        roleIds.push($(this).val());
+    });
+
+    $.ajax({
+        url :  rootPath+"/author/bussTenant/save?operType=2",
+        data : {"tenantName" : name,
+            "mobile" : mobile,
+            "roleId" : roleIds.join(","),
+            "idCard" : idCard,
+            "email" : email,
+            "bussId" : buss_id,
+            "tenantId" : tenantId},
+        type : 'post',
+        dataType : 'json',
+        success : function (data) {
+            alert("修改成功！");
+            $(".modal-scrollable,.modal-backdrop").hide();
+            getBussTenant();
+        },
+        error : function () {
+            alert("修改失败！");
+            return false;
+        }
+
+    });
+}
+
+	//保存信息
+function  saveConfigure(type) {
+       //被选中的value 装进数组
+       //var arr=[];
+       $(".tags-cont .btn").each(function(index){
+           if($(this).hasClass("active")){
+               arr.push($(this).attr("data-value"));
+           }
+       });
+       var cpu=$("#cpu").val();
+       var ram=$("#ram").val();
+       var ftp=$("#ftp").val();
+       var storage=$("#storage").val();
+     /*   if (arr.length<1){
+           $("#dataTip").show();
+           return false;
+       } */
+       $.ajax({
+           url : rootPath+"/author/buss/saveItResource?operType="+type,
+           data : {
+               "cpu" : cpu,
+               "ram" : ram,
+               "storage" : storage,
+               "ftp" : ftp,
+               "resId" : resId
+               /* "pemId" : arr.join(",") */
+           },
+           type : "post",
+           dataType : "json",
+           success : function (data) {
+               if(data.flag=="1"){
+                  $.jBox.tip('配置成功！','success');
+                   //alert("配置成功！");
+                   window.location.href="${ctx}/${bussinfoGuideUrl}";
+               }else {
+                   $.jBox.error('配置失败！<br/>失败原因：' + data.message, '提示');
+                  //alert("配置失败！"+data.message);
+                   return false;
+               }
+
+           },
+           error : function () {
+               alert("配置失败");
+               return false;
+           }
+       });
+   }
+function changeBox(pCode){
+    $("#par_"+pCode).addClass("cur").siblings().removeClass("cur");
+    $(".box").hide().removeClass("open-box");
+    $("#chil_"+pCode).addClass("open-box").show();
+    //判断box是否存在有选中的btn
+    $(".box").each(function(){
+        var btn=$(this).children(".btn").hasClass("active");
+        if(btn){
+            var boxIndex=$(this).index();
+            $(".tags-sidebar li").eq(boxIndex).addClass("selected");
+        }
+        if(!btn){
+            var boxIndex=$(this).index();
+            $(".tags-sidebar li").eq(boxIndex).removeClass("selected");
+        }
+    });
+    var k=0;
+    var j=0;
+   $("#chil_"+pCode +" .btn").each(function(){
+        var btn=$(this).hasClass("active");
+        if(btn){
+           k++;
+        }
+        j++;
+    });
+
+    if(j==k&&k!=0){
+        $("#checkAll").prop("checked","checked");
+    }else {
+        $("#checkAll").removeAttr("checked");
+    }
+
+
+}
+
+function changeTip() {
+    var  name=$.trim($("#name").val());
+    if(null!=name || ""!=name){
+        $("#nameTip").hide();
+    }
+    var idCard=$.trim($("#idCard").val());
+    if (null!=idCard || ""!=idCard){
+        $("#idCardTip").hide();
+        $("#idCardTip2").hide();
+    }
+    var phoneNum=$.trim($("#phoneNum").val());
+    if(null!=phoneNum ||　""!=phoneNum){
+        $("#phoneTip").hide();
+        $("#phoneTip2").hide();
+    }
+
+    var emial=$.trim($("#email").val());
+    if(null!=emial || ""!=emial){
+        $("#emailtip").hide();
+        $("#emailTip2").hide();
+    }
+    var roles=[];//权限
+    $('input[name="role"]:checked').each(function(){
+        roles.push($(this).val());
+    });
+    if(roles.length>0){
+        $("#roleTip").hide();
+    }
+    if(null==name || ""==name){
+        $("#nameTip").show();
+        return false;
+    }
+    if (null==idCard || ""==idCard){
+        $("#idCardTip").show();
+        return false;
+    }else{
+        //15位数身份证正则表达式
+        var arg1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+        //18位数身份证正则表达式
+        var arg2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/;
+        if (idCard.match(arg1) == null && idCard.match(arg2) == null){
+            $("#idCardTip2").show();
+            return false;
+        }
+    }
+    if(null==phoneNum ||　""==phoneNum){
+        $("#phoneTip").show();
+        return false;
+    }else{
+        var phoneRegNoArea = /^[1][358][0-9]{9}$/;
+        if (!phoneRegNoArea.test(phoneNum)) {
+            $("#phoneTip2").show();
+            return false;
+        }
+    }
+
+    if(null==emial || ""==emial){
+        $("#emailtip").show();
+        return false
+    }else{
+        var szReg=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        if(!szReg.test(emial)){
+            $("#emailTip2").show();
+            return false;
+        }
+    }
+    var roles=[];//权限
+    $('input[name="role"]:checked').each(function(){
+        roles.push($(this).val());
+    });
+    if(roles.length<1){
+        $("#roleTip").show();
+        //$(".modal-srollable,.modal-backdrop").show();
+        return false;
+    }
+}
+
+function changeEditTip() {
+    var name=$.trim($("#editName").val());
+    var mobile=$.trim($("#editPhone").val());
+    var email=$.trim($("#editEmail").val());
+    var idCard=$.trim($("#editIdCard").val());
+    var tenantId=$.trim($("#tenantId").val());
+    if(null!=name || ""!=name){
+        $("#nameEditTip").hide();
+    }
+    if (null!=idCard || ""!=idCard){
+        $("#idCardEditTip").hide();
+        $("#idCardEditTip2").hide();
+    }
+    if(null!=phoneNum ||　""!=phoneNum){
+        $("#phoneEditTip").hide();
+        $("#phoneEditTip2").hide();
+    }
+
+    if(null!=emial || ""!=emial){
+        $("#emailEditTip").hide();
+        $("#emailEditTip2").hide();
+    }
+    var roles=[];//权限
+    $('input[name="editRoleId"]:checked').each(function(){
+        roles.push($(this).val());
+    });
+    if(roles.length>0){
+        $("#roleEditTip").hide();
+    }
+    if(null==name || ""==name){
+        $("#nameEditTip").show();
+        return false;
+    }
+    if (null==idCard || ""==idCard){
+        $("#idCardEditTip").show();
+        return false;
+    }else{
+        //15位数身份证正则表达式
+        var arg1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+        //18位数身份证正则表达式
+        var arg2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[A-Z])$/;
+        if (idCard.match(arg1) == null && idCard.match(arg2) == null){
+            $("#idCardEditTip2").show();
+            return false;
+        }
+    }
+    if(null==phoneNum ||　""==phoneNum){
+        $("#phoneEditTip").show();
+        return false;
+    }else{
+        var phoneRegNoArea = /^[1][358][0-9]{9}$/;
+        if (!phoneRegNoArea.test(phoneNum)) {
+            $("#phoneEditTip2").show();
+            return false;
+        }
+    }
+
+    if(null==emial || ""==emial){
+        $("#emailEditTip").show();
+        return false
+    }else{
+        var szReg=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        if(!szReg.test(emial)){
+            $("#emailEditTip2").show();
+            return false;
+        }
+    }
+
+    var roleIds=[];//权限
+    $('input[name="editRoleId"]:checked').each(function(){
+        roleIds.push($(this).val());
+    });
+    if(roleIds.length<1){
+       $("#roleEditTip").show();
+        return false;
+    }
+}
+</script>
+<body>
+<!------------------------HEADER---------------------------->
+<#include "/views/common/header.html"/>
+
+<!------------------------SIDEBAR-------------------------->
+<#include "/views/common/aside.html"/>
+
+<!-------------------------CONT---------------------------->
+<form  id="queryForm" method="post" enctype="multipart/form-data" >
+<input type="hidden" name="tenantId" id="tenantId">
+<input type="hidden" name="dataCode" id="dataCode">
+<article class="article-box">
+    <div class="add-cont">
+        <section class="panel panel-primary">
+            <div class="panel-header"><h4>商户配置</h4></div>
+            <div class="panel-seheader">
+                <h5>IT资源配置</h5>
+            </div>
+            <div class="panel-body">
+          <!--       <div class="form-group  cl">
+                    <label class=" fl">CPU需求：</label>
+                    <select class="input-text" name="cpu" id="cpu">
+                        <if cpuTypeMap??>
+                        <#list cpuTypeMap?keys as key>
+                            <option value="${key}" > ${cpuTypeMap[key]}</option>
+                        </#list>
+                        </if>
+                    </select>
+                </div> 
+                <div class="form-group  cl">
+                    <label class=" fl">内存需求：</label>
+                    <select class="input-text" name="ram" id="ram">
+                        <#list memorySizeMap?keys as key>
+                            <option value="${key}" > ${memorySizeMap[key]}</option>
+                        </#list>
+                    </select>
+                </div>-->
+                <div class="form-group cl">
+                    <label class=" fl">存储需求：</label>
+                    <select class="input-text" name="storage" id="storage">
+                        <#list diskSizeMap?keys as key>
+                            <option value="${key}" > ${diskSizeMap[key]}</option>
+                        </#list>
+                    </select>
+               </div>
+                <!--  <div class="form-group  cl">
+                    <label class=" fl">FTP空间需求：</label>
+                    <select class="input-text" name="ftp" id="ftp">
+                        <#list ftpSizeMap?keys as key>
+                            <option value="${key}" > ${ftpSizeMap[key]}</option>
+                        </#list>
+                    </select>
+                </div> -->
+            </div>
+        </section>
+     
+   
+        <div class="btn-wrap mt-20 ml-80">
+            <a class="btn btn-primary" id="btnSave" href="javascript:void();" onclick="saveConfigure(1)">提交</a>
+            &nbsp; &nbsp;
+            <a class="btn btn-primary" id="btnSubmit" href="${ctx}/${bussinfoGuideUrl}">取消</a>
+
+
+        </div>
+    </div>
+</article>
+</form>
+<!------------------------FOOTER---------------------------->
+<#include "/views/common/footer.html"/>
+<!--------------------------MODAL---------------------------->
+
+</body>
+</html>

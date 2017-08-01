@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="APP_INFO">
+	<resultMap type="AppInfo" id="appInfoResultMap">
+		<id property="appId" column="APP_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="tenantName" column="TENANT_NAME"/>
+		<result property="bussName" column="BUSS_NAME"/>
+		<result property="appName" column="APP_NAME"/>
+		<result property="appurl" column="APP_url"/>
+		<result property="appDes" column="APP_DES"/>
+		<result property="appImg" column="APP_IMG" />
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="appId != null"><![CDATA[ AND t.APP_ID = #{appId} ]]></if>
+		<if test="appIdLike != null"><![CDATA[ AND t.APP_ID LIKE '%' || #{appIdLike} || '%' ]]></if>
+		<if test="appIdStart != null"><![CDATA[ AND t.APP_ID LIKE #{appIdStart} || '%' ]]></if>
+		<if test="appIdEnd != null"><![CDATA[ AND t.APP_ID LIKE '%' || #{appIdEnd} ]]></if>
+		<if test="appIdIn != null"><![CDATA[ AND t.APP_ID IN ]]><foreach item="item" index="index" collection="appIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="tenantName != null"><![CDATA[ AND t.TENANT_NAME = #{tenantName} ]]></if>
+		<if test="tenantNameLike != null"><![CDATA[ AND t.TENANT_NAME LIKE '%' || #{tenantNameLike} || '%' ]]></if>
+		<if test="tenantNameStart != null"><![CDATA[ AND t.TENANT_NAME LIKE #{tenantNameStart} || '%' ]]></if>
+		<if test="tenantNameEnd != null"><![CDATA[ AND t.TENANT_NAME LIKE '%' || #{tenantNameEnd} ]]></if>
+		<if test="tenantNameIn != null"><![CDATA[ AND t.TENANT_NAME IN ]]><foreach item="item" index="index" collection="tenantNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussName != null"><![CDATA[ AND t.BUSS_NAME = #{bussName} ]]></if>
+		<if test="bussNameLike != null"><![CDATA[ AND t.BUSS_NAME LIKE '%' || #{bussNameLike} || '%' ]]></if>
+		<if test="bussNameStart != null"><![CDATA[ AND t.BUSS_NAME LIKE #{bussNameStart} || '%' ]]></if>
+		<if test="bussNameEnd != null"><![CDATA[ AND t.BUSS_NAME LIKE '%' || #{bussNameEnd} ]]></if>
+		<if test="bussNameIn != null"><![CDATA[ AND t.BUSS_NAME IN ]]><foreach item="item" index="index" collection="bussNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appName != null"><![CDATA[ AND t.APP_NAME = #{appName} ]]></if>
+		<if test="appNameLike != null"><![CDATA[ AND t.APP_NAME LIKE '%' || #{appNameLike} || '%' ]]></if>
+		<if test="appNameStart != null"><![CDATA[ AND t.APP_NAME LIKE #{appNameStart} || '%' ]]></if>
+		<if test="appNameEnd != null"><![CDATA[ AND t.APP_NAME LIKE '%' || #{appNameEnd} ]]></if>
+		<if test="appNameIn != null"><![CDATA[ AND t.APP_NAME IN ]]><foreach item="item" index="index" collection="appNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appurl != null"><![CDATA[ AND t.APP_url = #{appurl} ]]></if>
+		<if test="appurlLike != null"><![CDATA[ AND t.APP_url LIKE '%' || #{appurlLike} || '%' ]]></if>
+		<if test="appurlStart != null"><![CDATA[ AND t.APP_url LIKE #{appurlStart} || '%' ]]></if>
+		<if test="appurlEnd != null"><![CDATA[ AND t.APP_url LIKE '%' || #{appurlEnd} ]]></if>
+		<if test="appurlIn != null"><![CDATA[ AND t.APP_url IN ]]><foreach item="item" index="index" collection="appurlIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appDes != null"><![CDATA[ AND t.APP_DES = #{appDes} ]]></if>
+		<if test="appDesLike != null"><![CDATA[ AND t.APP_DES LIKE '%' || #{appDesLike} || '%' ]]></if>
+		<if test="appDesStart != null"><![CDATA[ AND t.APP_DES LIKE #{appDesStart} || '%' ]]></if>
+		<if test="appDesEnd != null"><![CDATA[ AND t.APP_DES LIKE '%' || #{appDesEnd} ]]></if>
+		<if test="appDesIn != null"><![CDATA[ AND t.APP_DES IN ]]><foreach item="item" index="index" collection="appDesIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="appImg != null"><![CDATA[ AND t.APP_IMG = #{appImg} ]]></if>
+		<if test="appImgLike != null"><![CDATA[ AND t.APP_IMG LIKE '%' || #{appImgLike} || '%' ]]></if>
+		<if test="appImgStart != null"><![CDATA[ AND t.APP_IMG LIKE #{appImgStart} || '%' ]]></if>
+		<if test="appImgEnd != null"><![CDATA[ AND t.APP_IMG LIKE '%' || #{appImgEnd} ]]></if>
+		<if test="appImgIn != null"><![CDATA[ AND t.APP_IMG IN ]]><foreach item="item" index="index" collection="appImgIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="appId != null"><![CDATA[ AND t.APP_ID = #{appId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="tenantName != null"><![CDATA[ AND t.TENANT_NAME = #{tenantName} ]]></if>
+		<if test="bussName != null"><![CDATA[ AND t.BUSS_NAME = #{bussName} ]]></if>
+		<if test="appName != null"><![CDATA[ AND t.APP_NAME = #{appName} ]]></if>
+		<if test="appurl != null"><![CDATA[ AND t.APP_url = #{appurl} ]]></if>
+		<if test="appDes != null"><![CDATA[ AND t.APP_DES = #{appDes} ]]></if>
+		<if test="appImg != null"><![CDATA[ AND t.APP_IMG = #{appImg} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'appIdAsc'"><![CDATA[ t.APP_ID asc ]]></if>
+	  			<if test="item == 'appIdDesc'"><![CDATA[ t.APP_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'tenantNameAsc'"><![CDATA[ t.TENANT_NAME asc ]]></if>
+	  			<if test="item == 'tenantNameDesc'"><![CDATA[ t.TENANT_NAME desc ]]></if>
+	  			<if test="item == 'bussNameAsc'"><![CDATA[ t.BUSS_NAME asc ]]></if>
+	  			<if test="item == 'bussNameDesc'"><![CDATA[ t.BUSS_NAME desc ]]></if>
+	  			<if test="item == 'appNameAsc'"><![CDATA[ t.APP_NAME asc ]]></if>
+	  			<if test="item == 'appNameDesc'"><![CDATA[ t.APP_NAME desc ]]></if>
+	  			<if test="item == 'appurlAsc'"><![CDATA[ t.APP_url asc ]]></if>
+	  			<if test="item == 'appurlDesc'"><![CDATA[ t.APP_url desc ]]></if>
+	  			<if test="item == 'appDesAsc'"><![CDATA[ t.APP_DES asc ]]></if>
+	  			<if test="item == 'appDesDesc'"><![CDATA[ t.APP_DES desc ]]></if>
+	  			<if test="item == 'appImgAsc'"><![CDATA[ t.APP_IMG asc ]]></if>
+	  			<if test="item == 'appImgDesc'"><![CDATA[ t.APP_IMG desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="appInfoResultMap">
+		<![CDATA[ SELECT * FROM APP_INFO t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM APP_INFO t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="appInfoResultMap">
+		<![CDATA[ SELECT * FROM APP_INFO t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM APP_INFO t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="AppInfo" resultMap="appInfoResultMap">
+   	<![CDATA[ SELECT * FROM APP_INFO t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="AppInfo" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM APP_INFO t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="appInfoResultMap">
+    <![CDATA[ SELECT * FROM APP_INFO WHERE  
+				APP_ID=#{appId}
+		]]>
+	</select>
+  <!-- (3-4)============================= selectBuPk =================================== -->
+  <select id="selectBuPk" parameterType="java.lang.String" resultMap="appInfoResultMap">
+    <![CDATA[ SELECT * FROM  APP_INFO WHERE  
+				APP_NAME=#{appName}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="AppInfo">
+
+		<![CDATA[
+		    INSERT INTO APP_INFO
+		      (
+		      APP_ID,
+		      BUSS_ID,
+		      TENANT_NAME,
+		      BUSS_NAME,
+		      APP_NAME,
+		      APP_url,
+		      APP_DES,
+		      APP_IMG,
+		      CREATE_TIME,
+		      CREATER,
+		      MODIFY_TIME,
+		      MODIFIER
+		      )
+		    VALUES
+		      (			  
+					#{appId,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{tenantName,jdbcType=VARCHAR}
+				,
+					#{bussName,jdbcType=VARCHAR}
+				,
+					#{appName,jdbcType=VARCHAR}
+				,
+					#{appurl,jdbcType=VARCHAR}
+				,
+					#{appDes,jdbcType=VARCHAR}
+				,
+					#{appImg,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="AppInfo">
+    <![CDATA[ UPDATE APP_INFO ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					TENANT_NAME = #{tenantName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BUSS_NAME = #{bussName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_NAME = #{appName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_url = #{appurl,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_DES = #{appDes,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					APP_IMG = #{appImg,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE APP_ID=#{appId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="AppInfo">
+    <![CDATA[ UPDATE APP_INFO ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="tenantName != null"><![CDATA[ TENANT_NAME = #{tenantName}, ]]></if>
+    		<if test="bussName != null"><![CDATA[ BUSS_NAME = #{bussName}, ]]></if>
+    		<if test="appName != null"><![CDATA[ APP_NAME = #{appName}, ]]></if>
+    		<if test="appurl != null"><![CDATA[ APP_url = #{appurl}, ]]></if>
+    		<if test="appDes != null"><![CDATA[ APP_DES = #{appDes}, ]]></if>
+    		<if test="appImg != null"><![CDATA[ APP_IMG = #{appImg}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier} ]]></if>
+	    </set>  
+			WHERE APP_ID=#{appId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE APP_INFO ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE APP_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM APP_INFO  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="AppInfo">
+   <![CDATA[ DELETE FROM APP_INFO WHERE 1=1  ]]>    			
+		<![CDATA[ AND APP_ID = #{appId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND TENANT_NAME = #{tenantName} ]]>
+		<![CDATA[ AND BUSS_NAME = #{bussName} ]]>
+		<![CDATA[ AND APP_NAME = #{appName} ]]>
+		<![CDATA[ AND APP_url = #{appurl} ]]>
+		<![CDATA[ AND APP_DES = #{appDes} ]]>
+		<![CDATA[ AND APP_IMG = #{appImg} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM APP_INFO WHERE 
+		APP_ID IN (#{appId})
+		]]>
+	</delete>
+  
+</mapper>

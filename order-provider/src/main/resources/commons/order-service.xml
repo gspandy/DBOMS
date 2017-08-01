@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<!-- 和本地bean一样实现服务 -->
+	<bean id="ordInfoService" class="com.tydic.dbs.order.bo.OrdInfoBo">
+		<property name="ordInfoDao"><ref bean="ordInfoDao" /> </property>
+		<property name="ordLogDao"><ref bean="ordLogDao"/> </property>
+		<property name="ordPrdDao"><ref bean="ordPrdDao"/> </property>
+		<property name="ordRusultDao"><ref bean="ordRusultDao"/> </property>
+	</bean>
+	<bean id="ordLogService" class="com.tydic.dbs.order.bo.OrdLogBo">
+		<property name="ordLogDao"><ref bean="ordLogDao" /> </property>
+	</bean>
+	<bean id="ordPrdService" class="com.tydic.dbs.order.bo.OrdPrdBo">
+		<property name="ordPrdDao"><ref bean="ordPrdDao" /> </property>
+		<property name="ordLogDao"><ref bean="ordLogDao" /> </property>
+		<property name="ordInfoDao"><ref bean="ordInfoDao"/> </property>
+	</bean>
+	<bean id="ordRusultService" class="com.tydic.dbs.order.bo.OrdRusultBo">
+		<property name="ordRusultDao"><ref bean="ordRusultDao" /> </property>
+	</bean>
+
+	<bean id="ordResultFileService" class="com.tydic.dbs.order.bo.OrdResultFileBo">
+		<property name="ordResultFileDao"><ref bean="ordResultFileDao" /> </property>
+		<property name="ordResultFileHisDao"><ref bean="ordResultFileHisDao" /> </property>
+		<property name="ordInfoDao"><ref bean="ordInfoDao" /> </property>
+		<property name="bussItResourceDao"><ref bean="bussItResourceDao" /> </property>
+		<property name="billingListDao"><ref bean="billingListDao" /> </property>
+		<property name="consumListDao"><ref bean="consumListDao" /> </property>
+		<property name="ordPrdDao"><ref bean="ordPrdDao" /> </property>
+		<property name="ordRusultDao"><ref bean="ordRusultDao" /> </property>
+	</bean>
+
+	<bean id="ordResultFileHisService" class="com.tydic.dbs.order.bo.OrdResultFileHisBo">
+		<property name="ordResultFileHisDao"><ref bean="ordResultFileHisDao" /> </property>
+	</bean>
+		
+</beans>

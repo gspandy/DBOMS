@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_LOGIN_SMS">
+	<resultMap type="SysLoginSms" id="sysLoginSmsResultMap">
+		<id property="loginSmsId" column="LOGIN_SMS_ID"/>   
+		<result property="smsId" column="SMS_ID"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="veriCode" column="VERI_CODE"/>
+		<result property="smsType" column="SMS_TYPE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="expireTime" column="EXPIRE_TIME"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="loginSmsId != null"><![CDATA[ AND t.LOGIN_SMS_ID = #{loginSmsId} ]]></if>
+		<if test="loginSmsIdGt != null"><![CDATA[ AND t.LOGIN_SMS_ID > #{loginSmsIdGt} ]]></if>
+		<if test="loginSmsIdGte != null"><![CDATA[ AND t.LOGIN_SMS_ID >= #{loginSmsIdGte} ]]></if>
+		<if test="loginSmsIdLt != null"><![CDATA[ AND t.LOGIN_SMS_ID < #{loginSmsIdLt} ]]></if>
+		<if test="loginSmsIdLte != null"><![CDATA[ AND t.LOGIN_SMS_ID <= #{loginSmsIdLte} ]]></if>
+		<if test="loginSmsIdIn != null"><![CDATA[ AND t.LOGIN_SMS_ID IN ]]><foreach item="item" index="index" collection="loginSmsIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="smsId != null"><![CDATA[ AND t.SMS_ID = #{smsId} ]]></if>
+		<if test="smsIdGt != null"><![CDATA[ AND t.SMS_ID > #{smsIdGt} ]]></if>
+		<if test="smsIdGte != null"><![CDATA[ AND t.SMS_ID >= #{smsIdGte} ]]></if>
+		<if test="smsIdLt != null"><![CDATA[ AND t.SMS_ID < #{smsIdLt} ]]></if>
+		<if test="smsIdLte != null"><![CDATA[ AND t.SMS_ID <= #{smsIdLte} ]]></if>
+		<if test="smsIdIn != null"><![CDATA[ AND t.SMS_ID IN ]]><foreach item="item" index="index" collection="smsIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mobile != null"><![CDATA[ AND t.MOBILE = #{mobile} ]]></if>
+		<if test="mobileLike != null"><![CDATA[ AND t.MOBILE LIKE '%' || #{mobileLike} || '%' ]]></if>
+		<if test="mobileStart != null"><![CDATA[ AND t.MOBILE LIKE #{mobileStart} || '%' ]]></if>
+		<if test="mobileEnd != null"><![CDATA[ AND t.MOBILE LIKE '%' || #{mobileEnd} ]]></if>
+		<if test="mobileIn != null"><![CDATA[ AND t.MOBILE IN ]]><foreach item="item" index="index" collection="mobileIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="veriCode != null"><![CDATA[ AND t.VERI_CODE = #{veriCode} ]]></if>
+		<if test="veriCodeLike != null"><![CDATA[ AND t.VERI_CODE LIKE '%' || #{veriCodeLike} || '%' ]]></if>
+		<if test="veriCodeStart != null"><![CDATA[ AND t.VERI_CODE LIKE #{veriCodeStart} || '%' ]]></if>
+		<if test="veriCodeEnd != null"><![CDATA[ AND t.VERI_CODE LIKE '%' || #{veriCodeEnd} ]]></if>
+		<if test="veriCodeIn != null"><![CDATA[ AND t.VERI_CODE IN ]]><foreach item="item" index="index" collection="veriCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="smsType != null"><![CDATA[ AND t.SMS_TYPE = #{smsType} ]]></if>
+		<if test="smsTypeGt != null"><![CDATA[ AND t.SMS_TYPE > #{smsTypeGt} ]]></if>
+		<if test="smsTypeGte != null"><![CDATA[ AND t.SMS_TYPE >= #{smsTypeGte} ]]></if>
+		<if test="smsTypeLt != null"><![CDATA[ AND t.SMS_TYPE < #{smsTypeLt} ]]></if>
+		<if test="smsTypeLte != null"><![CDATA[ AND t.SMS_TYPE <= #{smsTypeLte} ]]></if>
+		<if test="smsTypeIn != null"><![CDATA[ AND t.SMS_TYPE IN ]]><foreach item="item" index="index" collection="smsTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="expireTime != null"><![CDATA[ AND t.EXPIRE_TIME = #{expireTime} ]]></if>
+		<if test="expireTimeLte != null"><![CDATA[ AND t.EXPIRE_TIME <= #{expireTimeLte} ]]></if>
+		<if test="expireTimeGte != null"><![CDATA[ AND t.EXPIRE_TIME >= #{expireTimeGte} ]]></if>
+		<if test="expireTimeLike != null"><![CDATA[ AND t.EXPIRE_TIME LIKE '%' || #{expireTimeLike} || '%' ]]></if>
+		<if test="expireTimeStart != null"><![CDATA[ AND t.EXPIRE_TIME LIKE #{expireTimeStart} || '%' ]]></if>
+		<if test="expireTimeEnd != null"><![CDATA[ AND t.EXPIRE_TIME LIKE '%' || #{expireTimeEnd} ]]></if>
+		<if test="expireTimeIn != null"><![CDATA[ AND t.EXPIRE_TIME IN ]]><foreach item="item" index="index" collection="expireTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="loginSmsId != null"><![CDATA[ AND t.LOGIN_SMS_ID = #{loginSmsId} ]]></if>
+		<if test="smsId != null"><![CDATA[ AND t.SMS_ID = #{smsId} ]]></if>
+		<if test="mobile != null"><![CDATA[ AND t.MOBILE = #{mobile} ]]></if>
+		<if test="veriCode != null"><![CDATA[ AND t.VERI_CODE = #{veriCode} ]]></if>
+		<if test="smsType != null"><![CDATA[ AND t.SMS_TYPE = #{smsType} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="expireTime != null"><![CDATA[ AND t.EXPIRE_TIME = #{expireTime} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'loginSmsIdAsc'"><![CDATA[ t.LOGIN_SMS_ID asc ]]></if>
+	  			<if test="item == 'loginSmsIdDesc'"><![CDATA[ t.LOGIN_SMS_ID desc ]]></if>
+	  			<if test="item == 'smsIdAsc'"><![CDATA[ t.SMS_ID asc ]]></if>
+	  			<if test="item == 'smsIdDesc'"><![CDATA[ t.SMS_ID desc ]]></if>
+	  			<if test="item == 'mobileAsc'"><![CDATA[ t.MOBILE asc ]]></if>
+	  			<if test="item == 'mobileDesc'"><![CDATA[ t.MOBILE desc ]]></if>
+	  			<if test="item == 'veriCodeAsc'"><![CDATA[ t.VERI_CODE asc ]]></if>
+	  			<if test="item == 'veriCodeDesc'"><![CDATA[ t.VERI_CODE desc ]]></if>
+	  			<if test="item == 'smsTypeAsc'"><![CDATA[ t.SMS_TYPE asc ]]></if>
+	  			<if test="item == 'smsTypeDesc'"><![CDATA[ t.SMS_TYPE desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'expireTimeAsc'"><![CDATA[ t.EXPIRE_TIME asc ]]></if>
+	  			<if test="item == 'expireTimeDesc'"><![CDATA[ t.EXPIRE_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysLoginSmsResultMap">
+		<![CDATA[ SELECT * FROM SYS_LOGIN_SMS t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_LOGIN_SMS t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysLoginSmsResultMap">
+		<![CDATA[ SELECT * FROM SYS_LOGIN_SMS t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_LOGIN_SMS t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysLoginSms" resultMap="sysLoginSmsResultMap">
+   	<![CDATA[ SELECT * FROM SYS_LOGIN_SMS t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysLoginSms" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_LOGIN_SMS t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysLoginSmsResultMap">
+    <![CDATA[ SELECT * FROM SYS_LOGIN_SMS WHERE  
+				LOGIN_SMS_ID=#{loginSmsId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysLoginSms">
+				<!--  
+				<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="loginSmsId">  
+		        	SELECT nextval('SEQ_SYS_LOGIN_SMS') AS loginSmsId
+		        </selectKey>
+				-->
+		<![CDATA[
+		    INSERT INTO SYS_LOGIN_SMS
+		      (
+		      LOGIN_SMS_ID,
+		      SMS_ID,
+		      MOBILE,
+		      VERI_CODE,
+		      SMS_TYPE,
+		      CREATE_TIME,
+		      EXPIRE_TIME
+		      )
+		    VALUES
+		      (			  
+					#{loginSmsId,jdbcType=INTEGER}
+				,
+					#{smsId,jdbcType=INTEGER}
+				,
+					#{mobile,jdbcType=VARCHAR}
+				,
+					#{veriCode,jdbcType=VARCHAR}
+				,
+					#{smsType,jdbcType=INTEGER}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{expireTime,jdbcType=TIMESTAMP}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysLoginSms">
+    <![CDATA[ UPDATE SYS_LOGIN_SMS ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SMS_ID = #{smsId,jdbcType=INTEGER},
+    		]]>
+    		<![CDATA[ 
+					MOBILE = #{mobile,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					VERI_CODE = #{veriCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					SMS_TYPE = #{smsType,jdbcType=INTEGER},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					EXPIRE_TIME = #{expireTime,jdbcType=TIMESTAMP}
+    		]]>
+	    </set>  
+			WHERE LOGIN_SMS_ID=#{loginSmsId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysLoginSms">
+    <![CDATA[ UPDATE SYS_LOGIN_SMS ]]>
+	    <set>  		
+    		<if test="smsId != null"><![CDATA[ SMS_ID = #{smsId}, ]]></if>
+    		<if test="mobile != null"><![CDATA[ MOBILE = #{mobile}, ]]></if>
+    		<if test="veriCode != null"><![CDATA[ VERI_CODE = #{veriCode}, ]]></if>
+    		<if test="smsType != null"><![CDATA[ SMS_TYPE = #{smsType}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="expireTime != null"><![CDATA[ EXPIRE_TIME = #{expireTime} ]]></if>
+	    </set>  
+			WHERE LOGIN_SMS_ID=#{loginSmsId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_LOGIN_SMS ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE LOGIN_SMS_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_LOGIN_SMS  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysLoginSms">
+   <![CDATA[ DELETE FROM SYS_LOGIN_SMS WHERE 1=1  ]]>    			
+		<![CDATA[ AND LOGIN_SMS_ID = #{loginSmsId} ]]>
+		<![CDATA[ AND SMS_ID = #{smsId} ]]>
+		<![CDATA[ AND MOBILE = #{mobile} ]]>
+		<![CDATA[ AND VERI_CODE = #{veriCode} ]]>
+		<![CDATA[ AND SMS_TYPE = #{smsType} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND EXPIRE_TIME = #{expireTime} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_LOGIN_SMS WHERE 
+		LOGIN_SMS_ID IN (#{loginSmsId})
+		]]>
+	</delete>
+  
+</mapper>

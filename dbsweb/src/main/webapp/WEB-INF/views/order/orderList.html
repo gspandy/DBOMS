@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>工单列表页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <!-- 时间插件 -->
+    <script type="text/javascript" src="${ctx}/js/My97DatePicker/WdatePicker.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	$(function () {
+		/***未左边导航添加样式***/
+		$("#menu4").parent(".info").show();
+		$("#menu4").addClass("active").siblings().removeClass("active");
+		
+		/***加载获取工单列表方法***/
+		getList();	
+	});
+  	var totalPage;
+  	var totalRecords;
+  	var page = 1;
+  	var rows = 6;
+  	var param = {};
+  	function getList(){
+  		if (!timeCheck()) {
+			return false;
+		}
+  		var ordId = $("#ordId").val()==undefined?"":$("#ordId").val();
+		var prdId = $("#prdId").val()==undefined?"":$("#prdId").val();
+		var prdName = $("#prdName").val()==undefined?"":$("#prdName").val();
+		var startTime = $("#startTime").val()==undefined?"":$("#startTime").val();
+		var endTime = $("#endTime").val()==undefined?"":$("#endTime").val();
+		var ordStatus = $("#ordStatus option:selected").val()==undefined?"":$("#ordStatus option:selected").val();
+		param["ordId"] = ordId;
+		param["prdId"] = prdId;
+		param["prdName"] = prdName;
+		param["startTime"] = startTime;
+		param["endTime"] = endTime;
+		param["ordStatus"] = ordStatus;
+		param["page"] = page;
+		param["rows"] = rows;
+		getData();
+  	}
+  	
+  	  /***切换页码获取数据***/
+	  function changPage(){
+		page = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+	    param["page"] = page;
+	    getList();
+	  }
+	  
+	  function getData(){
+	  	$.ajax({
+  			type: "POST",
+  			url: '${ctx}/author/order/getList',
+  			data: param,
+  			datatype: "json",
+  			success: function(data){
+  				if(data != null){
+  					var orderList = data.rows;
+  					totalPage = data.totalPage;
+  					totalRecords = data.totalNumber;
+  					$("#orderList").empty();
+  					var temp = "<thead><tr><th>工单号</th><th>产品ID</th><th>产品名称</th><th>产品计量单位</th><th>产品单价(元)</th><th>提交时间</th><th>数据返回条件</th><th>工单状态</th><th width=\"150\" >操作</th></tr></thead>";
+  					for (i in orderList){
+  						var prdUnit = orderList[i].prdUnit==1?"条数":"MB";
+  						var prdPrice = orderList[i].prdUnit==1?"￥"+orderList[i].prdPrice+"/条":"￥"+orderList[i].prdPrice+"/MB";
+  						var ordStatus = orderList[i].ordStatus;
+  						var time = FormatDate(orderList[i].createTime);
+  						var startTime = FormatDate(orderList[i].ordDateBegin);
+  						var endTime = FormatDate(orderList[i].ordDateEnd);
+  						if (ordStatus=='1') {
+  							ordStatus="<b class=\"c-orange\">未提交</b>";
+  							temp += "<tr>"
+								+ "<td>"+orderList[i].ordId+"</td>"
+								+ "<td>"+orderList[i].prdId+"</td>"
+								+ "<td>"+orderList[i].prdName+"</td>"
+								+ "<td>"+prdUnit+"</td>"
+								+ "<td>"+prdPrice+"</td>"
+								+ "<td>"+time+"</td>"
+								+ "<td>"+orderList[i].rows+"</td>"
+								+ "<td>"+ordStatus+"</td>"
+								+ "<td>"
+								+ "<a class=\"btn btn-op\" onclick=\"queryOrder('"+orderList[i].ordId+"')\" title=\"查看\"><i class=\"fa fa-search\"></i></a>"
+								+ "<a class=\"btn btn-op\" onclick=\"submitOrder('3','"+orderList[i].startRow+"','"+orderList[i].endRow+"','"+startTime+"','"+endTime+"','"+orderList[i].ordId+"','"+orderList[i].prdId+"')\" title=\"提交\"><i class=\"fa fa-upload\"></i></a>"
+								+ "<a class=\"btn btn-op\" onclick=\"updateOrder('"+orderList[i].ordId+"','"+orderList[i].prdId+"')\" title=\"修改\"><i class=\"fa fa-edit\"></i></a>"
+								+ "<a href=\"#removeModal\" data-toggle=\"modal\" onclick=\"preDelete('"+orderList[i].ordId+"')\" class=\"btn btn-op\" title=\"删除\"><i class=\"fa fa-trash\"></i></a>"
+								+ "</td>"
+								+ "</tr>";
+						} else if (ordStatus=='2') {
+							ordStatus="<b class=\"c-green\">已提交</b>";
+							temp += "<tr>"
+								+ "<td>"+orderList[i].ordId+"</td>"
+								+ "<td>"+orderList[i].prdId+"</td>"
+								+ "<td>"+orderList[i].prdName+"</td>"
+								+ "<td>"+prdUnit+"</td>"
+								+ "<td>"+prdPrice+"</td>"
+								+ "<td>"+time+"</td>"
+								+ "<td>"+orderList[i].rows+"</td>"
+								+ "<td>"+ordStatus+"</td>"
+								+ "<td>"
+								+ "<a class=\"btn btn-op\" onclick=\"queryOrder('"+orderList[i].ordId+"')\" title=\"查看\"><i class=\"fa fa-search\"></i></a>"
+								+ "</td>"
+								+ "</tr>";
+						} else if (ordStatus=='3') {
+							ordStatus="<b class=\"c-primary\">已执行</b>";
+							temp += "<tr>"
+								+ "<td>"+orderList[i].ordId+"</td>"
+								+ "<td>"+orderList[i].prdId+"</td>"
+								+ "<td>"+orderList[i].prdName+"</td>"
+								+ "<td>"+prdUnit+"</td>"
+								+ "<td>"+prdPrice+"</td>"
+								+ "<td>"+time+"</td>"
+								+ "<td>"+orderList[i].rows+"</td>"
+								+ "<td>"+ordStatus+"</td>"
+								+ "<td>"
+								+ "<a class=\"btn btn-op\" onclick=\"queryOrder('"+orderList[i].ordId+"')\" title=\"查看\"><i class=\"fa fa-search\"></i></a>"
+								+ "</td>"
+								+ "</tr>";
+						} else if(ordStatus=='4') {
+							ordStatus="<b class=\"c-red\">正在执行</b>";
+							temp += "<tr>"
+								+ "<td>"+orderList[i].ordId+"</td>"
+								+ "<td>"+orderList[i].prdId+"</td>"
+								+ "<td>"+orderList[i].prdName+"</td>"
+								+ "<td>"+prdUnit+"</td>"
+								+ "<td>"+prdPrice+"</td>"
+								+ "<td>"+time+"</td>"
+								+ "<td>"+orderList[i].rows+"</td>"
+								+ "<td>"+ordStatus+"</td>"
+								+ "<td>"
+								+ "<a class=\"btn btn-op\" onclick=\"queryOrder('"+orderList[i].ordId+"')\" title=\"查看\"><i class=\"fa fa-search\"></i></a>"
+								+ "</td>"
+								+ "</tr>";
+						}else {
+							ordStatus="<b class=\"c-red\">执行失败</b>";
+							temp += "<tr>"
+							+ "<td>"+orderList[i].ordId+"</td>"
+							+ "<td>"+orderList[i].prdId+"</td>"
+							+ "<td>"+orderList[i].prdName+"</td>"
+							+ "<td>"+prdUnit+"</td>"
+							+ "<td>"+prdPrice+"</td>"
+							+ "<td>"+time+"</td>"
+							+ "<td>"+orderList[i].rows+"</td>"
+							+ "<td>"+ordStatus+"</td>"
+							+ "<td>"
+							+ "<a class=\"btn btn-op\" onclick=\"queryOrder('"+orderList[i].ordId+"')\" title=\"查看\"><i class=\"fa fa-search\"></i></a>"
+							+ "</td>"
+							+ "</tr>";
+						}
+						
+  					}
+  					$("#orderList").append(temp);
+  					toPage();	
+  				}else{
+  					
+  				}
+  			},
+  			error: function(data){
+  				
+  			}
+	  	});
+	  }
+    </script>
+    <!-- 加载分页控件 -->
+	<script type="text/javascript">
+		function preDelete(orderId){
+			$("#orderId").val(orderId);
+		}
+		
+		/*
+		 * 查看工单详情
+		 */
+		function queryOrder(orderId){
+			window.location.href = "${ctx}/author/order/detail?orderId="+orderId;
+		}
+		
+		/*
+		 * 修改工单内容
+		 */
+		function updateOrder(orderId,prdId){
+			window.location.href = "${ctx}/author/ordApply/toOrderApply?orderId="+orderId+"&operType=0&prdId="+prdId;
+		}
+		
+		/***提交工单***/
+		function submitOrder(operType,startRow,endRow,startTime,endTime,orderId,prdId){
+			$.ajax({
+				type : 'POST',
+				url : '${ctx}/author/ordApply/orderConfig',
+				data : {"operType":operType,"startRow":startRow,"endRow":endRow,"startTime":startTime,"endTime":endTime,"orderId":orderId,"prdId":prdId},
+				datatype : 'json',
+				success : function(data) {
+					if(data.infFlag=="0"){
+						$.jBox.prompt(data.mes, '提示', 'error', { closed: function () { getList(); } });
+					}else{
+						if(data.flag=="1"){
+							$.jBox.tip('提交成功！','success');
+							getList();
+						}else {
+							$.jBox.error('提交失败！<br/>'+data.message, '提示');
+						}
+					}
+				}
+			});
+		}
+		
+		/**
+		 * 删除工单
+		 */
+		function deleteOrder(){
+			$("#removeModal").modal('hide');
+			var orderId = $("#orderId").val();
+			$.ajax({
+				type : 'POST',
+				url : '${ctx}/author/order/deleteOrder',
+				data : {"orderId":orderId},
+				datatype : 'json',
+				success : function(data) {
+					if(data.flag){
+						$.jBox.tip('删除成功！','success');
+						getList();
+					}else {
+						$.jBox.error('删除失败！<br/>'+data.msg, '提示');
+					}
+				}
+			});
+		}
+		
+		/***用时间查询需满足结束时间大于等于开始时间***/
+		function timeCheck(){
+	  		var startTimeVal = $("#startTime").val();
+	  		var endTimeVal = $("#endTime").val();
+	  		if (startTimeVal==undefined||startTimeVal==null||startTimeVal=="") {
+				return true;
+			}
+	  		if (endTimeVal==undefined||endTimeVal==null||endTimeVal=="") {
+				return true;
+			}
+	  		if (endTimeVal>=startTimeVal) {
+				return true;
+			}
+	  		$.jBox.error('输入错误！<br/>结束时间必须大于开始时间', '提示');
+	  		return false;
+  		}
+		
+		  /***格式化时间***/
+		  function FormatDate (strTime) {
+		      var date = new Date(strTime);
+		      var mon;var day;var hour;var min;var ses;
+		      var  temp=date.getMonth()+1;
+		      if(temp<10){mon="0"+temp;}else {mon=temp;}
+		      if(date.getDate()<10){day="0"+date.getDate();}else {day=date.getDate();}
+		      if(date.getHours()<10){hour="0"+date.getHours();}else {hour=date.getHours();}
+		      if(date.getMinutes()<10){min="0"+date.getMinutes();}else {min=date.getMinutes();}
+		      if(date.getSeconds()<10){ses="0"+date.getSeconds();}else {ses=date.getSeconds();}
+		      return date.getFullYear()+"-"+mon+"-"+day+" " +hour+":"+min+":"+ses;
+		  }
+		
+		function toPage(){
+			kkpager.total = totalPage;
+			kkpager.totalRecords = totalRecords;
+			kkpager.pno = page;
+			kkpager.hasPrv = (kkpager.pno > 1);
+			kkpager.hasNext = (kkpager.pno < kkpager.total);
+			kkpager.generPageHtml({
+			     pno : page,
+			     mode : 'click', 
+			     total : totalPage,  
+			     totalRecords : totalRecords,
+			     click : function(n){
+			         this.selectPage(n);
+			  		 changPage();
+			         return false;
+			     },
+			     getHref : function(n){
+			         return 'javascript:void(0)';
+			     }
+				 });
+		}
+	</script> 
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->    
+   <article class="article-box">
+        <div class="List-cont">
+         <section class="panel panel-primary search-panel ">
+             <div class="panel-header"><h4>工单列表</h4></div>
+             <div class="panel-body">
+               <div class="search-form">
+                <from id="searchForm">
+                <input type="hidden" id="orderId" value=""/>
+                 <div class="row cl">
+                     <div class="col-sm-3">
+                         <label class="form-label" for="">工单号：</label><div class="formControls"><input type="text" id="ordId" class="input-text" ></div>
+                     </div>
+                     <div class="col-sm-4">
+                          <label class="form-label" for="">提交时间：</label><div class="formControls formControls-max"><input type="text" id="startTime" class="input-text input-min" readonly="true" onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd',skin:'whyGreen'})" onchange="timeCheck();" >--<input type="text" id="endTime" class="input-text input-min" readonly="true" onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd',skin:'whyGreen'})" onchange="timeCheck();"></div>
+                     </div>
+                     <div class="col-sm-5">
+                             <label class="form-label" for="">工单状态：</label><div class="formControls">
+                                 <select class="input-text" name="" id="ordStatus">
+                                     <option value="">全部</option>
+                                     <option value="1">未提交</option>
+                                     <option value="2">已提交</option>
+                                     <option value="3">已执行</option>
+                                     <option value="4">正在执行</option>
+                                 </select>
+                             </div>
+                     </div>
+                     
+                 </div>
+                 <div class="row mt-10 cl">
+                     <div class="col-sm-3">
+                         <label class="form-label" for="">产品ID：</label><div class="formControls"><input type="text" id="prdId" class="input-text" ></div>
+                     </div>
+                     <div class="col-sm-4">
+                         <label class="form-label" for="">产品名称：</label><div class="formControls formControls-max"><input type="text" id="prdName" class="input-text input-max" ></div>
+                     </div>
+                     
+                     <div class="col-sm-5 text-r">
+                         <a href="javascript:void(0)" class="btn btn-primary" onclick="getList();">查询</a>
+                         <a href="${ctx}/author/ordApply/toOrderApply?operType=1" class="btn btn-primary-outline">新增</a>
+                     </div>
+                 </div>
+                </from> 
+                </div>
+                <div class="order-list mt-20">
+         <table class="table table-primary" id="orderList">
+         </table>
+         </div>
+         <div id="kkpager"></div>
+             </div>
+         </section>
+         
+       </div>
+     </article>  
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+<!--------------------------MODAL---------------------------->
+<div id="removeModal" class="modal w300 hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-header">
+    <h3 id="myModalLabel">删除订单</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();"><i class="fa fa-times"></i></a>
+ </div>
+  <div class="modal-body">
+ <p>是否删除此订单？</p>
+ </div>
+  <div class="modal-footer text-c">
+  <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">关闭</button>
+ <button class="btn btn-primary" onclick="deleteOrder();">确定</button> 
+ </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_VIP_LOG">
+	<resultMap type="SysVipLog" id="sysVipLogResultMap">
+		<id property="vipLogId" column="VIP_LOG_ID"/>   
+		<result property="sysVipUserId" column="SYS_VIP_USER_ID"/>
+		<result property="vipLogType" column="VIP_LOG_TYPE"/>
+		<result property="vipLoginTime" column="VIP_LOGIN_TIME"/>
+		<result property="vipLogoutTime" column="VIP_LOGOUT_TIME"/>
+		<result property="verifyCode" column="VERIFY_CODE"/>
+		<result property="vipPageId" column="VIP_PAGE_ID"/>
+		<result property="vipGoodsId" column="VIP_GOODS_ID"/>
+		<result property="status" column="STATUS"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="remark" column="REMARK"/>
+		<result property="mallCode" column="MALL_CODE"/>
+		<result property="accessType" column="ACCESS_TYPE"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="vipLogId != null"><![CDATA[ AND t.VIP_LOG_ID = #{vipLogId} ]]></if>
+		<if test="vipLogIdGt != null"><![CDATA[ AND t.VIP_LOG_ID > #{vipLogIdGt} ]]></if>
+		<if test="vipLogIdGte != null"><![CDATA[ AND t.VIP_LOG_ID >= #{vipLogIdGte} ]]></if>
+		<if test="vipLogIdLt != null"><![CDATA[ AND t.VIP_LOG_ID < #{vipLogIdLt} ]]></if>
+		<if test="vipLogIdLte != null"><![CDATA[ AND t.VIP_LOG_ID <= #{vipLogIdLte} ]]></if>
+		<if test="vipLogIdIn != null"><![CDATA[ AND t.VIP_LOG_ID IN ]]><foreach item="item" index="index" collection="vipLogIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="sysVipUserId != null"><![CDATA[ AND t.SYS_VIP_USER_ID = #{sysVipUserId} ]]></if>
+		<if test="sysVipUserIdGt != null"><![CDATA[ AND t.SYS_VIP_USER_ID > #{sysVipUserIdGt} ]]></if>
+		<if test="sysVipUserIdGte != null"><![CDATA[ AND t.SYS_VIP_USER_ID >= #{sysVipUserIdGte} ]]></if>
+		<if test="sysVipUserIdLt != null"><![CDATA[ AND t.SYS_VIP_USER_ID < #{sysVipUserIdLt} ]]></if>
+		<if test="sysVipUserIdLte != null"><![CDATA[ AND t.SYS_VIP_USER_ID <= #{sysVipUserIdLte} ]]></if>
+		<if test="sysVipUserIdIn != null"><![CDATA[ AND t.SYS_VIP_USER_ID IN ]]><foreach item="item" index="index" collection="sysVipUserIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="vipLogType != null"><![CDATA[ AND t.VIP_LOG_TYPE = #{vipLogType} ]]></if>
+		<if test="vipLogTypeLike != null"><![CDATA[ AND t.VIP_LOG_TYPE LIKE '%' || #{vipLogTypeLike} || '%' ]]></if>
+		<if test="vipLogTypeStart != null"><![CDATA[ AND t.VIP_LOG_TYPE LIKE #{vipLogTypeStart} || '%' ]]></if>
+		<if test="vipLogTypeEnd != null"><![CDATA[ AND t.VIP_LOG_TYPE LIKE '%' || #{vipLogTypeEnd} ]]></if>
+		<if test="vipLogTypeIn != null"><![CDATA[ AND t.VIP_LOG_TYPE IN ]]><foreach item="item" index="index" collection="vipLogTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="vipLoginTime != null"><![CDATA[ AND t.VIP_LOGIN_TIME = #{vipLoginTime} ]]></if>
+		<if test="vipLoginTimeGt != null"><![CDATA[ AND t.VIP_LOGIN_TIME > #{vipLoginTimeGt} ]]></if>
+		<if test="vipLoginTimeGte != null"><![CDATA[ AND t.VIP_LOGIN_TIME >= #{vipLoginTimeGte} ]]></if>
+		<if test="vipLoginTimeLt != null"><![CDATA[ AND t.VIP_LOGIN_TIME < #{vipLoginTimeLt} ]]></if>
+		<if test="vipLoginTimeLte != null"><![CDATA[ AND t.VIP_LOGIN_TIME <= #{vipLoginTimeLte} ]]></if>
+		<if test="vipLogoutTime != null"><![CDATA[ AND t.VIP_LOGOUT_TIME = #{vipLogoutTime} ]]></if>
+		<if test="vipLogoutTimeGt != null"><![CDATA[ AND t.VIP_LOGOUT_TIME > #{vipLogoutTimeGt} ]]></if>
+		<if test="vipLogoutTimeGte != null"><![CDATA[ AND t.VIP_LOGOUT_TIME >= #{vipLogoutTimeGte} ]]></if>
+		<if test="vipLogoutTimeLt != null"><![CDATA[ AND t.VIP_LOGOUT_TIME < #{vipLogoutTimeLt} ]]></if>
+		<if test="vipLogoutTimeLte != null"><![CDATA[ AND t.VIP_LOGOUT_TIME <= #{vipLogoutTimeLte} ]]></if>
+		<if test="verifyCode != null"><![CDATA[ AND t.VERIFY_CODE = #{verifyCode} ]]></if>
+		<if test="verifyCodeLike != null"><![CDATA[ AND t.VERIFY_CODE LIKE '%' || #{verifyCodeLike} || '%' ]]></if>
+		<if test="verifyCodeStart != null"><![CDATA[ AND t.VERIFY_CODE LIKE #{verifyCodeStart} || '%' ]]></if>
+		<if test="verifyCodeEnd != null"><![CDATA[ AND t.VERIFY_CODE LIKE '%' || #{verifyCodeEnd} ]]></if>
+		<if test="verifyCodeIn != null"><![CDATA[ AND t.VERIFY_CODE IN ]]><foreach item="item" index="index" collection="verifyCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="vipPageId != null"><![CDATA[ AND t.VIP_PAGE_ID = #{vipPageId} ]]></if>
+		<if test="vipPageIdLike != null"><![CDATA[ AND t.VIP_PAGE_ID LIKE '%' || #{vipPageIdLike} || '%' ]]></if>
+		<if test="vipPageIdStart != null"><![CDATA[ AND t.VIP_PAGE_ID LIKE #{vipPageIdStart} || '%' ]]></if>
+		<if test="vipPageIdEnd != null"><![CDATA[ AND t.VIP_PAGE_ID LIKE '%' || #{vipPageIdEnd} ]]></if>
+		<if test="vipPageIdIn != null"><![CDATA[ AND t.VIP_PAGE_ID IN ]]><foreach item="item" index="index" collection="vipPageIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="vipGoodsId != null"><![CDATA[ AND t.VIP_GOODS_ID = #{vipGoodsId} ]]></if>
+		<if test="vipGoodsIdLike != null"><![CDATA[ AND t.VIP_GOODS_ID LIKE '%' || #{vipGoodsIdLike} || '%' ]]></if>
+		<if test="vipGoodsIdStart != null"><![CDATA[ AND t.VIP_GOODS_ID LIKE #{vipGoodsIdStart} || '%' ]]></if>
+		<if test="vipGoodsIdEnd != null"><![CDATA[ AND t.VIP_GOODS_ID LIKE '%' || #{vipGoodsIdEnd} ]]></if>
+		<if test="vipGoodsIdIn != null"><![CDATA[ AND t.VIP_GOODS_ID IN ]]><foreach item="item" index="index" collection="vipGoodsIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeGt != null"><![CDATA[ AND t.CREATE_TIME > #{createTimeGt} ]]></if>
+		<if test="createTimeGte != null"><![CDATA[ AND t.CREATE_TIME >= #{createTimeGte} ]]></if>
+		<if test="createTimeLt != null"><![CDATA[ AND t.CREATE_TIME < #{createTimeLt} ]]></if>
+		<if test="createTimeLte != null"><![CDATA[ AND t.CREATE_TIME <= #{createTimeLte} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeGt != null"><![CDATA[ AND t.MODIFY_TIME > #{modifyTimeGt} ]]></if>
+		<if test="modifyTimeGte != null"><![CDATA[ AND t.MODIFY_TIME >= #{modifyTimeGte} ]]></if>
+		<if test="modifyTimeLt != null"><![CDATA[ AND t.MODIFY_TIME < #{modifyTimeLt} ]]></if>
+		<if test="modifyTimeLte != null"><![CDATA[ AND t.MODIFY_TIME <= #{modifyTimeLte} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mallCode != null"><![CDATA[ AND t.MALL_CODE = #{mallCode} ]]></if>
+		<if test="mallCodeLike != null"><![CDATA[ AND t.MALL_CODE LIKE '%' || #{mallCodeLike} || '%' ]]></if>
+		<if test="mallCodeStart != null"><![CDATA[ AND t.MALL_CODE LIKE #{mallCodeStart} || '%' ]]></if>
+		<if test="mallCodeEnd != null"><![CDATA[ AND t.MALL_CODE LIKE '%' || #{mallCodeEnd} ]]></if>
+		<if test="mallCodeIn != null"><![CDATA[ AND t.MALL_CODE IN ]]><foreach item="item" index="index" collection="mallCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="accessType != null"><![CDATA[ AND t.ACCESS_TYPE = #{accessType} ]]></if>
+		<if test="accessTypeLike != null"><![CDATA[ AND t.ACCESS_TYPE LIKE '%' || #{accessTypeLike} || '%' ]]></if>
+		<if test="accessTypeStart != null"><![CDATA[ AND t.ACCESS_TYPE LIKE #{accessTypeStart} || '%' ]]></if>
+		<if test="accessTypeEnd != null"><![CDATA[ AND t.ACCESS_TYPE LIKE '%' || #{accessTypeEnd} ]]></if>
+		<if test="accessTypeIn != null"><![CDATA[ AND t.ACCESS_TYPE IN ]]><foreach item="item" index="index" collection="accessTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="vipLogId != null"><![CDATA[ AND t.VIP_LOG_ID = #{vipLogId} ]]></if>
+		<if test="sysVipUserId != null"><![CDATA[ AND t.SYS_VIP_USER_ID = #{sysVipUserId} ]]></if>
+		<if test="vipLogType != null"><![CDATA[ AND t.VIP_LOG_TYPE = #{vipLogType} ]]></if>
+		<if test="vipLoginTime != null"><![CDATA[ AND t.VIP_LOGIN_TIME = #{vipLoginTime} ]]></if>
+		<if test="vipLogoutTime != null"><![CDATA[ AND t.VIP_LOGOUT_TIME = #{vipLogoutTime} ]]></if>
+		<if test="verifyCode != null"><![CDATA[ AND t.VERIFY_CODE = #{verifyCode} ]]></if>
+		<if test="vipPageId != null"><![CDATA[ AND t.VIP_PAGE_ID = #{vipPageId} ]]></if>
+		<if test="vipGoodsId != null"><![CDATA[ AND t.VIP_GOODS_ID = #{vipGoodsId} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="mallCode != null"><![CDATA[ AND t.MALL_CODE = #{mallCode} ]]></if>
+		<if test="accessType != null"><![CDATA[ AND t.ACCESS_TYPE = #{accessType} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'vipLogIdAsc'"><![CDATA[ t.VIP_LOG_ID asc ]]></if>
+	  			<if test="item == 'vipLogIdDesc'"><![CDATA[ t.VIP_LOG_ID desc ]]></if>
+	  			<if test="item == 'sysVipUserIdAsc'"><![CDATA[ t.SYS_VIP_USER_ID asc ]]></if>
+	  			<if test="item == 'sysVipUserIdDesc'"><![CDATA[ t.SYS_VIP_USER_ID desc ]]></if>
+	  			<if test="item == 'vipLogTypeAsc'"><![CDATA[ t.VIP_LOG_TYPE asc ]]></if>
+	  			<if test="item == 'vipLogTypeDesc'"><![CDATA[ t.VIP_LOG_TYPE desc ]]></if>
+	  			<if test="item == 'vipLoginTimeAsc'"><![CDATA[ t.VIP_LOGIN_TIME asc ]]></if>
+	  			<if test="item == 'vipLoginTimeDesc'"><![CDATA[ t.VIP_LOGIN_TIME desc ]]></if>
+	  			<if test="item == 'vipLogoutTimeAsc'"><![CDATA[ t.VIP_LOGOUT_TIME asc ]]></if>
+	  			<if test="item == 'vipLogoutTimeDesc'"><![CDATA[ t.VIP_LOGOUT_TIME desc ]]></if>
+	  			<if test="item == 'verifyCodeAsc'"><![CDATA[ t.VERIFY_CODE asc ]]></if>
+	  			<if test="item == 'verifyCodeDesc'"><![CDATA[ t.VERIFY_CODE desc ]]></if>
+	  			<if test="item == 'vipPageIdAsc'"><![CDATA[ t.VIP_PAGE_ID asc ]]></if>
+	  			<if test="item == 'vipPageIdDesc'"><![CDATA[ t.VIP_PAGE_ID desc ]]></if>
+	  			<if test="item == 'vipGoodsIdAsc'"><![CDATA[ t.VIP_GOODS_ID asc ]]></if>
+	  			<if test="item == 'vipGoodsIdDesc'"><![CDATA[ t.VIP_GOODS_ID desc ]]></if>
+	  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+	  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+	  			<if test="item == 'mallCodeAsc'"><![CDATA[ t.MALL_CODE asc ]]></if>
+	  			<if test="item == 'mallCodeDesc'"><![CDATA[ t.MALL_CODE desc ]]></if>
+	  			<if test="item == 'accessTypeAsc'"><![CDATA[ t.ACCESS_TYPE asc ]]></if>
+	  			<if test="item == 'accessTypeDesc'"><![CDATA[ t.ACCESS_TYPE desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysVipLogResultMap">
+		<![CDATA[ SELECT * FROM SYS_VIP_LOG t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_LOG t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysVipLogResultMap">
+		<![CDATA[ SELECT * FROM SYS_VIP_LOG t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_LOG t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysVipLog" resultMap="sysVipLogResultMap">
+   	<![CDATA[ SELECT * FROM SYS_VIP_LOG t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysVipLog" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_LOG t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysVipLogResultMap">
+    <![CDATA[ SELECT * FROM SYS_VIP_LOG WHERE  
+				VIP_LOG_ID=#{vipLogId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysVipLog">
+				<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="vipLogId">  
+		        	SELECT nextval('SEQ_SYS_VIP_LOG') AS vipLogId
+		        </selectKey>
+
+		<![CDATA[
+		    INSERT INTO SYS_VIP_LOG
+		      (
+		      VIP_LOG_ID,
+		      SYS_VIP_USER_ID,
+		      VIP_LOG_TYPE,
+		      VIP_LOGIN_TIME,
+		      VIP_LOGOUT_TIME,
+		      VERIFY_CODE,
+		      VIP_PAGE_ID,
+		      VIP_GOODS_ID,
+		      STATUS,
+		      CREATER,
+		      CREATE_TIME,
+		      MODIFIER,
+		      MODIFY_TIME,
+		      REMARK,
+		      MALL_CODE,
+		      ACCESS_TYPE
+		      )
+		    VALUES
+		      (			  
+					#{vipLogId,jdbcType=DECIMAL}
+				,
+					#{sysVipUserId,jdbcType=DECIMAL}
+				,
+					#{vipLogType,jdbcType=VARCHAR}
+				,
+					#{vipLoginTime,jdbcType=TIMESTAMP}
+				,
+					#{vipLogoutTime,jdbcType=TIMESTAMP}
+				,
+					#{verifyCode,jdbcType=VARCHAR}
+				,
+					#{vipPageId,jdbcType=VARCHAR}
+				,
+					#{vipGoodsId,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=CHAR}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				,
+					#{mallCode,jdbcType=VARCHAR}
+				,
+					#{accessType,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysVipLog">
+    <![CDATA[ UPDATE SYS_VIP_LOG ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SYS_VIP_USER_ID = #{sysVipUserId,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					VIP_LOG_TYPE = #{vipLogType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					VIP_LOGIN_TIME = #{vipLoginTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					VIP_LOGOUT_TIME = #{vipLogoutTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					VERIFY_CODE = #{verifyCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					VIP_PAGE_ID = #{vipPageId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					VIP_GOODS_ID = #{vipGoodsId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STATUS = #{status,jdbcType=CHAR},
+    		]]>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					MALL_CODE = #{mallCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ACCESS_TYPE = #{accessType,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE VIP_LOG_ID=#{vipLogId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysVipLog">
+    <![CDATA[ UPDATE SYS_VIP_LOG ]]>
+	    <set>  		
+    		<if test="sysVipUserId != null"><![CDATA[ SYS_VIP_USER_ID = #{sysVipUserId}, ]]></if>
+    		<if test="vipLogType != null"><![CDATA[ VIP_LOG_TYPE = #{vipLogType}, ]]></if>
+    		<if test="vipLoginTime != null"><![CDATA[ VIP_LOGIN_TIME = #{vipLoginTime}, ]]></if>
+    		<if test="vipLogoutTime != null"><![CDATA[ VIP_LOGOUT_TIME = #{vipLogoutTime}, ]]></if>
+    		<if test="verifyCode != null"><![CDATA[ VERIFY_CODE = #{verifyCode}, ]]></if>
+    		<if test="vipPageId != null"><![CDATA[ VIP_PAGE_ID = #{vipPageId}, ]]></if>
+    		<if test="vipGoodsId != null"><![CDATA[ VIP_GOODS_ID = #{vipGoodsId}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark}, ]]></if>
+    		<if test="mallCode != null"><![CDATA[ MALL_CODE = #{mallCode}, ]]></if>
+    		<if test="accessType != null"><![CDATA[ ACCESS_TYPE = #{accessType} ]]></if>
+	    </set>  
+			WHERE VIP_LOG_ID=#{vipLogId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_VIP_LOG ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE VIP_LOG_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_VIP_LOG  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysVipLog">
+   <![CDATA[ DELETE FROM SYS_VIP_LOG WHERE 1=1  ]]>    			
+		<![CDATA[ AND VIP_LOG_ID = #{vipLogId} ]]>
+		<![CDATA[ AND SYS_VIP_USER_ID = #{sysVipUserId} ]]>
+		<![CDATA[ AND VIP_LOG_TYPE = #{vipLogType} ]]>
+		<![CDATA[ AND VIP_LOGIN_TIME = #{vipLoginTime} ]]>
+		<![CDATA[ AND VIP_LOGOUT_TIME = #{vipLogoutTime} ]]>
+		<![CDATA[ AND VERIFY_CODE = #{verifyCode} ]]>
+		<![CDATA[ AND VIP_PAGE_ID = #{vipPageId} ]]>
+		<![CDATA[ AND VIP_GOODS_ID = #{vipGoodsId} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+		<![CDATA[ AND MALL_CODE = #{mallCode} ]]>
+		<![CDATA[ AND ACCESS_TYPE = #{accessType} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_VIP_LOG WHERE 
+		VIP_LOG_ID IN (#{vipLogId})
+		]]>
+	</delete>
+  
+</mapper>

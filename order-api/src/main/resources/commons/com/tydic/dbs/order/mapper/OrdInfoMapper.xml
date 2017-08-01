@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ORD_INFO">
+	<resultMap type="OrdInfo" id="ordInfoResultMap">
+		<id property="ordId" column="ORD_ID"/>   
+		<result property="busId" column="BUS_ID"/>
+		<result property="ordStatus" column="ORD_STATUS"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="remark" column="REMARK" />
+	</resultMap>
+	
+	<resultMap type="OrdInfoVo" id="ordInfoVoResultMap" extends="ordInfoResultMap">
+		<result property="prdId" column="PRD_ID"/>
+		<result property="bussName" column="BUSS_NAME"/>
+		<result property="startRow" column="START_ROW"/>
+		<result property="endRow" column="END_ROW"/>
+		<result property="ordPrdId" column="ORD_PRD_ID"/>
+		<result property="prdName" column="PRD_NAME"/>
+		<result property="prdUnit" column="PRD_UNIT"/>
+		<result property="prdPrice" column="PRD_PRICE"/>
+		<result property="dataResourceId" column="DATA_RESOURCE_ID"/>
+		<result property="dataResourceName" column="DATA_RESOURCE_NAME"/>
+		<result property="ordRusultId" column="ORD_RUSULT_ID"/>
+		<result property="resultCount" column="RESULT_COUNT"/>
+		<result property="resultUnit" column="RESULT_UNIT"/>
+		<result property="fileName" column="FILE_NAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileId" column="FILE_ID"/>
+		<result property="ordDateBegin" column="ORD_DATEBEGIN"/>
+		<result property="ordDateEnd" column="ORD_DATEEND"/>
+		<result property="consumTime" column="CONSUM_TIME"/>
+		<result property="remark" column="REMARK" />
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordIdLike != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdLike} || '%' ]]></if>
+		<if test="ordIdStart != null"><![CDATA[ AND t.ORD_ID LIKE #{ordIdStart} || '%' ]]></if>
+		<if test="ordIdEnd != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdEnd} ]]></if>
+		<if test="ordIdIn != null"><![CDATA[ AND t.ORD_ID IN ]]><foreach item="item" index="index" collection="ordIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="busId != null"><![CDATA[ AND t.BUS_ID = #{busId} ]]></if>
+		<if test="busIdLike != null"><![CDATA[ AND t.BUS_ID LIKE '%' || #{busIdLike} || '%' ]]></if>
+		<if test="busIdStart != null"><![CDATA[ AND t.BUS_ID LIKE #{busIdStart} || '%' ]]></if>
+		<if test="busIdEnd != null"><![CDATA[ AND t.BUS_ID LIKE '%' || #{busIdEnd} ]]></if>
+		<if test="busIdIn != null"><![CDATA[ AND t.BUS_ID IN ]]><foreach item="item" index="index" collection="busIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordStatus != null"><![CDATA[ AND t.ORD_STATUS = #{ordStatus} ]]></if>
+		<if test="ordStatusLike != null"><![CDATA[ AND t.ORD_STATUS LIKE '%' || #{ordStatusLike} || '%' ]]></if>
+		<if test="ordStatusStart != null"><![CDATA[ AND t.ORD_STATUS LIKE #{ordStatusStart} || '%' ]]></if>
+		<if test="ordStatusEnd != null"><![CDATA[ AND t.ORD_STATUS LIKE '%' || #{ordStatusEnd} ]]></if>
+		<if test="ordStatusIn != null"><![CDATA[ AND t.ORD_STATUS IN ]]><foreach item="item" index="index" collection="ordStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByParams2">
+		<if test="prdId != null"><![CDATA[ AND PRD.PRD_ID = #{prdId} ]]></if>
+		<if test="prdName != null"><![CDATA[ AND PRD.PRD_NAME = #{prdName} ]]></if>
+		<if test="prdNameLike != null"><![CDATA[ AND PRD.PRD_NAME Like CONCAT(CONCAT('%', #{prdNameLike}), '%') ]]></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordStatus != null"><![CDATA[ AND t.ORD_STATUS = #{ordStatus} ]]></if>
+		<if test="startTime != null"><![CDATA[ AND t.CREATE_TIME >= #{startTime} ]]></if>
+		<if test="endTime != null"><![CDATA[ AND t.CREATE_TIME <= #{endTime} ]]></if>
+		<if test="busId != null"><![CDATA[ AND t.BUS_ID = #{busId} ]]></if>
+		<if test="busIdLike != null"><![CDATA[ AND t.BUS_ID LIKE '%' || #{busIdLike} || '%' ]]></if>
+		<if test="busIdStart != null"><![CDATA[ AND t.BUS_ID LIKE #{busIdStart} || '%' ]]></if>
+		<if test="busIdEnd != null"><![CDATA[ AND t.BUS_ID LIKE '%' || #{busIdEnd} ]]></if>
+		<if test="busIdIn != null"><![CDATA[ AND t.BUS_ID IN ]]><foreach item="item" index="index" collection="busIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="busId != null"><![CDATA[ AND t.BUS_ID = #{busId} ]]></if>
+		<if test="ordStatus != null"><![CDATA[ AND t.ORD_STATUS = #{ordStatus} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'ordIdAsc'"><![CDATA[ t.ORD_ID asc ]]></if>
+	  			<if test="item == 'ordIdDesc'"><![CDATA[ t.ORD_ID desc ]]></if>
+	  			<if test="item == 'busIdAsc'"><![CDATA[ t.BUS_ID asc ]]></if>
+	  			<if test="item == 'busIdDesc'"><![CDATA[ t.BUS_ID desc ]]></if>
+	  			<if test="item == 'ordStatusAsc'"><![CDATA[ t.ORD_STATUS asc ]]></if>
+	  			<if test="item == 'ordStatusDesc'"><![CDATA[ t.ORD_STATUS desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+	  			<if test="item == 'runTimeDesc'"><![CDATA[ e.RUN_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="ordInfoResultMap">
+		<![CDATA[ SELECT * FROM ORD_INFO t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM ORD_INFO t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="ordInfoVoResultMap">
+		<![CDATA[ 
+			SELECT t.*,PRD.* FROM ORD_INFO t,
+			(SELECT o.ORD_ID,o.PRD_ID,o.START_ROW,o.END_ROW,o.ORD_DATEBEGIN,o.ORD_DATEEND,p.PRD_NAME,p.PRD_UNIT,p.PRD_PRICE 
+			FROM ORD_PRD o, PRD_INFO p WHERE o.PRD_ID=p.PRD_ID) PRD
+		]]>
+		<where>  
+			<![CDATA[ t.ORD_ID=PRD.ORD_ID ]]>
+			<include refid="conditionByParams2" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_INFO t, ORD_PRD o, PRD_INFO PRD ]]> 
+   		<where>  
+			<![CDATA[ o.PRD_ID=PRD.PRD_ID AND o.ORD_ID=t.ORD_ID ]]>
+			<include refid="conditionByParams2" />
+		</where>
+	</select>
+ 
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="OrdInfo" resultMap="ordInfoResultMap">
+   	<![CDATA[ SELECT * FROM ORD_INFO t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="OrdInfo" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_INFO t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="ordInfoResultMap">
+    <![CDATA[ SELECT * FROM ORD_INFO WHERE  
+				ORD_ID=#{ordId}
+		]]>
+	</select>
+  	
+  	<!-- (3-4)============================= selectByPkLeftIn =================================== -->
+  <select id="selectByPkLeftIn" parameterType="java.lang.String" resultMap="ordInfoVoResultMap">
+    <![CDATA[ SELECT t.*,o.*,p.*,r.*,s.*,ot.* FROM ORD_INFO AS t
+			LEFT JOIN ORD_PRD AS o ON t.ORD_ID = o.ORD_ID 
+			LEFT JOIN ORD_RUSULT AS ot ON ot.WORK_NO = t.ORD_ID 
+			LEFT JOIN PRD_INFO AS p ON p.PRD_ID = o.PRD_ID
+			LEFT JOIN PRD_DATA_RESOURCE AS r ON r.PRD_ID = p.PRD_ID
+			LEFT JOIN CONSUM_LIST AS s ON s.WORK_NO = t.ORD_ID
+
+			 where t.ORD_ID=#{ordId} ;
+		]]>
+	</select>
+
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="OrdInfo">
+
+		<![CDATA[
+		    INSERT INTO ORD_INFO
+		      (
+		      ORD_ID,
+		      BUS_ID,
+		      ORD_STATUS,
+		      CREATE_TIME,
+		      MODIFY_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (
+					#{ordId,jdbcType=VARCHAR}
+				,
+					#{busId,jdbcType=VARCHAR}
+				,
+					#{ordStatus,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="OrdInfo">
+    <![CDATA[ UPDATE ORD_INFO ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUS_ID = #{busId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORD_STATUS = #{ordStatus,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    			<if test="modifier != null">
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR},
+    		]]>
+    			</if>
+			<if test="remark != null">
+				<![CDATA[
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+			</if>
+	    </set>
+			WHERE ORD_ID=#{ordId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="OrdInfo">
+    <![CDATA[ UPDATE ORD_INFO ]]>
+	    <set>  		
+    		<if test="busId != null"><![CDATA[ BUS_ID = #{busId}, ]]></if>
+    		<if test="ordStatus != null"><![CDATA[ ORD_STATUS = #{ordStatus}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+			<if test="remark != null">
+				<![CDATA[
+					REMARK = #{remark}
+    		]]>
+			</if>
+	    </set>  
+			WHERE ORD_ID=#{ordId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE ORD_INFO ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ORD_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM ORD_INFO  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="OrdInfo">
+   <![CDATA[ DELETE FROM ORD_INFO WHERE 1=1  ]]>    			
+		<![CDATA[ AND ORD_ID = #{ordId} ]]>
+		<![CDATA[ AND BUS_ID = #{busId} ]]>
+		<![CDATA[ AND ORD_STATUS = #{ordStatus} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_INFO WHERE 
+		ORD_ID IN (#{ordId})
+		]]>
+	</delete>
+	
+	<!-- ========================updateByOrdId==================================== -->
+	<update id="updateByOrdId" parameterType="java.lang.String">
+	<![CDATA[ UPDATE ORD_INFO set ORD_STATUS ='2' WHERE ORD_ID =#{ordId}]]>
+	</update>
+	<!-- (9-1)============================= selectByParamsMap =================================== -->
+  <select id="selectByParamsMap" parameterType="map" resultType="map">
+		<![CDATA[ 
+			SELECT  t.WORK_NO,b.BUSS_NAME,o.PRD_ID,p.PRD_NAME,e.RUN_TIME,p.PRD_UNIT,t.ROW_NUM,t.DATA_SIZE FROM CONSUM_LIST t 
+			LEFT JOIN ORD_PRD o ON t.WORK_NO=o.ORD_ID
+			LEFT JOIN ORD_INFO oi ON o.ORD_ID=oi.ORD_ID 
+			LEFT JOIN BUSS_INFO b ON oi.BUS_ID=b.BUSS_ID
+			LEFT JOIN PRD_INFO p ON p.PRD_ID= o.PRD_ID 
+			LEFT JOIN ORD_RUSULT e ON o.ORD_PRD_ID=e.ORD_PRD_ID where 1=1 
+		]]>
+		<if test="ordId != null"><![CDATA[ AND t.WORK_NO = #{ordId} ]]></if>
+		<if test="bussName != null"><![CDATA[ AND b.BUSS_NAME = #{bussName} ]]></if>
+		<if test="prdId != null"><![CDATA[ AND o.PRD_ID = #{prdId} ]]></if>
+		<if test="prdName != null"><![CDATA[ AND p.PRD_NAME = #{prdName} ]]></if>
+		<if test="startTime != null"><![CDATA[AND e.RUN_TIME >= str_to_date(#{startTime},'%Y-%m-%d %H:%i:%s')]]></if>
+		<if test="endTime != null"><![CDATA[AND e.RUN_TIME <= str_to_date(#{endTime},'%Y-%m-%d %H:%i:%s')]]></if>
+		<if test="runTimeDesc != null"><![CDATA[order by  e.RUN_TIME desc]]></if>
+  </select>
+    <!-- (9-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsMapCount" parameterType="map" resultType="int">
+   		<![CDATA[ 
+			SELECT  COUNT(*)FROM CONSUM_LIST t 
+			LEFT JOIN ORD_PRD o ON t.WORK_NO=o.ORD_ID
+			LEFT JOIN ORD_INFO oi ON o.ORD_ID=oi.ORD_ID 
+			LEFT JOIN BUSS_INFO b ON oi.BUS_ID=b.BUSS_ID
+			LEFT JOIN PRD_INFO p ON p.PRD_ID= o.PRD_ID
+			LEFT JOIN ORD_RUSULT e ON o.ORD_PRD_ID=e.ORD_PRD_ID where 1=1 
+		]]>
+		<if test="ordId != null"><![CDATA[ AND t.WORK_NO = #{ordId} ]]></if>
+		<if test="bussName != null"><![CDATA[ AND b.BUSS_NAME = #{bussName} ]]></if>
+		<if test="prdId != null"><![CDATA[ AND o.PRD_ID = #{prdId} ]]></if>
+		<if test="prdName != null"><![CDATA[ AND p.PRD_NAME = #{prdName} ]]></if>
+		<if test="startTime != null"><![CDATA[AND e.RUN_TIME >= str_to_date(#{startTime},'%Y-%m-%d %H:%i:%s')]]></if>
+		<if test="endTime != null"><![CDATA[AND e.RUN_TIME <= str_to_date(#{endTime},'%Y-%m-%d %H:%i:%s')]]></if>
+	</select>
+</mapper>

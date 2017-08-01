@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://code.alibabatech.com/schema/dubbo
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<!-- 应用配置，用于配置当前应用信息，不管该应用是提供者还是消费者。 -->
+	<dubbo:application name="dboms-web"/>
+	
+	<!-- 注册中心配置，用于配置连接注册中心相关信息。 -->
+	 <dubbo:registry protocol="zookeeper" address="${env.dubbo.url}"/>
+	 
+	<!-- <dubbo:registry protocol="zookeeper" address="10.123.99.17:2181"/> -->
+	<!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+
+
+        
+    <!-- 权限管理 -->
+    <dubbo:reference id="sysMenuService"  interface="com.tydic.dbs.system.menu.service.SysMenuService" />
+	<dubbo:reference id="sysOperatorService" interface="com.tydic.dbs.system.operator.service.SysOperatorService" />
+	<dubbo:reference id="sysOperGroupService"  interface="com.tydic.dbs.system.userGroup.service.SysOperGroupService"/>
+	<dubbo:reference id="sysLoginLogService"  interface="com.tydic.dbs.system.log.service.SysLoginLogService" />
+	<dubbo:reference id="sysFunOperateService" interface="com.tydic.dbs.system.menu.service.SysFunOperateService"  />
+	<dubbo:reference id="sysOrganizeService"  interface="com.tydic.dbs.system.organize.service.SysOrganizeService"/>
+	<dubbo:reference id="sysRoleService" interface="com.tydic.dbs.system.role.service.SysRoleService"  />
+	<dubbo:reference id="sysRoleMenuService" interface="com.tydic.dbs.system.role.service.SysRoleMenuService" />
+	<dubbo:reference id="sysDataPermissionService" interface="com.tydic.dbs.system.role.service.SysDataPermissionService" />
+	<dubbo:reference id="sysUserGroupService" interface="com.tydic.dbs.system.userGroup.service.SysUserGroupService"  />
+	<dubbo:reference id="sysUserGroupRoleService"  interface="com.tydic.dbs.system.userGroup.service.SysUserGroupRoleService" />
+	<dubbo:reference id="sysUploadFileService"  interface="com.tydic.dbs.system.sysUploadFile.service.SysUploadFileService" />
+	<dubbo:reference id="sendEmailService"  interface="com.tydic.dbs.system.email.service.SendEmailService" />
+
+	
+    <dubbo:reference id="prdInfoService" interface="com.tydic.dbs.product.service.PrdInfoService"/>
+    <dubbo:reference id="bussInfoService" interface="com.tydic.dbs.buyer.service.BussInfoService"/>
+	<dubbo:reference id="bussItResourceService" interface="com.tydic.dbs.buyer.service.BussItResourceService"/>
+	<dubbo:reference id="bussAuditStatusService" interface="com.tydic.dbs.buyer.service.BussAuditStatusService"/>
+	<!-- 工单管理 -->
+	<dubbo:reference id="ordInfoService" interface="com.tydic.dbs.order.service.OrdInfoService"/>
+	<dubbo:reference id="ordLogService" interface="com.tydic.dbs.order.service.OrdLogService"/>
+	<dubbo:reference id="ordPrdService" interface="com.tydic.dbs.order.service.OrdPrdService"/>
+	<dubbo:reference id="ordRusultService" interface="com.tydic.dbs.order.service.OrdRusultService"/>
+	<dubbo:reference id="prdDataResourceService" interface="com.tydic.dbs.product.service.PrdDataResourceService"/>
+	<!-- 租户权限-->
+	<dubbo:reference id="bussTenantService" interface="com.tydic.dbs.buyer.service.BussTenantService" />
+	<dubbo:reference id="bussTenantRoleService" interface="com.tydic.dbs.buyer.service.BussTenantRoleService" />
+	<dubbo:reference id="bussDataPemissionService" interface="com.tydic.dbs.buyer.service.BussDataPemissionService"/>
+	<!-- 计费管理 -->
+	<dubbo:reference id="chaBillService" interface="com.tydic.dbs.billing.service.ChaBillService" />
+	<!-- 计费管理 -->
+	<dubbo:reference id="infFileLogService" interface="com.tydic.dbs.system.log.service.InfFileLogService" />
+	<dubbo:reference id="uploadFileService" interface="com.tydic.dbs.system.log.service.UploadFileService"/>
+	<dubbo:reference id="infIndentService" interface="com.tydic.dbs.system.log.service.InfIndentService"/>
+	<dubbo:reference id="ordResultFileService" interface="com.tydic.dbs.order.service.OrdResultFileService"/>
+
+	<dubbo:reference id="interfaceLogService" interface="com.tydic.dbs.buyer.service.InterfaceLogService"/>
+	<dubbo:reference id="prdDataResourceRequireService" interface="com.tydic.dbs.product.service.PrdDataResourceRequireService"/>
+	<dubbo:reference id="appInfoService" interface="com.tydic.dbs.buyer.service.AppInfoService"/>
+	<dubbo:reference id="dataPermissonCfgService" interface="com.tydic.dbs.buyer.service.DataPermissonCfgService"/>
+</beans>

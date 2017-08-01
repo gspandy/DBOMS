@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://code.alibabatech.com/schema/dubbo
+
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<!-- 应用配置，用于配置当前应用信息，不管该应用是提供者还是消费者。 -->
+	<dubbo:application name="system-provider-app"/>
+	
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!-- <dubbo:registry address="multicast://224.5.6.7:1234"/> -->
+	
+	<!-- 注册中心配置，用于配置连接注册中心相关信息。 -->
+	<dubbo:registry protocol="zookeeper" address="${env.dubbo.url}"/>
+	
+	<!-- 用dubbo协议在20896端口暴露服务 -->
+	<!-- 协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受。 -->
+	<dubbo:protocol name="dubbo" port="40000"/>
+	<!-- <dubbo:protocol name="hessian" port="20896"/> -->
+	
+	<!-- 声明需要暴露的服务接口 -->
+	<!-- 服务配置，用于暴露一个服务，定义服务的元信息，一个服务可以用多个协议暴露，一个服务也可以注册到多个注册中心。 -->
+	<dubbo:service interface="com.tydic.dbs.system.menu.service.SysMenuService" ref="sysMenuService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.operator.service.SysOperatorService" ref="sysOperatorService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.userGroup.service.SysOperGroupService" ref="sysOperGroupService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.log.service.SysLoginLogService" ref="sysLoginLogService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.menu.service.SysFunOperateService" ref="sysFunOperateService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.organize.service.SysOrganizeService" ref="sysOrganizeService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.role.service.SysRoleService" ref="sysRoleService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.role.service.SysRoleMenuService" ref="sysRoleMenuService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.userGroup.service.SysUserGroupService" ref="sysUserGroupService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.userGroup.service.SysUserGroupRoleService" ref="sysUserGroupRoleService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.role.service.SysDataPermissionService" ref="sysDataPermissionService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.sysUploadFile.service.SysUploadFileService" ref="sysUploadFileService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.SysLoginSms.service.SysLoginSmsService" ref="sysLoginSmsService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.email.service.SendEmailService" ref="sendEmailService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.log.service.InfFileLogService" ref="infFileLogService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.log.service.InfIndentService" ref="infIndentService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.log.service.UploadFileService" ref="uploadFileService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.sms.service.SysSmsService" ref="sysSmsService" protocol="dubbo" timeout="10000"/>
+	<dubbo:service interface="com.tydic.dbs.system.sms.service.DBsSmsService" ref="dBsSmsService" protocol="dubbo" timeout="10000"/>
+
+</beans>

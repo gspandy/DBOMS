@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户应用列表页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    <#include "/views/common/head.html"/>
+    <!-- <script type="text/javascript" src="${ctx}/js/app.js"></script> -->
+  </head>
+  
+  <script type="text/javascript">
+  	$(function($){
+  	    $("#menu7").parent(".info").show();
+  	    $("#menu7").addClass("active").siblings().removeClass("active");
+  	  firstAppList();
+  	});
+  	function delProBefor(id,fileCode){
+  		$("#appId").val(id);
+  		$("#fileCode").val(fileCode);
+  	}
+  	function delapp(){
+	  	$("#removeModal").modal('hide');
+  		var id = $("#appId").val();
+  		var fileCode = $("#fileCode").val();
+  		
+  		$.ajax({
+  			type: "POST",
+  			url: "${ctx}/author/bussinfo/delApp.do",
+  			data: {appId:id,fileCode:fileCode},
+  			datatype: "json",
+  			success: function(data){
+  				if (!data) {
+		  			$.jBox.error("删除失败！","提示");
+				}
+  				searchAppList();
+  			}
+  		});
+  	}
+  </script>
+  <!-- 产品新增、修改、详情 下载-->
+  <script type="text/javascript">
+  	function appAdd(){
+  		window.location.href="${ctx}/author/bussinfo/toAppDetial?type=0";
+  	}
+  	function appDetial(appId,type){//type 1查看 2修改
+  		$("#appId").val(appId);
+  		$("#type").val(type);
+  		$("#detialForm").submit();
+  	}
+
+  </script>
+
+  <!-- 加载应用列表 -->
+  <script type="text/javascript">
+	var totalPage;
+	var totalRecords;
+	var pageNo = 1;
+	var param = {};
+	function firstAppList(){
+  		var appName = $("#appName").val()==undefined?"":$("#appName").val();
+  		param["appName"] = appName.trim();
+  	  	getAppList();
+	}
+	//查询按钮获取数据
+	function searchAppList(){
+  		pageNo = 1;
+  		firstAppList();
+	}
+	//切换页码获取数据
+	function changPage(){
+  		pageNo = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+  	    param["pageNo"] = pageNo;
+  	  	getAppList();
+	}
+  	function getAppList(){
+  		$.ajax({
+  			type: "POST",
+  			url: "${ctx}/author/bussinfo/getAppList.do",
+  			data: param,
+  			datatype: "json",
+  			success: function(data){
+  				if (data!=null) {
+  					var appInfoList = data.objects;
+					var temp = "<thead><tr><th>APP名称</th><th>APP URL</th><th width=\"150\">操作</th></tr></thead>";
+  					$("#appList").remove();
+  					$("#order-list").append("<table id=\"appList\" class=\"table table-primary\"></table>");
+  					for(x in appInfoList){
+  						temp += "<tr>"
+  						    +"<td>"+appInfoList[x].appName+"</td>"
+  						    +"<td>"+appInfoList[x].appurl+"</td>"
+  						    +"<td>"
+  						    +"<a onClick=\"appDetial(\'"+appInfoList[x].appId+"\',1);\" class=\"btn btn-op\" title=\"查看\"><i class=\"fa fa-search\"></i></a>";
+  							temp += "<a onClick=\"appDetial(\'"+appInfoList[x].appId+"\',2);\" class=\"btn btn-op\" title=\"修改\"><i class=\"fa fa-edit\"></i></a>"
+  						    +"<a href=\"#removeModal\" onClick=\"delProBefor(\'"+appInfoList[x].appId+"\',"+appInfoList[x].prdDatafile+");\" data-toggle=\"modal\" class=\"btn btn-op\" title=\"删除\"><i class=\"fa fa-trash\"></i></a>"
+  						temp += "</td>"
+  						+"</tr>";
+  					}
+					$("#appList").append(temp);
+  					totalPage = data.totalPage;
+  					totalRecords = data.totalNumber;
+  					pageNo = data.currentPage;
+  					toPage();
+  				} else {
+  				}
+  			}
+  		});
+  	}
+    </script>
+    <!-- 加载分页控件 -->
+   <script type="text/javascript">
+  	function toPage(){
+		//alert("总页数"+totalPage+"-总数据"+totalRecords+"-当前页"+pageNo);
+  		kkpager.total = totalPage;
+  		kkpager.totalRecords = totalRecords;
+  		kkpager.pno = pageNo;
+  		kkpager.hasPrv = (kkpager.pno > 1)
+  		kkpager.hasNext = (kkpager.pno < kkpager.total);
+  		kkpager.generPageHtml({
+  		     pno : pageNo,
+  		     mode : 'click', 
+  		     total : totalPage,  
+  		     totalRecords : totalRecords,
+  		     click : function(n){
+  		         this.selectPage(n);
+  		  		 changPage();
+  		         return false;
+  		     },
+  		     getHref : function(n){
+  		         return 'javascript:void(0)';
+  		     }
+  			 });
+  	}
+  </script>
+  <body>
+  <form style="display:none;" id="detialForm" method="post" action="${ctx}/author/bussinfo/toAppDetial.do">
+  	<input id="appId" name="appId" />
+  	<input id="type" name="type" />
+  </form>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+<!-------------------------CONT---------------------------->      
+
+     <article class="article-box">
+        <div class="List-cont">
+         <section class="panel panel-primary search-panel ">
+             <div class="panel-header"><h4>商户应用列表</h4></div>
+             <div class="panel-body">
+               <div class="search-form">
+                <from id="searchForm">
+                 <div class="row cl">
+                     <div class="col-sm-3">
+                         <label class="form-label" for="">APP名称：</label><div class="formControls"><input name="appName" id="appName" type="text" class="input-text" ></div>
+                     </div>
+                    <div class="col-sm-12 text-r">
+                    
+                         <a onclick="searchAppList();" class="btn btn-primary">查询</a>
+                 		 
+                 		 <a onClick="appAdd();" class="btn btn-primary-outline">新增</a>
+                 		 	
+                     </div>
+                 </div>
+                </from> 
+                </div>
+		         <div id="order-list" class="product-list mt-20">
+		         	<table id="appList" class="table table-primary"></table>
+		         </div>
+		         <div id="kkpager" class="mt-10 ml-20 mr-30"></div>
+             </div>
+         </section>
+       </div>
+     </article>
+     <!------------------------FOOTER----------------------------> 
+  	<#include "/views/common/footer.html"/>
+  	<!--------------------------MODAL---------------------------->
+	<div id="removeModal" class="modal w300 hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-header">
+	    <h3 id="myModalLabel">删除产品</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();"><i class="fa fa-times"></i></a>
+	 </div>
+	  <div class="modal-body">
+	 <p>是否删除此产品？</p>
+	 </div>
+	  <div class="modal-footer text-c">
+	  <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">关闭</button>
+	  <button onclick="delapp();" class="btn btn-primary">确定</button> 
+	 </div>
+	</div>
+  </body>
+</html>

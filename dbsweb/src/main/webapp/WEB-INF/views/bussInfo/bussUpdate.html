@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户信息修改页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	    
+    	function down(fileId){
+  		if (fileId=='null') {
+  	  		return false;
+		}
+  		$("#fileCode").val(fileId);
+  		$("#downFile").submit();
+  	}
+  	
+  	
+  	//校验手机号码
+	function checkMobileNo(){
+		  var bussMobileNo = $("#bussMobileNo").val();
+		  var RegularMobile=/^[1][358][0-9]{9}$/;/**手机号码验证**/
+		  if(bussMobileNo == ""){
+		  	 $("#mobileNocheckTip1").show();
+		  	 $("#mobileNocheckTip2").hide();
+		  	 return false;
+		  }else{
+		  	$("#mobileNocheckTip1").hide();
+		  	if (!RegularMobile.test(bussMobileNo)){
+		  		$("#mobileNocheckTip2").show();
+		  		return false;
+		  	}else {
+		  		$("#mobileNocheckTip2").hide();
+    			return true;
+		  	}	  	
+    		
+		  }
+    	
+	}
+  	//校验联系地址
+  	function checkAddress(){
+		  var  bussAddress = $("#bussAddress").val();
+		  if(bussAddress == ""){
+		  	 	$("#addresscheckTip").show();
+		  	 	return false;
+		  }else {
+    			$("#addresscheckTip").hide();
+    			return true;
+		  }
+    	
+	}
+  	//校验EMAIL
+  	function checkEmail(){
+		  var bussEmail = $("#bussEmail").val();
+		  var RegularMail=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;/**邮箱验证**/
+		  if(bussEmail == ""){
+		  	 	$("#emailcheckTip1").show();
+		  	 	$("#emailcheckTip2").hide();
+		  	 	return false;
+		  }else {
+		  	$("#emailcheckTip1").hide();
+		  	if(!RegularMail.test(bussEmail)){
+		  		$("#emailcheckTip2").show();
+		  		 return false;
+		  	}else{
+    			$("#emailcheckTip2").hide();
+    			return true;
+		  	}
+    	}
+	}
+  	//校验联系电话
+  	function checkTelNo(){
+		  var  bussTeleNo = $("#bussTeleNo").val();
+		  
+		  if(bussTeleNo == ""){
+		  	 	$("#teleNocheckTip").show();
+		  	 	return false;
+		  }else {
+   			$("#teleNocheckTip").hide();
+   			return true;
+    	}
+	}
+  	
+  	function modifyBuyer(bussId){
+  		
+  		var  bussMobileNo = $("#bussMobileNo").val();
+  		var  bussAddress = $("#bussAddress").val();
+  		var  bussEmail = $("#bussEmail").val();
+  		var  bussTeleNo = $("#bussTeleNo").val();
+  		if(checkMobileNo()){
+  			if(checkAddress()){
+  				if(checkEmail()){
+  					if(checkTelNo()){
+  						dataParm ={"bussId":bussId,"bussMobileNo":bussMobileNo,"bussAddress":bussAddress,"bussEmail":bussEmail,"bussTeleNo":bussTeleNo};
+						$.ajax({
+							url : rootPath+"/author/bussinfo/doUpdateBuyer",
+							data :	dataParm,
+							type : 'POST',
+							dataType : 'json',
+							success : function (data){
+								if(data.flag){
+									$.jBox.tip('修改商户成功！','success');
+									setTimeout('document.location.href="${ctx}/author/bussinfo/query"',500);
+								}else{
+									$.jBox.error('修改商户失败！<br/>'+data.msg, '提示');
+								}
+							},
+							error : function () {
+				                $.jBox.error('修改商户失败！<br/>'+data.msg, '提示');
+				                return false;
+				            }
+						});
+  					}
+  				}
+  			}
+  		}
+		
+  	}
+  	
+  	
+    </script> 
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->
+	<form style="display:none;" id="downFile" name="downFile" action="${ctx}/author/product/downFile.do" method="post">
+		<input id="fileCode" name="fileCode" value="" />
+	</form>    
+     <article class="article-box">
+        <div class="Edit-cont">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4>商户资料修改</h4></div>
+              <div class="panel-seheader">
+                     <h5>商户资料</h5>
+              </div>
+             <div class="panel-body">
+                
+                 <p><b class="c-red">* </b>账号：${loginMemberVo.bussAccount?if_exists}</p>
+                 <p><b class="c-red">* </b>姓名：${loginMemberVo.bussName?if_exists}</p>
+                 <div class="form-group  cl">
+                      <label class=" fl"><b class="c-red">* </b>手机号码：</label>
+                      <input type="text" id="bussMobileNo" class="input-text" maxlength="11" onblur="checkMobileNo();" value="${loginMemberVo.bussMobileNo?if_exists}" onkeyup="value=value.replace(/[^\d]/g,'') " 
+      						onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="mobileNocheckTip1" name="mobileNocheckTip1" >手机号码不能为空！</span>
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="mobileNocheckTip2" name="mobileNocheckTip2" >请输入正确的手机号码！</span>
+                 </div>
+                 <p><b class="c-red">* </b>身份证号码：${loginMemberVo.bussCredNo?if_exists}</p>
+                 <div class="form-group  cl">
+                      <label class=" fl"><b class="c-red">* </b>联系地址：</label>
+                      <input type="text" id="bussAddress" class="input-text" onblur="checkAddress();" value="${loginMemberVo.bussAddress?if_exists}">
+                 	  <span style="color: #ee3170;font-size: 14px;display:none" id="addresscheckTip" name="addresscheckTip" >联系地址不能为空！</span>
+                 </div>
+                 <div class="form-group  cl">
+                      <label class=" fl"><b class="c-red">* </b>EMAIL：</label>
+                      <input type="text" id="bussEmail" class="input-text" onblur="checkEmail();" value="${loginMemberVo.bussEmail?if_exists}">
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="emailcheckTip1" name="emailcheckTip1" >邮箱不能为空！</span>
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="emailcheckTip2" name="emailcheckTip2" >请输入正确的邮箱地址！</span>
+                 </div>
+                 <p><b class="c-red">* </b>机构地址：${loginMemberVo.orgAddress?if_exists}</p>
+                 <p><b class="c-red">* </b>工商编号：${loginMemberVo.bussinessNum?if_exists}</p>
+                 <div class="form-group  cl">
+                      <label class=" fl"><b class="c-red">* </b>联系电话：</label>
+                      <input type="text" id="bussTeleNo" class="input-text" onblur="checkTelNo();" value="${loginMemberVo.bussTeleNo?if_exists}" maxlength="30" onkeyup="value=value.replace(/[^\d]/g,'') " 
+      							onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+                      <span style="color: #ee3170;font-size: 14px;display:none" id="teleNocheckTip" name="teleNocheckTip" >联系电话不能为空！</span>
+                 </div>
+                 <p><b class="c-red">* </b>证扫描件：<a class="c-primary" href="javascript:void();" onclick="down('${loginMemberVo.fileId?if_exists}')">${loginMemberVo.uploadFileName?if_exists}</a></p>
+             </div>
+         </section>
+        
+         <div class="btn-wrap mt-20 ml-80">
+             <button class="btn btn-primary" onclick="modifyBuyer('${loginMemberVo.bussId}')">保存</button>
+             <button class="btn btn-primary" onclick="javascript :history.back(-1)">取消</button>
+         </div>
+          </div>    
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

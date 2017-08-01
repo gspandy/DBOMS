@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户信息查询页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	    
+    function down(ordId){
+  		if (ordId=='null' ) {
+  	  		return false;
+		}
+  		$("#fileCode").val(ordId);
+  		$("#downFile").submit();
+  	}
+  	
+    </script> 
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->
+	<form style="display:none;" id="downFile" name="downFile" action="${ctx}/author/product/downFile.do" method="post">
+		<input id="fileCode" name="fileCode" value="" />
+	</form>    
+     <article class="article-box">
+        <div class="Detail-cont">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4>工单详情</h4></div>
+         <!-- <div class="panel-seheader">
+                     <h5>数据服务信息</h5>
+              </div>
+             <div class="panel-body">
+                
+                 <p>数据服务ID：${vo.dataResourceId?if_exists}</p>
+                 <p>数据服务名称：${vo.dataResourceName?if_exists}</p>
+             </div>--> 
+         </section>
+        <section class="panel panel-secondary">
+            <div class="panel-header"><h4>结果数据信息</h4></div>
+            <div class="panel-body ">
+            <#if vo.resultUnit??>
+            	<#if vo.resultUnit == "1">
+            		<p>计量结果：${vo.resultCount?if_exists}条</p>
+            	<#else>
+            		<p>计量结果：${vo.resultCount?if_exists}MB</p>	
+            	</#if>
+            </#if>     
+                <p>提取时间：
+                <#if vo.consumTime??>
+                	${vo.consumTime?string('yyyy-MM-dd HH:mm:ss')}
+                </#if>
+                </p> 
+                <p>数据下载： <a class="c-primary" href="javascript:void();" onclick="down('${vo.ordId?if_exists}')">${vo.fileName?if_exists}</a></p> 
+            </div>
+        </section>
+          <section class="panel panel-secondary">
+            <div class="panel-header"><h4>工单状态信息</h4></div>
+            <div class="panel-body ">
+                <p>工单编号：${vo.ordId?if_exists}</p>
+                <p>工单状态：
+                <#if vo.ordStatus??>
+                	<#if vo.ordStatus=="1">
+                		<span class="c-success">未提交</span>
+               		<#elseif vo.ordStatus=="2">
+               			<span class="c-success">已提交</span>
+	                <#elseif vo.ordStatus=="3">
+	                	<span class="c-success">已执行</span>
+                     <#elseif vo.ordStatus=="5">
+                         <span class="c-red">执行失败</span>
+                	</#if>
+
+                </#if>
+                </p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：
+                    <#if vo.ordStatus??>
+                        <#if vo.ordStatus=="5">
+                            <span class="c-red">${vo.remark?if_exists}</span>
+                        </#if>
+                    </#if>
+                </p>
+            </div>
+        </section>
+           <section class="panel panel-secondary">
+            <div class="panel-header"><h4>工单操作信息</h4></div>
+            <div class="panel-body ">
+                <table class="table table-primary">
+                   <thead><tr>
+                       <th>操作时间</th>                  
+                       <th>操作信息</th>
+                       <th>操作人</th>
+                       <th>联系方式</th>  
+                   </tr></thead>
+                   <#if ordLogList??>
+                   		<#list ordLogList as ol>
+                   			<tr>
+		                        <td>${ol.ordLogTime?string('yyyy-MM-dd HH:mm:ss')}</td>                      
+		                        <td>${ol.ordLogMemo?if_exists}</td>
+		                        <td>${ol.ordLogUserAccount?if_exists}</td>
+		                        <td>${ol.ordLogUserTel?if_exists}</td>
+                    		</tr>
+                   		</#list>
+                   </#if>
+                </table>  
+            </div>
+        </section>
+           <section class="panel panel-secondary">
+            <div class="panel-header"><h4>商户信息</h4></div>
+            <div class="panel-body ">
+                <p>商户名称：${loginMemberVo.bussAccount?if_exists}</p> 
+                <p>联系电话：${loginMemberVo.bussMobileNo?if_exists}</p>  
+            </div>
+        </section>
+           <section class="panel panel-secondary">
+            <div class="panel-header"><h4>产品清单</h4></div>
+            <div class="panel-body ">
+                <table class="table table-primary">
+                    <thead><tr>
+                        <th>产品编号</th>
+                        <th>产品名称</th>
+                        <th>产品计量单位</th>
+                        <th>产品单位价格</th>
+                    </tr></thead>
+                    <tr>
+                        <td>${vo.prdId?if_exists}</td>
+                        <td>${vo.prdName?if_exists}</td>
+                        <#if vo.prdUnit??>
+                        	<#if vo.prdUnit=="1">
+                        		<td>按数据结果容量计算（MB）</td>
+                        		<td><span class="c-orange"><b class="f-14">￥${vo.prdPrice?if_exists}/MB</b></span></td>
+	                        <#else>
+	                        	<td>按数据结果条数计算（条）</td>
+	                        	<td><span class="c-orange"><b class="f-14">￥${vo.prdPrice?if_exists}/条</b></span></td>
+	                        </#if>
+                        </#if>                        
+                        
+                       
+                    </tr>
+                </table> 
+            </div>
+        </section>
+           <section class="panel panel-secondary">
+            <div class="panel-header"><h4>工单信息</h4></div>
+            <div class="panel-body ">
+                <p>数据返回条件：${vo.rows?if_exists}</p> 
+                <p>数据时段：${vo.ordDateBegin?string('yyyy-MM-dd HH:mm:ss')}至${vo.ordDateEnd?string('yyyy-MM-dd HH:mm:ss')}</p>  
+            </div>
+        </section>
+           <div class="btn-wrap mt-20 ml-80"> 
+              <button class="btn btn-close" onClick="javascript:history.go(-1);">返回</button>
+         </div>
+          </div>    
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_USER_GROUP">
+
+	<resultMap type="SysUserGroup" id="sysUserGroupResultMap">
+		<id property="groCode" column="GRO_CODE"/>   
+		<result property="groName" column="GRO_NAME"/>
+		<result property="status" column="STATUS"/>
+		<result property="groDesc" column="GRO_DESC"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<resultMap type="SysUserGroup" id="userGroupResultMap" extends="sysUserGroupResultMap">
+		<result property="userNum" column="USER_NUM"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="groCodeLike != null"><![CDATA[ AND t.GRO_CODE LIKE '%' || #{groCodeLike} || '%' ]]></if>
+		<if test="groCodeIn != null"><![CDATA[ AND t.GRO_CODE IN ]]><foreach item="item" index="index" collection="groCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="groName != null"><![CDATA[ AND t.GRO_NAME = #{groName} ]]></if>
+		<if test="groNameLike != null"><![CDATA[ AND t.GRO_NAME LIKE '%' || #{groNameLike} || '%' ]]></if>
+		<if test="groNameIn != null"><![CDATA[ AND t.GRO_NAME IN ]]><foreach item="item" index="index" collection="groNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="groDesc != null"><![CDATA[ AND t.GRO_DESC = #{groDesc} ]]></if>
+		<if test="groDescLike != null"><![CDATA[ AND t.GRO_DESC LIKE '%' || #{groDescLike} || '%' ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		
+		<if test="operId != null"><![CDATA[ AND o.OPER_ID = #{operId} ]]></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="groName != null"><![CDATA[ AND t.GRO_NAME = #{groName} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="groDesc != null"><![CDATA[ AND t.GRO_DESC = #{groDesc} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+  			<if test="item == 'groCodeAsc'"><![CDATA[ t.GRO_CODE asc ]]></if>
+  			<if test="item == 'groCodeDesc'"><![CDATA[ t.GRO_CODE desc ]]></if>
+  			<if test="item == 'groNameAsc'"><![CDATA[ t.GRO_NAME asc ]]></if>
+  			<if test="item == 'groNameDesc'"><![CDATA[ t.GRO_NAME desc ]]></if>
+  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysUserGroupResultMap">
+		<![CDATA[ SELECT * FROM SYS_USER_GROUP t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  	<select id="selectByParams" parameterType="map" resultMap="userGroupResultMap">
+		<![CDATA[
+			SELECT t.*,(select COUNT(o.OPER_GRP_REL_ID) FROM SYS_OPER_GROUP o WHERE o.GRO_CODE = t.GRO_CODE) USER_NUM FROM SYS_USER_GROUP t 
+		]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+  	<!-- (2-2)============================= selectByParamsCount =================================== -->
+  	<select id="selectByParamsCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+	
+	<!-- select user group relation information by operator information -->
+	<select id="selectByOper" parameterType="map" resultMap="userGroupResultMap">
+		<![CDATA[
+			SELECT t.* FROM SYS_USER_GROUP t, SYS_OPER_GROUP o
+		]]>
+		<where>  
+			<![CDATA[ t.GRO_CODE = o.GRO_CODE ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+  	<select id="selectByOperCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(t.GRO_CODE) FROM SYS_USER_GROUP t, SYS_OPER_GROUP o ]]> 
+   		<where>  
+			<![CDATA[ t.GRO_CODE = o.GRO_CODE ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+	
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysUserGroup" resultMap="sysUserGroupResultMap">
+   	<![CDATA[ SELECT * FROM SYS_USER_GROUP t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	<!-- (3-2)============================= selectByVOCount =================================== -->
+  	<select id="selectByVOCount" parameterType="SysUserGroup" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="java.lang.String" resultMap="sysUserGroupResultMap">
+    	<![CDATA[ SELECT * FROM SYS_USER_GROUP WHERE GRO_CODE=#{groCode} ]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysUserGroup"> 
+		<![CDATA[
+		    INSERT INTO SYS_USER_GROUP
+		      (
+		      GRO_CODE,
+		      GRO_NAME,
+		      STATUS,
+		      GRO_DESC,
+		      CREATER,
+		      CREATE_TIME,
+		      MODIFIER,
+		      MODIFY_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (		  
+				#{groCode,jdbcType=VARCHAR},
+				#{groName,jdbcType=VARCHAR},
+				#{status,jdbcType=VARCHAR},
+				#{groDesc,jdbcType=VARCHAR},
+				#{creater,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{modifier,jdbcType=VARCHAR},
+				#{modifyTime,jdbcType=TIMESTAMP},
+				#{remark,jdbcType=VARCHAR}
+		      )
+      	]]>
+  	</insert>
+    
+  	<!-- (5-1)============================= updateByVO =================================== -->
+  	<update id="updateByVO" parameterType="SysUserGroup">
+    	<![CDATA[ UPDATE SYS_USER_GROUP ]]>
+	    <set>  		
+    		<![CDATA[ GRO_NAME = #{groName,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ STATUS = #{status,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ GRO_DESC = #{groDesc,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ CREATER = #{creater,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}, ]]>
+    		<![CDATA[ MODIFIER = #{modifier,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}, ]]>
+    		<![CDATA[ REMARK = #{remark,jdbcType=VARCHAR} ]]>
+	    </set>  
+			WHERE GRO_CODE=#{groCode}
+  	</update>
+  
+  	<!-- (5-2)============================= updateByVO2 =================================== -->
+  	<update id="updateByVoNotNull" parameterType="SysUserGroup">
+    	<![CDATA[ UPDATE SYS_USER_GROUP ]]>
+	    <set>  		
+    		<if test="groName != null"><![CDATA[ GRO_NAME = #{groName}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="groDesc != null"><![CDATA[ GRO_DESC = #{groDesc}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE GRO_CODE=#{groCode}
+  	</update>
+  
+  	<!-- (5-3)============================= updateStatus =================================== -->
+  	<update id="updateStatus" parameterType="map">
+    	<![CDATA[ UPDATE SYS_USER_GROUP ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE GRO_CODE IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  	</update>
+    
+  	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    	<![CDATA[ DELETE FROM SYS_USER_GROUP  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysUserGroup">
+   		<![CDATA[ DELETE FROM SYS_USER_GROUP WHERE 1=1  ]]>    			
+		<if test="groCode != null"><![CDATA[ AND GRO_CODE = #{groCode} ]]></if>
+		<if test="groName != null"><![CDATA[ AND GRO_NAME = #{groName} ]]></if>
+		<if test="status != null"><![CDATA[ AND STATUS = #{status} ]]></if>
+		<if test="groDesc != null"><![CDATA[ AND GRO_DESC = #{groDesc} ]]></if>
+		<if test="creater != null"><![CDATA[ AND CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND MODIFIER = #{modifier} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND REMARK = #{remark} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   		<![CDATA[ DELETE FROM SYS_USER_GROUP WHERE GRO_CODE = #{groCode} ]]>
+	</delete>
+  
+</mapper>

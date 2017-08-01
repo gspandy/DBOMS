@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ORD_RUSULT">
+	<resultMap type="OrdRusult" id="ordRusultResultMap">
+		<id property="ordRusultId" column="ORD_RUSULT_ID"/>   
+		<result property="ordPrdId" column="ORD_PRD_ID"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileName" column="FILE_NAME"/>
+		<result property="fileStatus" column="FILE_STATUS"/>
+		<result property="runTime" column="RUN_TIME"/>
+		<result property="resultCount" column="RESULT_COUNT"/>
+		<result property="resultUnit" column="RESULT_UNIT"/>
+		<result property="workNo" column="WORK_NO"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="ordRusultId != null"><![CDATA[ AND t.ORD_RUSULT_ID = #{ordRusultId} ]]></if>
+		<if test="ordRusultIdLike != null"><![CDATA[ AND t.ORD_RUSULT_ID LIKE '%' || #{ordRusultIdLike} || '%' ]]></if>
+		<if test="ordRusultIdStart != null"><![CDATA[ AND t.ORD_RUSULT_ID LIKE #{ordRusultIdStart} || '%' ]]></if>
+		<if test="ordRusultIdEnd != null"><![CDATA[ AND t.ORD_RUSULT_ID LIKE '%' || #{ordRusultIdEnd} ]]></if>
+		<if test="ordRusultIdIn != null"><![CDATA[ AND t.ORD_RUSULT_ID IN ]]><foreach item="item" index="index" collection="ordRusultIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordPrdId != null"><![CDATA[ AND t.ORD_PRD_ID = #{ordPrdId} ]]></if>
+		<if test="ordPrdIdLike != null"><![CDATA[ AND t.ORD_PRD_ID LIKE '%' || #{ordPrdIdLike} || '%' ]]></if>
+		<if test="ordPrdIdStart != null"><![CDATA[ AND t.ORD_PRD_ID LIKE #{ordPrdIdStart} || '%' ]]></if>
+		<if test="ordPrdIdEnd != null"><![CDATA[ AND t.ORD_PRD_ID LIKE '%' || #{ordPrdIdEnd} ]]></if>
+		<if test="ordPrdIdIn != null"><![CDATA[ AND t.ORD_PRD_ID IN ]]><foreach item="item" index="index" collection="ordPrdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="filePath != null"><![CDATA[ AND t.FILE_PATH = #{filePath} ]]></if>
+		<if test="filePathLike != null"><![CDATA[ AND t.FILE_PATH LIKE '%' || #{filePathLike} || '%' ]]></if>
+		<if test="filePathStart != null"><![CDATA[ AND t.FILE_PATH LIKE #{filePathStart} || '%' ]]></if>
+		<if test="filePathEnd != null"><![CDATA[ AND t.FILE_PATH LIKE '%' || #{filePathEnd} ]]></if>
+		<if test="filePathIn != null"><![CDATA[ AND t.FILE_PATH IN ]]><foreach item="item" index="index" collection="filePathIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileNameLike != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameLike} || '%' ]]></if>
+		<if test="fileNameStart != null"><![CDATA[ AND t.FILE_NAME LIKE #{fileNameStart} || '%' ]]></if>
+		<if test="fileNameEnd != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameEnd} ]]></if>
+		<if test="fileNameIn != null"><![CDATA[ AND t.FILE_NAME IN ]]><foreach item="item" index="index" collection="fileNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileStatus != null"><![CDATA[ AND t.FILE_STATUS = #{fileStatus} ]]></if>
+		<if test="fileStatusLike != null"><![CDATA[ AND t.FILE_STATUS LIKE '%' || #{fileStatusLike} || '%' ]]></if>
+		<if test="fileStatusStart != null"><![CDATA[ AND t.FILE_STATUS LIKE #{fileStatusStart} || '%' ]]></if>
+		<if test="fileStatusEnd != null"><![CDATA[ AND t.FILE_STATUS LIKE '%' || #{fileStatusEnd} ]]></if>
+		<if test="fileStatusIn != null"><![CDATA[ AND t.FILE_STATUS IN ]]><foreach item="item" index="index" collection="fileStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="runTime != null"><![CDATA[ AND t.RUN_TIME = #{runTime} ]]></if>
+		<if test="runTimeLike != null"><![CDATA[ AND t.RUN_TIME LIKE '%' || #{runTimeLike} || '%' ]]></if>
+		<if test="runTimeStart != null"><![CDATA[ AND t.RUN_TIME LIKE #{runTimeStart} || '%' ]]></if>
+		<if test="runTimeEnd != null"><![CDATA[ AND t.RUN_TIME LIKE '%' || #{runTimeEnd} ]]></if>
+		<if test="runTimeIn != null"><![CDATA[ AND t.RUN_TIME IN ]]><foreach item="item" index="index" collection="runTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="workNo != null"><![CDATA[ AND t.WORK_NO = #{workNo} ]]></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="ordRusultId != null"><![CDATA[ AND t.ORD_RUSULT_ID = #{ordRusultId} ]]></if>
+		<if test="ordPrdId != null"><![CDATA[ AND t.ORD_PRD_ID = #{ordPrdId} ]]></if>
+		<if test="filePath != null"><![CDATA[ AND t.FILE_PATH = #{filePath} ]]></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileStatus != null"><![CDATA[ AND t.FILE_STATUS = #{fileStatus} ]]></if>
+		<if test="runTime != null"><![CDATA[ AND t.RUN_TIME = #{runTime} ]]></if>
+		<if test="workNo != null"><![CDATA[ AND t.WORK_NO = #{workNo} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'ordRusultIdAsc'"><![CDATA[ t.ORD_RUSULT_ID asc ]]></if>
+	  			<if test="item == 'ordRusultIdDesc'"><![CDATA[ t.ORD_RUSULT_ID desc ]]></if>
+	  			<if test="item == 'ordPrdIdAsc'"><![CDATA[ t.ORD_PRD_ID asc ]]></if>
+	  			<if test="item == 'ordPrdIdDesc'"><![CDATA[ t.ORD_PRD_ID desc ]]></if>
+	  			<if test="item == 'filePathAsc'"><![CDATA[ t.FILE_PATH asc ]]></if>
+	  			<if test="item == 'filePathDesc'"><![CDATA[ t.FILE_PATH desc ]]></if>
+	  			<if test="item == 'fileNameAsc'"><![CDATA[ t.FILE_NAME asc ]]></if>
+	  			<if test="item == 'fileNameDesc'"><![CDATA[ t.FILE_NAME desc ]]></if>
+	  			<if test="item == 'fileStatusAsc'"><![CDATA[ t.FILE_STATUS asc ]]></if>
+	  			<if test="item == 'fileStatusDesc'"><![CDATA[ t.FILE_STATUS desc ]]></if>
+	  			<if test="item == 'runTimeAsc'"><![CDATA[ t.RUN_TIME asc ]]></if>
+	  			<if test="item == 'runTimeDesc'"><![CDATA[ t.RUN_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="ordRusultResultMap">
+		<![CDATA[ SELECT * FROM ORD_RUSULT t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM ORD_RUSULT t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="ordRusultResultMap">
+		<![CDATA[ SELECT * FROM ORD_RUSULT t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_RUSULT t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="OrdRusult" resultMap="ordRusultResultMap">
+   	<![CDATA[ SELECT * FROM ORD_RUSULT t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="OrdRusult" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_RUSULT t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="ordRusultResultMap">
+    <![CDATA[ SELECT * FROM ORD_RUSULT WHERE  
+				ORD_RUSULT_ID=#{ordRusultId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="OrdRusult">
+
+		<![CDATA[
+		    INSERT INTO ORD_RUSULT
+		      (
+		      ORD_RUSULT_ID,
+		      ORD_PRD_ID,
+		      FILE_PATH,
+		      FILE_NAME,
+		      FILE_STATUS,
+		      RUN_TIME,
+		      RESULT_COUNT,
+		      RESULT_UNIT,
+		      WORK_NO
+		      )
+		    VALUES
+		      (			  
+					#{ordRusultId,jdbcType=VARCHAR}
+				,
+					#{ordPrdId,jdbcType=VARCHAR}
+				,
+					#{filePath,jdbcType=VARCHAR}
+				,
+					#{fileName,jdbcType=VARCHAR}
+				,
+					#{fileStatus,jdbcType=VARCHAR}
+				,
+					#{runTime,jdbcType=TIMESTAMP}
+				,
+					#{resultCount,jdbcType=VARCHAR}
+				,
+					#{resultUnit,jdbcType=VARCHAR}
+				,
+					#{workNo,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="OrdRusult">
+    <![CDATA[ UPDATE ORD_RUSULT ]]>
+	    <set>  		
+    		<![CDATA[ 
+					ORD_PRD_ID = #{ordPrdId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_PATH = #{filePath,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_NAME = #{fileName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_STATUS = #{fileStatus,jdbcType=VARCHAR},
+    		]]>
+				<if test="runTime != null">
+    		<![CDATA[ 
+					RUN_TIME = #{runTime,jdbcType=TIMESTAMP}
+    		]]>
+				</if>
+	    </set>  
+			WHERE ORD_RUSULT_ID=#{ordRusultId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="OrdRusult">
+    <![CDATA[ UPDATE ORD_RUSULT ]]>
+	    <set>  		
+    		<if test="ordPrdId != null"><![CDATA[ ORD_PRD_ID = #{ordPrdId}, ]]></if>
+    		<if test="filePath != null"><![CDATA[ FILE_PATH = #{filePath}, ]]></if>
+    		<if test="fileName != null"><![CDATA[ FILE_NAME = #{fileName}, ]]></if>
+    		<if test="fileStatus != null"><![CDATA[ FILE_STATUS = #{fileStatus}, ]]></if>
+    		<if test="workNo != null"><![CDATA[ WORK_NO = #{workNo}, ]]></if>
+    		<if test="runTime != null"><![CDATA[ RUN_TIME = #{runTime} ]]></if>
+	    </set>  
+			WHERE ORD_RUSULT_ID=#{ordRusultId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE ORD_RUSULT ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ORD_RUSULT_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM ORD_RUSULT  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="OrdRusult">
+   <![CDATA[ DELETE FROM ORD_RUSULT WHERE 1=1  ]]>    			
+		<![CDATA[ AND ORD_RUSULT_ID = #{ordRusultId} ]]>
+		<![CDATA[ AND ORD_PRD_ID = #{ordPrdId} ]]>
+		<![CDATA[ AND FILE_PATH = #{filePath} ]]>
+		<![CDATA[ AND FILE_NAME = #{fileName} ]]>
+		<![CDATA[ AND FILE_STATUS = #{fileStatus} ]]>
+		<![CDATA[ AND RUN_TIME = #{runTime} ]]>
+		<![CDATA[ AND WORK_NO = #{workNo} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_RUSULT WHERE 
+		ORD_RUSULT_ID IN (#{ordRusultId})
+		]]>
+	</delete>
+  
+</mapper>

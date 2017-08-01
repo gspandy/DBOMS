@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CHA_BILL">
+	<resultMap type="ChaBill" id="chaBillResultMap">
+		<id property="billId" column="BILL_ID"/>   
+		<result property="monthId" column="MONTH_ID"/>
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="billAmount" column="BILL_AMOUNT"/>
+		<result property="payAmount" column="PAY_AMOUNT"/>
+		<result property="billTime" column="BILL_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	<resultMap type="ChaBillVo" id="chaBillVoResultMap" extends="chaBillResultMap">
+		<result property="ordId" column="ORD_ID"/>
+		<result property="prdId" column="PRD_ID"/>
+		<result property="prdName" column="PRD_NAME"/>
+		<result property="prdUnit" column="PRD_UNIT"/>
+		<result property="prdPrice" column="PRD_PRICE"/>
+		<result property="ordDateBegin" column="RUN_TIME"/>
+		<result property="rowNum" column="ROW_NUM"/>
+		<result property="dataSize" column="DATA_SIZE"/>
+		<result property="consumAmout" column="CONSUM_AMOUNT"/>
+		<result property="payAmout" column="PAY_AMOUNT"/>
+		<result property="bussAccount" column="BUSS_ACCOUNT"/>
+	</resultMap>
+	<resultMap type="ChaBill" id="chaBillNameResultMap" extends="chaBillResultMap">
+		<result property="bussAccount" column="BUSS_ACCOUNT"/>
+	</resultMap>
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="billId != null"><![CDATA[ AND t.BILL_ID = #{billId} ]]></if>
+		<if test="billIdLike != null"><![CDATA[ AND t.BILL_ID LIKE '%' || #{billIdLike} || '%' ]]></if>
+		<if test="billIdStart != null"><![CDATA[ AND t.BILL_ID LIKE #{billIdStart} || '%' ]]></if>
+		<if test="billIdEnd != null"><![CDATA[ AND t.BILL_ID LIKE '%' || #{billIdEnd} ]]></if>
+		<if test="billIdIn != null"><![CDATA[ AND t.BILL_ID IN ]]><foreach item="item" index="index" collection="billIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="monthId != null"><![CDATA[ AND t.MONTH_ID = #{monthId} ]]></if>
+		<if test="monthIdLike != null"><![CDATA[ AND t.MONTH_ID LIKE '%' || #{monthIdLike} || '%' ]]></if>
+		<if test="monthIdStart != null"><![CDATA[ AND t.MONTH_ID >= #{monthIdStart} ]]></if>
+		<if test="monthIdEnd != null"><![CDATA[ AND t.MONTH_ID <= #{monthIdEnd} ]]></if>
+		<if test="monthIdIn != null"><![CDATA[ AND t.MONTH_ID IN ]]><foreach item="item" index="index" collection="monthIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="monthIdGTe != null"><![CDATA[ AND t.MONTH_ID >= #{monthIdGTe}]]></if>
+		<if test="monthIdLTe != null"><![CDATA[ AND t.MONTH_ID <= #{monthIdLTe}]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="billAmount != null"><![CDATA[ AND t.BILL_AMOUNT = #{billAmount} ]]></if>
+		<if test="billAmountLike != null"><![CDATA[ AND t.BILL_AMOUNT LIKE '%' || #{billAmountLike} || '%' ]]></if>
+		<if test="billAmountStart != null"><![CDATA[ AND t.BILL_AMOUNT LIKE #{billAmountStart} || '%' ]]></if>
+		<if test="billAmountEnd != null"><![CDATA[ AND t.BILL_AMOUNT LIKE '%' || #{billAmountEnd} ]]></if>
+		<if test="billAmountIn != null"><![CDATA[ AND t.BILL_AMOUNT IN ]]><foreach item="item" index="index" collection="billAmountIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="payAmount != null"><![CDATA[ AND t.PAY_AMOUNT = #{payAmount} ]]></if>
+		<if test="payAmountLike != null"><![CDATA[ AND t.PAY_AMOUNT LIKE '%' || #{payAmountLike} || '%' ]]></if>
+		<if test="payAmountStart != null"><![CDATA[ AND t.PAY_AMOUNT LIKE #{payAmountStart} || '%' ]]></if>
+		<if test="payAmountEnd != null"><![CDATA[ AND t.PAY_AMOUNT LIKE '%' || #{payAmountEnd} ]]></if>
+		<if test="payAmountIn != null"><![CDATA[ AND t.PAY_AMOUNT IN ]]><foreach item="item" index="index" collection="payAmountIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="billTime != null"><![CDATA[ AND t.BILL_TIME = #{billTime} ]]></if>
+		<if test="billTimeLike != null"><![CDATA[ AND t.BILL_TIME LIKE '%' || #{billTimeLike} || '%' ]]></if>
+		<if test="billTimeStart != null"><![CDATA[ AND t.BILL_TIME LIKE #{billTimeStart} || '%' ]]></if>
+		<if test="billTimeEnd != null"><![CDATA[ AND t.BILL_TIME LIKE '%' || #{billTimeEnd} ]]></if>
+		<if test="billTimeIn != null"><![CDATA[ AND t.BILL_TIME IN ]]><foreach item="item" index="index" collection="billTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		
+		<if test="bussAccountLike != null"><![CDATA[ AND b.BUSS_ACCOUNT LIKE CONCAT(CONCAT('%', #{bussAccountLike}), '%') ]]></if>
+		<if test="bussAccount != null"><![CDATA[ AND b.BUSS_ACCOUNT = #{bussAccount} ]]></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="billId != null"><![CDATA[ AND t.BILL_ID = #{billId} ]]></if>
+		<if test="monthId != null"><![CDATA[ AND t.MONTH_ID = #{monthId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="billAmount != null"><![CDATA[ AND t.BILL_AMOUNT = #{billAmount} ]]></if>
+		<if test="payAmount != null"><![CDATA[ AND t.PAY_AMOUNT = #{payAmount} ]]></if>
+		<if test="billTime != null"><![CDATA[ AND t.BILL_TIME = #{billTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'billIdAsc'"><![CDATA[ t.BILL_ID asc ]]></if>
+	  			<if test="item == 'billIdDesc'"><![CDATA[ t.BILL_ID desc ]]></if>
+	  			<if test="item == 'monthIdAsc'"><![CDATA[ t.MONTH_ID asc ]]></if>
+	  			<if test="item == 'monthIdDesc'"><![CDATA[ t.MONTH_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'billAmountAsc'"><![CDATA[ t.BILL_AMOUNT asc ]]></if>
+	  			<if test="item == 'billAmountDesc'"><![CDATA[ t.BILL_AMOUNT desc ]]></if>
+	  			<if test="item == 'payAmountAsc'"><![CDATA[ t.PAY_AMOUNT asc ]]></if>
+	  			<if test="item == 'payAmountDesc'"><![CDATA[ t.PAY_AMOUNT desc ]]></if>
+	  			<if test="item == 'billTimeAsc'"><![CDATA[ t.BILL_TIME asc ]]></if>
+	  			<if test="item == 'billTimeDesc'"><![CDATA[ t.BILL_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+	  			
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="chaBillResultMap">
+		<![CDATA[ SELECT * FROM CHA_BILL t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM CHA_BILL t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="chaBillVoResultMap">
+		<![CDATA[ SELECT i.*,PRD.*,BIL.*,b.BUSS_ACCOUNT FROM ORD_INFO i,CHA_BILL t,BUSS_INFO b,
+				(SELECT r.RUN_TIME,o.ORD_ID,o.PRD_ID,o.START_ROW,o.END_ROW,o.ORD_DATEBEGIN,o.ORD_DATEEND,p.PRD_NAME,p.PRD_UNIT,p.PRD_PRICE 
+				FROM ORD_PRD o, PRD_INFO p ,ORD_RUSULT r WHERE o.PRD_ID=p.PRD_ID and o.ORD_PRD_ID=r.ORD_PRD_ID) PRD,
+				(select c.BUSS_ID,c.WORK_NO,c.ROW_NUM,c.DATA_SIZE,bl.CONSUM_AMOUNT,bl.PAY_AMOUNT from 
+				CONSUM_LIST c, BILLING_LIST bl where c.BILLING_ID = bl.BILLING_ID ) BIL ]]>
+		<where>  
+			<![CDATA[ i.ORD_ID=PRD.ORD_ID and BIL.WORK_NO = i.ORD_ID and t.BUSS_ID = i.BUS_ID and BIL.BUSS_ID=t.BUSS_ID and t.BUSS_ID=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_INFO i,CHA_BILL t,BUSS_INFO b,
+				(SELECT r.RUN_TIME,o.ORD_ID,o.PRD_ID,o.START_ROW,o.END_ROW,o.ORD_DATEBEGIN,o.ORD_DATEEND,p.PRD_NAME,p.PRD_UNIT,p.PRD_PRICE 
+				FROM ORD_PRD o, PRD_INFO p ,ORD_RUSULT r WHERE o.PRD_ID=p.PRD_ID and o.ORD_PRD_ID=r.ORD_PRD_ID) PRD,
+				(select c.BUSS_ID,c.WORK_NO,c.ROW_NUM,c.DATA_SIZE,bl.CONSUM_AMOUNT,bl.PAY_AMOUNT from 
+				CONSUM_LIST c, BILLING_LIST bl where c.BILLING_ID = bl.BILLING_ID ) BIL ]]> 
+   		<where>  
+			<![CDATA[ i.ORD_ID=PRD.ORD_ID and BIL.WORK_NO = i.ORD_ID and t.BUSS_ID = i.BUS_ID and BIL.BUSS_ID=t.BUSS_ID and t.BUSS_ID=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+	</select>
+	
+  	<!-- (2-3-1)============================= selectByParamsCount =================================== -->
+  	<select id="selectListByParamsSum" parameterType="map" resultType="double">
+   	<![CDATA[ SELECT sum(t.BILL_AMOUNT) FROM CHA_BILL t, BUSS_INFO b ]]> 
+   		<where>  
+			<![CDATA[ t.BUSS_ID=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+	</select>
+	
+	<!-- (2-3-2)============================= selectByParams =================================== -->
+  	<select id="selectListByParams" parameterType="map" resultMap="chaBillNameResultMap">
+		<![CDATA[ SELECT t.*,b.BUSS_ACCOUNT FROM CHA_BILL t, BUSS_INFO b ]]>
+		<where>  
+			<![CDATA[ t.BUSS_ID=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+    
+  	<!-- (2-3-3)============================= selectByParamsCount =================================== -->
+  	<select id="selectListByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM CHA_BILL t, BUSS_INFO b ]]> 
+   		<where>  
+			<![CDATA[ t.BUSS_ID=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="ChaBill" resultMap="chaBillResultMap">
+   	<![CDATA[ SELECT * FROM CHA_BILL t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="ChaBill" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM CHA_BILL t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="chaBillResultMap">
+    <![CDATA[ SELECT * FROM CHA_BILL WHERE  
+				BILL_ID=#{billId}
+		]]>
+	</select>
+  	
+  	<!-- (3-4)============================= getChaBillbyMap =================================== -->
+  <select id="getChaBillbyMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    <![CDATA[ SELECT t.* FROM CHA_BILL t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	<!-- (3-5)============================= getChaBillDetailbyMap =================================== -->
+  <select id="getChaBillDetailbyMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    <![CDATA[ SELECT i.*,PRD.*,BIL.* FROM ORD_INFO i,CHA_BILL t,
+				(SELECT r.RUN_TIME,o.ORD_ID,o.PRD_ID,o.START_ROW,o.END_ROW,o.ORD_DATEBEGIN,o.ORD_DATEEND,p.PRD_NAME,p.PRD_UNIT,p.PRD_PRICE 
+				FROM ORD_PRD o, PRD_INFO p ,ORD_RUSULT r WHERE o.PRD_ID=p.PRD_ID and o.ORD_PRD_ID=r.ORD_PRD_ID) PRD,
+				(select c.BUSS_ID,c.WORK_NO,c.ROW_NUM,c.DATA_SIZE,bl.CONSUM_AMOUNT,bl.PAY_AMOUNT from 
+				CONSUM_LIST c, BILLING_LIST bl where c.BILLING_ID = bl.BILLING_ID ) BIL ]]>
+		<where>  
+			<![CDATA[ i.ORD_ID=PRD.ORD_ID and BIL.WORK_NO = i.ORD_ID and t.BUSS_ID = i.BUS_ID and BIL.BUSS_ID=t.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="ChaBill">
+
+		<![CDATA[
+		    INSERT INTO CHA_BILL
+		      (
+		      BILL_ID,
+		      MONTH_ID,
+		      BUSS_ID,
+		      BILL_AMOUNT,
+		      PAY_AMOUNT,
+		      BILL_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{billId,jdbcType=VARCHAR}
+				,
+					#{monthId,jdbcType=DECIMAL}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{billAmount,jdbcType=DECIMAL}
+				,
+					#{payAmount,jdbcType=DECIMAL}
+				,
+					#{billTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="ChaBill">
+    <![CDATA[ UPDATE CHA_BILL ]]>
+	    <set>  		
+    		<![CDATA[ 
+					MONTH_ID = #{monthId,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					BILL_AMOUNT = #{billAmount,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					PAY_AMOUNT = #{payAmount,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					BILL_TIME = #{billTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE BILL_ID=#{billId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="ChaBill">
+    <![CDATA[ UPDATE CHA_BILL ]]>
+	    <set>  		
+    		<if test="monthId != null"><![CDATA[ MONTH_ID = #{monthId}, ]]></if>
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="billAmount != null"><![CDATA[ BILL_AMOUNT = #{billAmount}, ]]></if>
+    		<if test="payAmount != null"><![CDATA[ PAY_AMOUNT = #{payAmount}, ]]></if>
+    		<if test="billTime != null"><![CDATA[ BILL_TIME = #{billTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE BILL_ID=#{billId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE CHA_BILL ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE BILL_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM CHA_BILL  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="ChaBill">
+   <![CDATA[ DELETE FROM CHA_BILL WHERE 1=1  ]]>    			
+		<![CDATA[ AND BILL_ID = #{billId} ]]>
+		<![CDATA[ AND MONTH_ID = #{monthId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND BILL_AMOUNT = #{billAmount} ]]>
+		<![CDATA[ AND PAY_AMOUNT = #{payAmount} ]]>
+		<![CDATA[ AND BILL_TIME = #{billTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM CHA_BILL WHERE 
+		BILL_ID IN (#{billId})
+		]]>
+	</delete>
+
+	<delete id="deleteByMonthId" parameterType="java.lang.String">
+		<![CDATA[
+		DELETE FROM CHA_BILL WHERE
+		MONTH_ID = #{monthId}
+		]]>
+	</delete>
+
+	<insert id="addBatch" useGeneratedKeys="true" parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="billId" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into CHA_BILL (MONTH_ID,BUSS_ID,BILL_AMOUNT,PAY_AMOUNT,BILL_TIME)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.monthId},#{item.bussId},#{item.consumTotal},#{item.payTotal},now())
+		</foreach>
+	</insert>
+</mapper>

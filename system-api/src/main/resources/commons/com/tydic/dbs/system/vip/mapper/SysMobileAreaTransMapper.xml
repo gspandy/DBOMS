@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_MOBILE_AREA_TRANS">
+	<resultMap type="SysMobileAreaTrans" id="sysMobileAreaTransResultMap">
+		<id property="mobileAreaTransId" column="MOBILE_AREA_TRANS_ID"/>   
+		<result property="mobileStart" column="MOBILE_START"/>
+		<result property="mobileEnd" column="MOBILE_END"/>
+		<result property="mobileArea" column="MOBILE_AREA"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="mobileAreaTransId != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID = #{mobileAreaTransId} ]]></if>
+		<if test="mobileAreaTransIdGt != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID > #{mobileAreaTransIdGt} ]]></if>
+		<if test="mobileAreaTransIdGte != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID >= #{mobileAreaTransIdGte} ]]></if>
+		<if test="mobileAreaTransIdLt != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID < #{mobileAreaTransIdLt} ]]></if>
+		<if test="mobileAreaTransIdLte != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID <= #{mobileAreaTransIdLte} ]]></if>
+		<if test="mobileAreaTransIdIn != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID IN ]]><foreach item="item" index="index" collection="mobileAreaTransIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mobileStart != null"><![CDATA[ AND t.MOBILE_START = #{mobileStart} ]]></if>
+		<if test="mobileStartGt != null"><![CDATA[ AND t.MOBILE_START > #{mobileStartGt} ]]></if>
+		<if test="mobileStartGte != null"><![CDATA[ AND t.MOBILE_START >= #{mobileStartGte} ]]></if>
+		<if test="mobileStartLt != null"><![CDATA[ AND t.MOBILE_START < #{mobileStartLt} ]]></if>
+		<if test="mobileStartLte != null"><![CDATA[ AND t.MOBILE_START <= #{mobileStartLte} ]]></if>
+		<if test="mobileStartIn != null"><![CDATA[ AND t.MOBILE_START IN ]]><foreach item="item" index="index" collection="mobileStartIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mobileEnd != null"><![CDATA[ AND t.MOBILE_END = #{mobileEnd} ]]></if>
+		<if test="mobileEndGt != null"><![CDATA[ AND t.MOBILE_END > #{mobileEndGt} ]]></if>
+		<if test="mobileEndGte != null"><![CDATA[ AND t.MOBILE_END >= #{mobileEndGte} ]]></if>
+		<if test="mobileEndLt != null"><![CDATA[ AND t.MOBILE_END < #{mobileEndLt} ]]></if>
+		<if test="mobileEndLte != null"><![CDATA[ AND t.MOBILE_END <= #{mobileEndLte} ]]></if>
+		<if test="mobileEndIn != null"><![CDATA[ AND t.MOBILE_END IN ]]><foreach item="item" index="index" collection="mobileEndIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mobileArea != null"><![CDATA[ AND t.MOBILE_AREA = #{mobileArea} ]]></if>
+		<if test="mobileAreaLike != null"><![CDATA[ AND t.MOBILE_AREA LIKE '%' || #{mobileAreaLike} || '%' ]]></if>
+		<if test="mobileAreaStart != null"><![CDATA[ AND t.MOBILE_AREA LIKE #{mobileAreaStart} || '%' ]]></if>
+		<if test="mobileAreaEnd != null"><![CDATA[ AND t.MOBILE_AREA LIKE '%' || #{mobileAreaEnd} ]]></if>
+		<if test="mobileAreaIn != null"><![CDATA[ AND t.MOBILE_AREA IN ]]><foreach item="item" index="index" collection="mobileAreaIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="mobileAreaTransId != null"><![CDATA[ AND t.MOBILE_AREA_TRANS_ID = #{mobileAreaTransId} ]]></if>
+		<if test="mobileStart != null"><![CDATA[ AND t.MOBILE_START = #{mobileStart} ]]></if>
+		<if test="mobileEnd != null"><![CDATA[ AND t.MOBILE_END = #{mobileEnd} ]]></if>
+		<if test="mobileArea != null"><![CDATA[ AND t.MOBILE_AREA = #{mobileArea} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'mobileAreaTransIdAsc'"><![CDATA[ t.MOBILE_AREA_TRANS_ID asc ]]></if>
+	  			<if test="item == 'mobileAreaTransIdDesc'"><![CDATA[ t.MOBILE_AREA_TRANS_ID desc ]]></if>
+	  			<if test="item == 'mobileStartAsc'"><![CDATA[ t.MOBILE_START asc ]]></if>
+	  			<if test="item == 'mobileStartDesc'"><![CDATA[ t.MOBILE_START desc ]]></if>
+	  			<if test="item == 'mobileEndAsc'"><![CDATA[ t.MOBILE_END asc ]]></if>
+	  			<if test="item == 'mobileEndDesc'"><![CDATA[ t.MOBILE_END desc ]]></if>
+	  			<if test="item == 'mobileAreaAsc'"><![CDATA[ t.MOBILE_AREA asc ]]></if>
+	  			<if test="item == 'mobileAreaDesc'"><![CDATA[ t.MOBILE_AREA desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysMobileAreaTransResultMap">
+		<![CDATA[ SELECT * FROM SYS_MOBILE_AREA_TRANS t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_MOBILE_AREA_TRANS t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysMobileAreaTransResultMap">
+		<![CDATA[ SELECT * FROM SYS_MOBILE_AREA_TRANS t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_MOBILE_AREA_TRANS t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysMobileAreaTrans" resultMap="sysMobileAreaTransResultMap">
+   	<![CDATA[ SELECT * FROM SYS_MOBILE_AREA_TRANS t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysMobileAreaTrans" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_MOBILE_AREA_TRANS t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysMobileAreaTransResultMap">
+    <![CDATA[ SELECT * FROM SYS_MOBILE_AREA_TRANS WHERE  
+				MOBILE_AREA_TRANS_ID=#{mobileAreaTransId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysMobileAreaTrans">
+				<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="mobileAreaTransId">  
+		        	SELECT nextval('SEQ_SYS_MOBILE_AREA_TRANS') AS mobileAreaTransId
+		        </selectKey>
+
+		<![CDATA[
+		    INSERT INTO SYS_MOBILE_AREA_TRANS
+		      (
+		      MOBILE_AREA_TRANS_ID,
+		      MOBILE_START,
+		      MOBILE_END,
+		      MOBILE_AREA
+		      )
+		    VALUES
+		      (			  
+					#{mobileAreaTransId,jdbcType=DECIMAL}
+				,
+					#{mobileStart,jdbcType=DECIMAL}
+				,
+					#{mobileEnd,jdbcType=DECIMAL}
+				,
+					#{mobileArea,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysMobileAreaTrans">
+    <![CDATA[ UPDATE SYS_MOBILE_AREA_TRANS ]]>
+	    <set>  		
+    		<![CDATA[ 
+					MOBILE_START = #{mobileStart,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					MOBILE_END = #{mobileEnd,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					MOBILE_AREA = #{mobileArea,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE MOBILE_AREA_TRANS_ID=#{mobileAreaTransId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysMobileAreaTrans">
+    <![CDATA[ UPDATE SYS_MOBILE_AREA_TRANS ]]>
+	    <set>  		
+    		<if test="mobileStart != null"><![CDATA[ MOBILE_START = #{mobileStart}, ]]></if>
+    		<if test="mobileEnd != null"><![CDATA[ MOBILE_END = #{mobileEnd}, ]]></if>
+    		<if test="mobileArea != null"><![CDATA[ MOBILE_AREA = #{mobileArea} ]]></if>
+	    </set>  
+			WHERE MOBILE_AREA_TRANS_ID=#{mobileAreaTransId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_MOBILE_AREA_TRANS ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE MOBILE_AREA_TRANS_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_MOBILE_AREA_TRANS  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysMobileAreaTrans">
+   <![CDATA[ DELETE FROM SYS_MOBILE_AREA_TRANS WHERE 1=1  ]]>    			
+		<![CDATA[ AND MOBILE_AREA_TRANS_ID = #{mobileAreaTransId} ]]>
+		<![CDATA[ AND MOBILE_START = #{mobileStart} ]]>
+		<![CDATA[ AND MOBILE_END = #{mobileEnd} ]]>
+		<![CDATA[ AND MOBILE_AREA = #{mobileArea} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_MOBILE_AREA_TRANS WHERE 
+		MOBILE_AREA_TRANS_ID IN (#{mobileAreaTransId})
+		]]>
+	</delete>
+  
+</mapper>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>密码重置页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+  		
+  		/***光标指引到用户账户输入框***/
+		function setfocus(){
+			$("#UserName").focus();
+		}
+		
+		/***校验密码必须是8-18位数字或者字母***/
+		function checkPwd(){		
+		  var  userpassword =$("#newPwd").val();
+		  var  uspassword = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{8,18}/;
+		  if (userpassword == ""){
+		  	$("#UserPasswordTip").show();
+		  	return false;
+		  }else {
+		  	$("#UserPasswordTip").hide();
+		  	if(!uspassword.test(userpassword)){
+		  		$("#UserPasswordTip").show();
+		  		 return false;
+		  	}else{
+    			$("#UserPasswordTip").hide();
+    			return true;
+		  	}
+		  }
+	    	
+		}
+		/***2次输入密码比较***/
+		function checkCPwd(){
+			var cnewPwd=$("#cnewPwd").val();
+			var  newPwd =$("#newPwd").val();
+		 	var  uspassword = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{8,18}/;
+		 	if (cnewPwd == ""){
+			  	$("#passwordsameTip").show();
+			  	$("#passwordsameTip2").hide();
+			  	$("#passwordsameTip3").hide();
+			  	return false;
+			  }else {
+			  	$("#passwordsameTip").hide();
+			  	if(!uspassword.test(cnewPwd)){
+			  		$("#passwordsameTip3").show();
+			  		 return false;
+			  	}else{
+	    			$("#passwordsameTip3").hide();
+	    			if (newPwd != cnewPwd){
+	    				$("#passwordsameTip2").show();
+			  		 	return false;
+	    			}else {
+	    				$("#passwordsameTip2").hide();
+			  		 	return true;
+	    			}
+			  	}
+			  }
+			
+		}
+		
+		function submit(){
+			var newPwd = $.trim($("#newPwd").val());
+			var cnewPwd = $.trim($("#cnewPwd").val());
+			var bussId = $.trim($("#bussId").val());
+			var jsonParam = {"newPwd":newPwd,"cnewPwd":cnewPwd,"bussId":bussId};
+			if (checkPwd()){
+				if (checkCPwd()){
+						$.ajax({
+							type : "POST",
+								url : '${ctx}/doResetPwd',
+								dataType : 'json',
+								data : jsonParam,
+								success : function(data){
+									if(data.flag){
+										$.jBox.tip('重置密码成功！','success');
+										document.location.href="${ctx}/login";
+									}else{
+										$.jBox.error('重置密码失败！<br/>'+data.msg, '提示');
+									}
+								},
+								error : function(data){
+									$.jBox.error('重置密码失败！<br/>'+data.msg, '提示');
+								}
+						});
+					}
+			}
+			
+		}
+    </script> 
+</head>
+<body onload="setfocus()">
+<!------------------------HEADER----------------------------> 
+  <header class="navbar-wrapper">
+      <div class="navbar navbar-blue">
+          <div class="container-fluid cl">
+              <a class="logo navbar-logo" href="#"><img src="img/logo.png" alt="logo"></a>
+              <a class="logo navbar-slogan" href="#">中国联通大数据应用模型孵化平台</a>
+          </div>
+      </div>
+  </header>
+
+<!------------------------LOGIN---------------------------->   
+  <div class="psw-wrap">
+      <section class="psw-panel panel panel-default ">
+          <div class="panel-header"><h4>密码重置</h4></div>
+          <div class="panel-body form-horizontal">
+          <form id="pswForm">
+              <div class="form-group row cl">
+                  <label class="form-label col-sm-3">新密码：</label>
+                  <div class="formControls col-sm-9">
+                  <input class="input-text" name="newPwd" id="newPwd" type="password" placeholder="请输入8～18位数字加字母组合的密码" onblur="checkPwd()">
+                  <span style="color: #ee3170;font-size: 14px;display:none" id="UserPasswordTip" name="UserPasswordTip" >请输入8～18位数字加字母组合的密码！</span>
+                  </div>
+                  <!--  <p class="col-sm-9 col-sm-offset-3 mt-5 f-12 c-red" >8~18位数字组合</p>-->
+              </div>  
+              <div class="form-group  row cl">
+                  <label  class="form-label col-sm-3" >确认新密码：</label>
+                   <div class="formControls col-sm-9">
+                  <input class="input-text" type="password" name="cnewPwd" id="cnewPwd" autocomplete="off" placeholder="请再次输入新密码" onblur="checkCPwd()">
+                  <span style="color: #ee3170;font-size: 14px;display:none" id="passwordsameTip" name="passwordsameTip" >请输入确认密码!</span>
+                  <span style="color: #ee3170;font-size: 14px;display:none" id="passwordsameTip3" name="passwordsameTip3" >请输入8～18位数字加字母组合的密码！</span>
+                  <span style="color: #ee3170;font-size: 14px;display:none" id="passwordsameTip2" name="passwordsameTip2" >两次密码输入不一致!</span>
+                  </div>
+                 
+              </div>
+              <div class="row cl">
+                 <div class="col-sm-9 col-sm-offset-3">
+                     <a href="javascript:void(0)" type="submit" class="btn btn-primary btn-next" onclick="submit()">保存</a>
+                  </div>
+                  
+              </div>
+             
+          </form>
+          </div> 
+             
+          <div class="panel-footer mb-5 cl"> 
+              <a class="btn btn-link fr" href="${ctx}/login" title="返回登录页">返回登录</a>
+          </div>
+      </section>
+  </div>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_CHAN_OPER_REL">
+	<resultMap type="SysChanOperRel" id="sysChanOperRelResultMap">
+		<id property="operChannelId" column="OPER_CHANNEL_ID"/>   
+		<result property="operId" column="OPER_ID"/>
+		<result property="channelId" column="CHANNEL_ID"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<resultMap type="SysChanOperRel" id="chanOperRelResultMap" extends="sysChanOperRelResultMap">
+		<result property="channelName" column="CHANNEL_NAME"/>
+	</resultMap>
+	
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="operChannelId != null"><![CDATA[ AND t.OPER_CHANNEL_ID = #{operChannelId} ]]></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="operIdLike != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdLike} || '%' ]]></if>
+		<if test="operIdIn != null"><![CDATA[ AND t.OPER_ID IN ]]><foreach item="item" index="index" collection="operIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="channelId != null"><![CDATA[ AND t.CHANNEL_ID = #{channelId} ]]></if>
+		<if test="channelIdIn != null"><![CDATA[ AND t.CHANNEL_ID IN ]]><foreach item="item" index="index" collection="channelIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="operChannelId != null"><![CDATA[ AND t.OPER_CHANNEL_ID = #{operChannelId} ]]></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="channelId != null"><![CDATA[ AND t.CHANNEL_ID = #{channelId} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+  			<if test="item == 'operChannelIdAsc'"><![CDATA[ t.OPER_CHANNEL_ID asc ]]></if>
+  			<if test="item == 'operChannelIdDesc'"><![CDATA[ t.OPER_CHANNEL_ID desc ]]></if>
+  			<if test="item == 'operIdAsc'"><![CDATA[ t.OPER_ID asc ]]></if>
+  			<if test="item == 'operIdDesc'"><![CDATA[ t.OPER_ID desc ]]></if>
+  			<if test="item == 'channelIdAsc'"><![CDATA[ t.CHANNEL_ID asc ]]></if>
+  			<if test="item == 'channelIdDesc'"><![CDATA[ t.CHANNEL_ID desc ]]></if>
+  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysChanOperRelResultMap">
+		<![CDATA[ SELECT * FROM SYS_CHAN_OPER_REL t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_CHAN_OPER_REL t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  	<select id="selectByParams" parameterType="map" resultMap="chanOperRelResultMap">
+		<![CDATA[
+			SELECT T.*, C.CHANNEL_NAME FROM SYS_CHAN_OPER_REL T
+  			LEFT JOIN CHL_CHANNEL C ON C.CHANNEL_ID = T.CHANNEL_ID
+		]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+    
+  	<!-- (2-2)============================= selectByParamsCount =================================== -->
+  	<select id="selectByParamsCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_CHAN_OPER_REL t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysChanOperRel" resultMap="sysChanOperRelResultMap">
+   	<![CDATA[ SELECT * FROM SYS_CHAN_OPER_REL t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	<!-- (3-2)============================= selectByVOCount =================================== -->
+  	<select id="selectByVOCount" parameterType="SysChanOperRel" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_CHAN_OPER_REL t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="java.lang.Long" resultMap="sysChanOperRelResultMap">
+    	<![CDATA[ SELECT * FROM SYS_CHAN_OPER_REL WHERE OPER_CHANNEL_ID=#{operChannelId} ]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysChanOperRel">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="operChannelId">  
+        	SELECT nextval('SEQ_SYS_CHAN_OPER_REL') AS operChannelId
+        </selectKey>
+		<![CDATA[
+		    INSERT INTO SYS_CHAN_OPER_REL
+		      (
+		      OPER_CHANNEL_ID,
+		      OPER_ID,
+		      CHANNEL_ID,
+		      CREATER,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (	  
+				#{operChannelId,jdbcType=DECIMAL},
+				#{operId,jdbcType=VARCHAR},
+				#{channelId,jdbcType=DECIMAL},
+				#{creater,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{remark,jdbcType=VARCHAR}
+		      )
+      	]]>
+  	</insert>
+    
+  	<!-- (5-1)============================= updateByVO =================================== -->
+  	<update id="updateByVO" parameterType="SysChanOperRel">
+    <![CDATA[ UPDATE SYS_CHAN_OPER_REL ]]>
+	    <set>  		
+    		<![CDATA[ 
+					OPER_ID = #{operId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CHANNEL_ID = #{channelId,jdbcType=DECIMAL},
+    		]]>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE OPER_CHANNEL_ID=#{operChannelId}
+  	</update>
+  
+  	<!-- (5-2)============================= updateByVO2 =================================== -->
+  	<update id="updateByVoNotNull" parameterType="SysChanOperRel">
+    <![CDATA[ UPDATE SYS_CHAN_OPER_REL ]]>
+	    <set>  		
+    		<if test="operId != null"><![CDATA[ OPER_ID = #{operId}, ]]></if>
+    		<if test="channelId != null"><![CDATA[ CHANNEL_ID = #{channelId}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE OPER_CHANNEL_ID=#{operChannelId}
+  	</update>
+  
+  	<!-- (5-3)============================= updateStatus =================================== -->
+  	<update id="updateStatus" parameterType="map">
+    	<![CDATA[ UPDATE SYS_CHAN_OPER_REL ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE OPER_CHANNEL_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  	</update>
+    
+  	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    	<![CDATA[ DELETE FROM SYS_CHAN_OPER_REL  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysChanOperRel">
+   	<![CDATA[ DELETE FROM SYS_CHAN_OPER_REL WHERE 1=1  ]]>    			
+		<![CDATA[ AND OPER_CHANNEL_ID = #{operChannelId} ]]>
+		<![CDATA[ AND OPER_ID = #{operId} ]]>
+		<![CDATA[ AND CHANNEL_ID = #{channelId} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+  		<![CDATA[ DELETE FROM SYS_CHAN_OPER_REL WHERE OPER_CHANNEL_ID = #{operChannelId} ]]>
+	</delete>
+  
+</mapper>

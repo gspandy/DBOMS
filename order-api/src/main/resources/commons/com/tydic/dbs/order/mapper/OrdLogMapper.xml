@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ORD_LOG">
+	<resultMap type="OrdLog" id="ordLogResultMap">
+		<id property="ordLogId" column="ORD_LOG_ID"/>   
+		<result property="ordId" column="ORD_ID"/>
+		<result property="ordLogTime" column="ORD_LOG_TIME"/>
+		<result property="ordLogType" column="ORD_LOG_TYPE"/>
+		<result property="ordLogMemo" column="ORD_LOG_MEMO"/>
+		<result property="ordLogUser" column="ORD_LOG_USER"/>
+	</resultMap>
+	<resultMap type="OrdLog" id="ordLogResultUserMap" extends="ordLogResultMap">
+		<result property="ordLogUserTel" column="BUSS_MOBILE_NO"/>
+		<result property="ordLogUserAccount" column="BUSS_ACCOUNT"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="ordLogId != null"><![CDATA[ AND t.ORD_LOG_ID = #{ordLogId} ]]></if>
+		<if test="ordLogIdLike != null"><![CDATA[ AND t.ORD_LOG_ID LIKE '%' || #{ordLogIdLike} || '%' ]]></if>
+		<if test="ordLogIdStart != null"><![CDATA[ AND t.ORD_LOG_ID LIKE #{ordLogIdStart} || '%' ]]></if>
+		<if test="ordLogIdEnd != null"><![CDATA[ AND t.ORD_LOG_ID LIKE '%' || #{ordLogIdEnd} ]]></if>
+		<if test="ordLogIdIn != null"><![CDATA[ AND t.ORD_LOG_ID IN ]]><foreach item="item" index="index" collection="ordLogIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordIdLike != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdLike} || '%' ]]></if>
+		<if test="ordIdStart != null"><![CDATA[ AND t.ORD_ID LIKE #{ordIdStart} || '%' ]]></if>
+		<if test="ordIdEnd != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdEnd} ]]></if>
+		<if test="ordIdIn != null"><![CDATA[ AND t.ORD_ID IN ]]><foreach item="item" index="index" collection="ordIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordLogTime != null"><![CDATA[ AND t.ORD_LOG_TIME = #{ordLogTime} ]]></if>
+		<if test="ordLogTimeLike != null"><![CDATA[ AND t.ORD_LOG_TIME LIKE '%' || #{ordLogTimeLike} || '%' ]]></if>
+		<if test="ordLogTimeStart != null"><![CDATA[ AND t.ORD_LOG_TIME LIKE #{ordLogTimeStart} || '%' ]]></if>
+		<if test="ordLogTimeEnd != null"><![CDATA[ AND t.ORD_LOG_TIME LIKE '%' || #{ordLogTimeEnd} ]]></if>
+		<if test="ordLogTimeIn != null"><![CDATA[ AND t.ORD_LOG_TIME IN ]]><foreach item="item" index="index" collection="ordLogTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordLogType != null"><![CDATA[ AND t.ORD_LOG_TYPE = #{ordLogType} ]]></if>
+		<if test="ordLogTypeLike != null"><![CDATA[ AND t.ORD_LOG_TYPE LIKE '%' || #{ordLogTypeLike} || '%' ]]></if>
+		<if test="ordLogTypeStart != null"><![CDATA[ AND t.ORD_LOG_TYPE LIKE #{ordLogTypeStart} || '%' ]]></if>
+		<if test="ordLogTypeEnd != null"><![CDATA[ AND t.ORD_LOG_TYPE LIKE '%' || #{ordLogTypeEnd} ]]></if>
+		<if test="ordLogTypeIn != null"><![CDATA[ AND t.ORD_LOG_TYPE IN ]]><foreach item="item" index="index" collection="ordLogTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordLogMemo != null"><![CDATA[ AND t.ORD_LOG_MEMO = #{ordLogMemo} ]]></if>
+		<if test="ordLogMemoLike != null"><![CDATA[ AND t.ORD_LOG_MEMO LIKE '%' || #{ordLogMemoLike} || '%' ]]></if>
+		<if test="ordLogMemoStart != null"><![CDATA[ AND t.ORD_LOG_MEMO LIKE #{ordLogMemoStart} || '%' ]]></if>
+		<if test="ordLogMemoEnd != null"><![CDATA[ AND t.ORD_LOG_MEMO LIKE '%' || #{ordLogMemoEnd} ]]></if>
+		<if test="ordLogMemoIn != null"><![CDATA[ AND t.ORD_LOG_MEMO IN ]]><foreach item="item" index="index" collection="ordLogMemoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordLogUser != null"><![CDATA[ AND t.ORD_LOG_USER = #{ordLogUser} ]]></if>
+		<if test="ordLogUserLike != null"><![CDATA[ AND t.ORD_LOG_USER LIKE '%' || #{ordLogUserLike} || '%' ]]></if>
+		<if test="ordLogUserStart != null"><![CDATA[ AND t.ORD_LOG_USER LIKE #{ordLogUserStart} || '%' ]]></if>
+		<if test="ordLogUserEnd != null"><![CDATA[ AND t.ORD_LOG_USER LIKE '%' || #{ordLogUserEnd} ]]></if>
+		<if test="ordLogUserIn != null"><![CDATA[ AND t.ORD_LOG_USER IN ]]><foreach item="item" index="index" collection="ordLogUserIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="ordLogId != null"><![CDATA[ AND t.ORD_LOG_ID = #{ordLogId} ]]></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordLogTime != null"><![CDATA[ AND t.ORD_LOG_TIME = #{ordLogTime} ]]></if>
+		<if test="ordLogType != null"><![CDATA[ AND t.ORD_LOG_TYPE = #{ordLogType} ]]></if>
+		<if test="ordLogMemo != null"><![CDATA[ AND t.ORD_LOG_MEMO = #{ordLogMemo} ]]></if>
+		<if test="ordLogUser != null"><![CDATA[ AND t.ORD_LOG_USER = #{ordLogUser} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'ordLogIdAsc'"><![CDATA[ t.ORD_LOG_ID asc ]]></if>
+	  			<if test="item == 'ordLogIdDesc'"><![CDATA[ t.ORD_LOG_ID desc ]]></if>
+	  			<if test="item == 'ordIdAsc'"><![CDATA[ t.ORD_ID asc ]]></if>
+	  			<if test="item == 'ordIdDesc'"><![CDATA[ t.ORD_ID desc ]]></if>
+	  			<if test="item == 'ordLogTimeAsc'"><![CDATA[ t.ORD_LOG_TIME asc ]]></if>
+	  			<if test="item == 'ordLogTimeDesc'"><![CDATA[ t.ORD_LOG_TIME desc ]]></if>
+	  			<if test="item == 'ordLogTypeAsc'"><![CDATA[ t.ORD_LOG_TYPE asc ]]></if>
+	  			<if test="item == 'ordLogTypeDesc'"><![CDATA[ t.ORD_LOG_TYPE desc ]]></if>
+	  			<if test="item == 'ordLogMemoAsc'"><![CDATA[ t.ORD_LOG_MEMO asc ]]></if>
+	  			<if test="item == 'ordLogMemoDesc'"><![CDATA[ t.ORD_LOG_MEMO desc ]]></if>
+	  			<if test="item == 'ordLogUserAsc'"><![CDATA[ t.ORD_LOG_USER asc ]]></if>
+	  			<if test="item == 'ordLogUserDesc'"><![CDATA[ t.ORD_LOG_USER desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="ordLogResultMap">
+		<![CDATA[ SELECT * FROM ORD_LOG t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM ORD_LOG t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="ordLogResultUserMap">
+		<![CDATA[ SELECT t.*,b.BUSS_MOBILE_NO,b.BUSS_ACCOUNT FROM ORD_LOG t, BUSS_INFO b ]]>
+		<where>  
+			<![CDATA[ t.ORD_LOG_USER=b.BUSS_ID ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_LOG t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="OrdLog" resultMap="ordLogResultMap">
+   	<![CDATA[ SELECT * FROM ORD_LOG t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="OrdLog" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_LOG t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="ordLogResultMap">
+    <![CDATA[ SELECT * FROM ORD_LOG WHERE  
+				ORD_LOG_ID=#{ordLogId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="OrdLog">
+
+		<![CDATA[
+		    INSERT INTO ORD_LOG
+		      (
+		      ORD_LOG_ID,
+		      ORD_ID,
+		      ORD_LOG_TIME,
+		      ORD_LOG_TYPE,
+		      ORD_LOG_MEMO,
+		      ORD_LOG_USER
+		      )
+		    VALUES
+		      (			  
+					#{ordLogId,jdbcType=VARCHAR}
+				,
+					#{ordId,jdbcType=VARCHAR}
+				,
+					#{ordLogTime,jdbcType=TIMESTAMP}
+				,
+					#{ordLogType,jdbcType=VARCHAR}
+				,
+					#{ordLogMemo,jdbcType=VARCHAR}
+				,
+					#{ordLogUser,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="OrdLog">
+    <![CDATA[ UPDATE ORD_LOG ]]>
+	    <set>  		
+    		<![CDATA[ 
+					ORD_ID = #{ordId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORD_LOG_TIME = #{ordLogTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					ORD_LOG_TYPE = #{ordLogType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORD_LOG_MEMO = #{ordLogMemo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORD_LOG_USER = #{ordLogUser,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE ORD_LOG_ID=#{ordLogId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="OrdLog">
+    <![CDATA[ UPDATE ORD_LOG ]]>
+	    <set>  		
+    		<if test="ordId != null"><![CDATA[ ORD_ID = #{ordId}, ]]></if>
+    		<if test="ordLogTime != null"><![CDATA[ ORD_LOG_TIME = #{ordLogTime}, ]]></if>
+    		<if test="ordLogType != null"><![CDATA[ ORD_LOG_TYPE = #{ordLogType}, ]]></if>
+    		<if test="ordLogMemo != null"><![CDATA[ ORD_LOG_MEMO = #{ordLogMemo}, ]]></if>
+    		<if test="ordLogUser != null"><![CDATA[ ORD_LOG_USER = #{ordLogUser} ]]></if>
+	    </set>  
+			WHERE ORD_LOG_ID=#{ordLogId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE ORD_LOG ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ORD_LOG_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM ORD_LOG  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="OrdLog">
+   <![CDATA[ DELETE FROM ORD_LOG WHERE 1=1  ]]>    			
+		<![CDATA[ AND ORD_LOG_ID = #{ordLogId} ]]>
+		<![CDATA[ AND ORD_ID = #{ordId} ]]>
+		<![CDATA[ AND ORD_LOG_TIME = #{ordLogTime} ]]>
+		<![CDATA[ AND ORD_LOG_TYPE = #{ordLogType} ]]>
+		<![CDATA[ AND ORD_LOG_MEMO = #{ordLogMemo} ]]>
+		<![CDATA[ AND ORD_LOG_USER = #{ordLogUser} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_LOG WHERE 
+		ORD_LOG_ID IN (#{ordLogId})
+		]]>
+	</delete>
+  
+</mapper>

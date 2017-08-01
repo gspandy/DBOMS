@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户导航页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <#include "/views/common/head.html"/>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+
+<script type="text/javascript">
+$(function () {
+		/***未左边导航添加样式***/
+		var aa = $("#menu1");
+		$("#menu2").parent(".info").show();
+		$("#menu2").addClass("active").siblings().removeClass("active");
+	
+	}); 
+function toConfig(operType){
+	$.ajax({
+		type: "POST",
+		url: '${ctx}/author/bussinfo/checkResource',
+		datatype: 'json',
+		data: "",
+		success: function(data,textStatus){
+			if (data.flag) {				      	       
+     	      document.location.href="${ctx}/${userAuthSettingUrl}?type="+operType;
+			} else {
+				 $.jBox.tip("商户基础信息尚未配置！请先配置商户基础信息！");
+			}
+		}
+   	});
+
+}  
+</script>
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+
+    <!-------------------------CONT---------------------------->
+    <article class="article-box">
+		
+        <div class="guide-cont  ">
+            <div class="panel guide-panel mt-10">
+                <div class="panel-body text-c ">
+                  <div class="row cl mt-70">
+                      <!-- <div class="col-sm-4">
+						 
+                          <div class=" box">
+                 		     <h3 >IT资源</h3>
+                 		     
+                 		    <#if auditStatusList??> 
+		                  		<#if ITRESOURCE??>
+		                  			  <#if ITStatus=="1">
+		                  			<p class="c-green">待审核 </p>
+			                   	     <a class="btn btn-primary mt-20" href="${ctx}/${userItSeeSettingUrl}?type=1">查看配置</a>
+			               			   <#elseif ITStatus=="2">
+			               			   	<p class="c-green">审核通过</p> 
+		                  			     	<a class="btn btn-primary mt-20" href="${ctx}/${userItSettingUrl}?type=0">修改配置</a><br>
+			                   			    <a class="btn btn-primary mt-20" href="${ctx}/${userItSeeSettingUrl}?type=1">查看配置</a>
+			                   			  <#elseif ITStatus=="3"> 
+			                   			  	  <p class="c-red text-overflow">审核不通过</p>
+			                   			  	  <a class="btn btn-primary mt-20" href="${ctx}/${userItSettingUrl}?type=0">修改配置</a><br>
+			                   				  <a class="btn btn-primary mt-20" href="${ctx}/${userItSeeSettingUrl}?type=1">查看配置</a>
+		                  			  </#if>
+			                		<#else>
+					                    	<p class="c-red text-overflow">尚未进行资源配置</p>
+						                	<a class="btn btn-primary mt-20" href="${ctx}/${userItSettingUrl}?type=0">立即配置</a><br>
+			                		
+			                	</#if>
+		                    <#else> 
+		                    	<p class="c-red text-overflow">尚未进行资源配置</p>
+			                	<a class="btn btn-primary mt-20" href="${ctx}/${userItSettingUrl}?type=0">立即配置</a><br>
+		                  </#if>
+                          </div>
+                      </div>  -->
+                      <div class="col-sm-4">
+                         <div class=" box">
+                   <h3 >商户基础配置</h3>
+                    <#if auditStatusList??> 
+		          	 	  <#if DATAPEM??>
+		          	 		<#if DATAStatus=="1">
+			          	 		<p class="c-green">待审核</p>
+		                 		<a class="btn btn-primary mt-20" href="${ctx}/${userDataSeeSettingUrl}?type=5">查看配置</a>
+	                 		<#elseif DATAStatus=="2"> 
+	                 		 	<p class="c-green">审核通过</p>
+					                  <a class="btn btn-primary mt-20" href="${ctx}/${userDataSettingUrl}?type=2">修改配置</a><br> 
+	                 			<a class="btn btn-primary mt-20" href="${ctx}/${userDataSeeSettingUrl}?type=5">查看配置</a>
+	                 		<#elseif DATAStatus=="3">
+	                 		    <p class="c-red text-overflow">审核不通过</p>
+	                 		    <a class="btn btn-primary mt-20" href="${ctx}/${userDataSettingUrl}?type=2">修改配置</a><br> 
+	                 			<a class="btn btn-primary mt-20" href="${ctx}/${userDataSeeSettingUrl}?type=5">查看配置</a>
+			            	 </#if>     
+			                <#else>
+					            	  <p class="c-red text-overflow">尚未进行配置</p>
+					                  <a class="btn btn-primary mt-20" href="${ctx}/${userDataSettingUrl}?type=1">立即配置</a><br> 
+		          		  </#if>
+		          		  <#else>
+					            	  <p class="c-red text-overflow">尚未进行配置</p>
+					                  <a class="btn btn-primary mt-20" href="${ctx}/${userDataSettingUrl}?type=1">立即配置</a><br> 
+		           </#if>
+		                 </div>
+                     </div>
+                      <div class="col-sm-4">
+                          <div class=" box">
+                   <h3 >操作员权限</h3>
+                 
+                   <#if bussTenantList??> 
+		          	 	  <#if AUTHStatus??>
+		          	 	  		
+		          	 		<#if AUTHStatus=="WAIT">
+			          	 		<p class="c-green">存在待审核的操作员</p>
+			          	 		<a class="btn btn-primary mt-20" href="javascript:toConfig(0)">立即配置</a><br>     
+		                 		<a class="btn btn-primary mt-20" href="${ctx}/${userAuthSeeSettingUrl}?type=1">查看配置</a>
+	                 		<#elseif AUTHStatus=="PASS"> 
+	                 		 	<p class="c-green">审核通过</p>
+	                 			<a class="btn btn-primary mt-20" href="javascript:toConfig(0)">修改配置</a><br> 
+	                  			<a class="btn btn-primary mt-20" href="${ctx}/${userAuthSeeSettingUrl}?type=1">查看配置</a>
+	                 		<#elseif AUTHStatus=="NOPASS">
+	                 		    <p class="c-red text-overflow">存在审核不通过的操作员</p>
+	                 		    <a class="btn btn-primary mt-20" href="javascript:toConfig(0)">修改配置</a><br> 
+	                 			<a class="btn btn-primary mt-20" href="${ctx}/${userAuthSeeSettingUrl}?type=1">查看配置</a>
+			            	 </#if>     
+			                <#else>
+					            	  <p class="c-red text-overflow">尚未进行资源配置</p>
+					                  <a class="btn btn-primary mt-20" href="javascript:toConfig(0)">立即配置</a><br>       	  	
+		          		  </#if>
+		          		  <#else>
+					            	  <p class="c-red text-overflow">尚未进行资源配置</p>
+					                  <a class="btn btn-primary mt-20" href="javascript:toConfig(0)">立即配置</a><br>   
+		           </#if>
+		           
+		          		
+		          			 
+                     </div>    
+                      </div>
+                  </div>
+                  
+                </div>
+          
+       </div>
+       </div>
+       </article>
+	
+<!------------------------FOOTER---------------------------->
+ <#include "/views/common/footer.html"/>
+
+</body>
+
+</html>

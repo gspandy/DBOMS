@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>工单新增页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <link rel="Bookmark" href="img/favorite.png" >
+    <link rel="Shortcut Icon" href="img/favorite.png" />
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="${ctx}/css/reset.css">
+    <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${ctx}/css/general.css">
+    <link rel="stylesheet" href="${ctx}/css/layout.css">
+    <link rel="stylesheet" href="${ctx}/css/core.css">
+    <link rel="stylesheet" href="${ctx}/css/components.css">
+    <link rel="stylesheet" href="${ctx}/js/kkpager/kkpager_blue.css">
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/additional-methods.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/messages_zh.js"></script>
+    <script type="text/javascript" src="${ctx}/js/kkpager/kkpager.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modalmanager.js"></script>
+    <script type="text/javascript" src="${ctx}/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+
+    <!--[if IE 6]>
+    <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('.pngfix,.icon');</script>
+    <![endif]-->
+</head>
+<script type="text/javascript">
+    var rootPath="${ctx}";
+    var untis=[];
+    $(function(){
+        /***未左边导航添加样式***/
+        var aa = $("#menu4");
+        $("#menu4").parent(".info").show();
+        $("#menu4").addClass("active").siblings().removeClass("active");
+        getPrdList();
+    });
+    var totalPage;
+    var totalRecords;
+    var pageNo = 1;
+    function getPrdList() {
+        var prdId=$("#prdId").val();
+        var prdName=$("#prdName").val();
+        $.ajax({
+            url : rootPath+"/author/ordApply/getPrdInfoList",
+            data: {"pageNo" : pageNo,
+                    "prdId" : prdId,
+                    "prdName" : prdName},
+            type : 'post',
+            dataType : 'json',
+            success:function (data) {
+                var list=data.objects;
+                var html="";
+                $("#prdList").html("");
+                for(var i in list){
+                    html+="<tr>";
+                    html+="<td><input type='radio' id='prdRadio' name='prdRadio' onclick='savePrd(this)'></td>";
+                    html+="<td>"+list[i].prdId+"</td>";
+                    html+="<td>"+list[i].prdName+"</td>";
+                    html+="<td style='display: none'>"+list[i].prdDataName+"</td>";
+                    html+="<td style='display: none'>"+list[i].dataResourceId+"</td>";
+                    html+="<td style='display: none'>"+list[i].dataResourceName+"</td>";
+                    html+="<td style='display: none'>"+list[i].prdOthers+"</td>";
+                    html+="<td style='display: none'>"+list[i].prdPrice+"</td>";
+                    html+="<td style='display: none'>"+list[i].prdUnit+"</td>";
+                    html+="<td style='display: none'>"+list[i].prdDatafile+"</td>"
+                    html+="</tr>";
+                }
+                $("#prdList").html(html);
+                totalPage = data.totalPage;
+                totalRecords = data.totalNumber;
+                pageNo = data.currentPage;
+                toPage();
+            },
+            error :function () {
+                return false;
+            }
+            
+        });
+        
+    }
+
+    function toPage(){
+        //alert("总页数"+totalPage+"-总数据"+totalRecords+"-当前页"+pageNo);
+        kkpager.total = totalPage;
+        kkpager.totalRecords = totalRecords;
+        kkpager.pno = pageNo;
+        kkpager.hasPrv = (kkpager.pno > 1)
+        kkpager.hasNext = (kkpager.pno < kkpager.total);
+        kkpager.generPageHtml({
+            pno : pageNo,
+            mode : 'click',
+            total : totalPage,
+            totalRecords : totalRecords,
+            click : function(n){
+                this.selectPage(n);
+                changPage();
+                return false;
+            },
+            getHref : function(n){
+                return 'javascript:void(0)';
+            }
+        });
+    }
+    function changPage(){
+        pageNo = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+        param["pageNo"] = pageNo;
+        getPrdList();
+    }
+
+    var prdId="";
+    function savePrd(obj) {
+    	$("#prdTip").hide();	
+        var str=obj.parentNode.parentNode;
+        if(obj.checked){
+            prdId=(str.cells[1].innerText);
+            $("#productId").val(str.cells[1].innerText);
+            $("#productName").val(str.cells[2].innerText);
+            //added andy 0927 start
+            //$("#dataResource").empty();
+            //$("#dataResource").html(str.cells[3].innerText);
+            //added andy 0927 end
+            //$("#dataId").empty();
+            //$("#dataId").html(str.cells[4].innerText);
+            //$("#dataName").empty();
+            //$("#dataName").html(str.cells[5].innerText);
+            $("#otherText").empty();
+            $("#otherText").html(str.cells[6].innerText);
+            $("#unit").empty();
+            $("#unit").html(str.cells[8].innerText);
+            var temp=str.cells[8].innerText;
+            <#list unitMap?keys as key>
+            	var k="${key}";
+            	if(k==temp){
+           		 $("#unit").html("${unitMap[key]}");
+            	}
+            </#list>
+            $("#unitPrice").empty();
+            $("#unitPrice").html(str.cells[7].innerText);
+            //$("#resId").val(str.cells[9].innerText);
+            $("#oldPrdId").val(str.cells[1].innerText);
+            /***added by andy 0928-start ***/
+            $.ajax({
+            url : rootPath+"/author/ordApply/getPrdDataList",
+            data: {"prdId" : prdId},
+            type : 'post',
+            dataType : 'json',
+            success:function (data) {
+                var list=data.objects;
+                var html="";
+                $("#proDataList").html("");
+                for(var i in list){
+                	html+="<div class='data'>";
+                    html+="<span class='name' id='dataName' name='dataName'>"+list[i].columnName+"</span>";
+                    html+="<span class='type' id='dataType' name='dataType'>"+list[i].columnType+"</span>";
+                    html+="<span class='des' id='dataDes' name='dataDes'>"+list[i].columnDesc+"</span>"
+                    html+="</div>";
+                }
+                html+="</div>";
+                $("#proDataList").html(html);
+            },
+            error :function () {
+                //return false;
+                $("#proDataList").html("");
+            }
+            
+        });
+        /***added by andy 0928-end ***/            
+        }
+    }
+    
+    function saveOrder(operType) {
+        var startRow=$("#starRow").val();
+        var endRow=$("#endRow").val();
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+        //var resId=$("#resId").val();
+        var orderId=$("#oldOrdId").val();
+        if(startTime==null||""==startTime||endTime==null||""==endTime){
+            $("#timeTip").show();
+            $("#timeTip2").hide();
+            return false;
+        }else if (startTime>endTime){
+            $("#timeTip").hide();
+            $("#timeTip2").show();
+            return false;
+        }
+        $("#timeTip").hide();
+        $("#timeTip2").hide();
+        if(startRow==null||""==startRow){
+            startRow=0;
+        }
+        if (endRow==null || ""==endRow){
+            endRow=0;
+        }
+        if(parseInt(endRow)<parseInt(startRow)){
+            $("#rowTip").show();
+            return false;
+        }
+        $("#rowTip").hide();
+		if(operType=="01" || operType=="00"){
+			prdId=$("#oldPrdId").val();
+		}
+		if(prdId==null || ""==prdId){
+			$("#prdTip").show();
+			return false;
+		}
+        $.ajax({
+            url : rootPath+"/author/ordApply/orderConfig",
+            type : 'post',
+            data:{"operType":operType,
+                    "startRow":startRow,
+                    "endRow":endRow,
+                    "startTime":startTime,
+                    "endTime" : endTime,
+                    "prdId":prdId,
+                   // "resId":resId,
+                    "orderId" : orderId},
+            dataType:'json',
+            success : function (data) {
+                if(data.infFlag=="0"){
+                   // $.jBox.error(data.mes, '提示');
+                    //setTimeout("window.location.href='${ctx}/${orderListUrl}'",1500);
+                    $.jBox.prompt(data.mes, '提示', 'error', { closed: function () { window.location.href='${ctx}/${orderListUrl}'; } });
+                }else{
+                    if (data.flag=="1"){
+                        $.jBox.tip(data.message,'success');
+                        setTimeout("window.location.href='${ctx}/${orderListUrl}'",500);
+                    }else {
+                        $.jBox.error(data.message, '提示');
+                        return false;
+                    }
+                }
+            },
+            error :function () {
+                $.jBox.error(data.message, '提示');
+                return false;
+            }
+        });
+    }
+    
+    /*function down(fileId){
+		var fileId=$("#resId").val();
+  		if (fileId==null || ""== fileId) {
+  	  		return false;
+		}
+  		$.ajax({
+  			type: "POST",
+  			async:false,
+  			url: "${ctx}/product/download.do",
+  			datatype: "json",
+  			data:{fileId : fileId},
+  			success: function(data){
+  				if (data==null||data=="null"||data.length<1) {
+  					alert("获取文件失败，请联系管理员！");
+  					return;
+  				}
+  				//if(confirm("下载数据资源文件？")){
+  					window.location.href="${ctx}/temp/"+data;
+  				//}
+	  			//afterDown(data);
+  			}
+  		});
+  	}*/
+  	/***
+    function down(){
+        $("#fileCode").val($("#resId").val());
+        $("#downFile").submit();
+    }***/
+</script>
+<script>
+//展示data信息
+$(document).on("click",".data",function(){
+ 	var info = '字段名：'+$(this).children(".name").text()+'<br/>字段类型：'+$(this).children(".type").text() +'<br/>字段描述：'+$(this).children(".des").text() ;
+	 $.jBox.info(info, "字段信息",{ buttons: { '关闭': true} });
+});
+</script>
+<form style="display:none;" id="downFile" name="downFile" action="${ctx}/author/product/downFile.do" method="post">
+    <input id="fileCode" name="fileCode" value="" />
+</form>
+<body>
+<!------------------------HEADER---------------------------->
+<#include "/views/common/header.html"/>
+<!------------------------SIDEBAR-------------------------->
+<#include "/views/common/aside.html"/>
+
+<!-------------------------CONT---------------------------->
+<input type="hidden" name="oldOrdId" id="oldOrdId" value="${orderId!''}"/>
+<article class="article-box">
+    <div class="add-cont">
+        <section class="panel panel-primary">
+            <div class="panel-header">
+            <#if flag??>
+            <#if flag=="1">
+        	<h4>新增工单</h4>
+        	<#else>
+        	<h4>修改工单</h4>
+        	</#if>
+        	</#if>
+        	</div>
+            <div class="panel-seheader">
+                <h5>选择产品</h5>
+            </div>
+            <div class="panel-body">
+                <div class="form-group  cl">
+                    <label class=" fl">产品ID：</label>
+                    <input class="input-text fl"  type="text"  onblur="true" disabled="disabled" name="productId" id="productId" value="${ordPrdAndData.prdId!''}">   <a href="#selectModal" data-toggle="modal"  class="btn btn-primary-outline ml-20 f-12">选择产品</a>
+                    <span id="prdTip" style="color: red;display: none">请至少选择一个产品</span>
+                	<input type="hidden" name="oldPrdId" id="oldPrdId" value="${ordPrdAndData.prdId!''}">
+                </div>
+                <div class="form-group  cl">
+                    <label class=" fl">产品名称：</label>
+                    <input class="input-text fl"  type="text" disabled="disabled"  name="productName" id="productName" value="${ordPrdAndData.prdName!''}">
+                </div>
+                <div class="form-group cl">
+                    <label class=" fl">数据资源需求：</label>
+                    <!--  
+                    <a class="c-blue" id="dataResource">${ordPrdAndData.prdDataName!''}</a>
+                    <input type="hidden" name="resId" id="resId" value="${ordPrdAndData.prdDatafile!''}">
+                    -->
+                    <!-- added andy 0927 start -->
+                    <div class="fl dataNeedy w350">
+                          <div class="data-box" id="proDataList">
+                              <#if proDataList??>
+		                          	<#list proDataList as pd>
+		                          		<div class="data">
+		                                  <span class="name" id="dataName" name="dataName">${pd.columnName?if_exists}</span>
+		                                  <span class="type" id="dataType" name="dataType">${pd.columnType?if_exists}</span>
+		                                  <span class="des" id="dataDes" name="dataDes">${pd.columnDesc?if_exists}</span>
+		                              	</div>
+		                          	</#list>
+                          	  </#if>
+                          </div>
+                     </div>
+                     <!-- added andy 0927 end -->
+                </div>
+                <div class="form-group  cl">
+                    <label class=" fl">其他需求：</label>
+                    <textarea class="textarea fl" type="text" rows="20" cols="30" id="otherText" disabled="disabled">${ordPrdAndData.prdOthers!''}</textarea>
+                </div>
+                <br>
+                <br>
+                <div class="form-group  cl">
+                    <label class=" fl">计量单位：</label>
+                    <span id="unit">
+                    <#list unitMap?keys as key>
+                    	<#if ordPrdAndData.prdUnit??>
+	                         <#if ordPrdAndData.prdUnit== key>
+	                         	${unitMap[key]}
+	                         <#else>
+                         	 </#if>
+                        </#if>
+                    </#list>
+                    </span>
+                </div>
+                <div class="form-group  cl">
+                    <label class=" fl">计量单价(元)：</label><span id="unitPrice">${ordPrdAndData.prdPrice!''}</span>
+                </div>
+                <!--  
+                <div class="form-group  cl">
+                    <label class=" fl">数据服务ID：</label><span id="dataId">${ordPrdAndData.dataResourceId!''}</span>
+                </div>
+                <div class="form-group  cl">
+                    <label class=" fl">数据服务名称：</label><span id="dataName">${ordPrdAndData.dataResourceName!''}</span>
+                </div>
+                -->
+                <br>
+
+            </div>
+        </section>
+        <section class="panel panel-secondary">
+            <div class="panel-header"><h4>填写工单要求</h4></div>
+            <div class="panel-body">
+                <div class="form-group  cl">
+                    <label class=" fl">数据返回条件：</label>
+                    <input id="starRow" class="input-text input-min fl" maxlength="8" type="text" value="${ordPrd.startRow!''}" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"><span class="fl ml-5 mr-5" >条至</span>
+                    <input id="endRow" class="input-text input-min fl"  maxlength="8" type="text" value="${ordPrd.endRow!''}" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"><span class="fl ml-5" >条</span>
+                    &nbsp;&nbsp;<span id="rowTip" style="color: red;display: none">开始行不能大于结束行</span>
+                </div>
+                <div class="form-group  cl">
+                    <label class=" fl">数据时段：</label>
+                    <input id="startTime" class="input-text input-min2 fl"  type="text" onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd HH:mm:ss',skin:'whyGreen'})" value="${(ordPrd.ordDatebegin?string("yyyy-MM-dd HH:mm:ss"))!''}" ><span class="fl  ml-5 mr-5">至</span>
+                    <input id="endTime" class="input-text input-min2 fl"  type="text" onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd HH:mm:ss',skin:'whyGreen'})" value="${(ordPrd.ordDateend?string("yyyy-MM-dd HH:mm:ss"))!''}">
+                    &nbsp;<span id="timeTip" style="color: red;display: none">数据时间段不能为空</span><span id="timeTip2" style="color: red;display: none">开始时间不能大于结束时间</span>
+                </div>
+
+            </div>
+        </section>
+        <div class="btn-wrap mt-20 ml-60">
+        	<#if flag??>
+        		<#if flag=="1">
+        		<button class="btn btn-primary" onclick="saveOrder('11')">保存</button>
+	            &nbsp; &nbsp;
+	            <button class="btn btn-primary" onclick="saveOrder('10')">提交</button>
+        		<#else>
+        		<button class="btn btn-primary" onclick="saveOrder('01')">保存</button>
+	            &nbsp; &nbsp;
+	            <button class="btn btn-primary" onclick="saveOrder('00')">提交</button>
+        		</#if>
+        	</#if>
+            
+            &nbsp; &nbsp;
+            <a class="btn btn-close" href="${ctx}/${orderListUrl}" >关闭</a>
+        </div>
+
+    </div>
+</article>
+
+<!------------------------FOOTER---------------------------->
+<#include "/views/common/footer.html"/>
+
+
+
+<!--------------------------MODAL---------------------------->
+<!----------------选择产品弹出框--------------------->
+<div id="selectModal" class="modal full hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="myModalLabel">选择产品</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();"><i class="fa fa-times"></i></a>
+    </div>
+    <div class="modal-body">
+        <div class="search-form">
+            <from id="searchForm">
+                <div class="row cl">
+                    <div class="col-sm-4">
+                        <label class="form-label" for="">产品ID：</label><div class="formControls"><input type="text" class="input-text" name="prdId" id="prdId"></div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label" for="">产品名称：</label><div class="formControls"><input type="text" class="input-text" name="prdName" id="prdName" ></div>
+                    </div>
+
+                    <div class="col-sm-4 text-r">
+                        <a  class="btn btn-primary" onclick="getPrdList()">查询</a>
+                    </div>
+
+                </div>
+            </from>
+        </div>
+        <div class="product-list mt-20">
+            <table class="table table-primary">
+                <thead>
+                <tr>
+
+                    <th width="30"></th>
+                    <th>产品ID</th>
+                    <th>产品名称</th>
+                    <!--  <th>数据资源需求</th> 
+                    <th>数据服务ID</th>
+                    <th>数据服务名称</th>-->
+
+                </tr>
+                </thead>
+                <tbody id="prdList"></tbody>
+            </table>
+        </div>
+        <div id="kkpager"></div>
+
+    </div>
+    <div class="modal-footer text-c">
+        <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</button>
+    </div>
+</div>
+
+
+</body>
+</html>

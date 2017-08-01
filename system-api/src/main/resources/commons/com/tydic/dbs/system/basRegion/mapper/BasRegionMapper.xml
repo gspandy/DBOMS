@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BAS_REGION">
+	<resultMap type="BasRegion" id="basRegionResultMap">
+		<id property="regionCode" column="REGION_CODE"/>   
+		<result property="lang" column="LANG"/>
+		<result property="regionPid" column="REGION_PID"/>
+		<result property="regionName" column="REGION_NAME"/>
+		<result property="reOrder" column="REORDER"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="regionCodeLike != null"><![CDATA[ AND t.REGION_CODE LIKE '%' || #{regionCodeLike} || '%' ]]></if>
+		<if test="regionCodeStart != null"><![CDATA[ AND t.REGION_CODE LIKE #{regionCodeStart} || '%' ]]></if>
+		<if test="regionCodeEnd != null"><![CDATA[ AND t.REGION_CODE LIKE '%' || #{regionCodeEnd} ]]></if>
+		<if test="regionCodeIn != null"><![CDATA[ AND t.REGION_CODE IN ]]><foreach item="item" index="index" collection="regionCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="lang != null"><![CDATA[ AND t.LANG = #{lang} ]]></if>
+		<if test="regionPid != null"><![CDATA[ AND t.REGION_PID = #{regionPid,jdbcType=VARCHAR} ]]></if>
+		<if test="regionPidLike != null"><![CDATA[ AND t.REGION_PID LIKE '%' || #{regionPidLike} || '%' ]]></if>
+		<if test="regionPidStart != null"><![CDATA[ AND t.REGION_PID LIKE #{regionPidStart} || '%' ]]></if>
+		<if test="regionPidEnd != null"><![CDATA[ AND t.REGION_PID LIKE '%' || #{regionPidEnd} ]]></if>
+		<if test="regionPidIn != null"><![CDATA[ AND t.REGION_PID IN ]]><foreach item="item" index="index" collection="regionPidIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="regionName != null"><![CDATA[ AND t.REGION_NAME = #{regionName} ]]></if>
+		<if test="regionNameLike != null"><![CDATA[ AND t.REGION_NAME LIKE '%' || #{regionNameLike} || '%' ]]></if>
+		<if test="regionNameStart != null"><![CDATA[ AND t.REGION_NAME LIKE #{regionNameStart} || '%' ]]></if>
+		<if test="regionNameEnd != null"><![CDATA[ AND t.REGION_NAME LIKE '%' || #{regionNameEnd} ]]></if>
+		<if test="regionNameIn != null"><![CDATA[ AND t.REGION_NAME IN ]]><foreach item="item" index="index" collection="regionNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="reOrder != null"><![CDATA[ AND t.REORDER = #{reOrder} ]]></if>
+		<if test="reOrderGt != null"><![CDATA[ AND t.REORDER > #{reOrderGt} ]]></if>
+		<if test="reOrderGte != null"><![CDATA[ AND t.REORDER >= #{reOrderGte} ]]></if>
+		<if test="reOrderLt != null"><![CDATA[ AND t.REORDER < #{reOrderLt} ]]></if>
+		<if test="reOrderLte != null"><![CDATA[ AND t.REORDER <= #{reOrderLte} ]]></if>
+		<if test="reOrderIn != null"><![CDATA[ AND t.REORDER IN ]]><foreach item="item" index="index" collection="reOrderIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="lang != null"><![CDATA[ AND t.LANG = #{lang} ]]></if>
+		<if test="regionPid != null"><![CDATA[ AND t.REGION_PID = #{regionPid} ]]></if>
+		<if test="regionName != null"><![CDATA[ AND t.REGION_NAME = #{regionName} ]]></if>
+		<if test="reOrder != null"><![CDATA[ AND t.REORDER = #{reOrder} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'regionCodeAsc'"><![CDATA[ t.REGION_CODE asc ]]></if>
+	  			<if test="item == 'regionCodeDesc'"><![CDATA[ t.REGION_CODE desc ]]></if>
+	  			<if test="item == 'regionPidAsc'"><![CDATA[ t.REGION_PID asc ]]></if>
+	  			<if test="item == 'regionPidDesc'"><![CDATA[ t.REGION_PID desc ]]></if>
+	  			<if test="item == 'regionNameAsc'"><![CDATA[ t.REGION_NAME asc ]]></if>
+	  			<if test="item == 'regionNameDesc'"><![CDATA[ t.REGION_NAME desc ]]></if>
+	  			<if test="item == 'reOrderAsc'"><![CDATA[ t.REORDER asc ]]></if>
+	  			<if test="item == 'reOrderDesc'"><![CDATA[ t.REORDER desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="basRegionResultMap">
+		<![CDATA[ SELECT * FROM BAS_REGION t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BAS_REGION t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="basRegionResultMap">
+		<![CDATA[ SELECT DISTINCT t.* FROM BAS_REGION t ]]>
+		<if test="parentChannelIdStartWith != null"> LEFT JOIN CHL_CHANNEL_REGION CCR ON CCR.REGION_CODE = t.REGION_CODE</if>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+			<if test="parentChannelIdStartWith != null">
+				<![CDATA[ AND CCR.CHANNEL_ID IN 
+				(
+					 WITH RECURSIVE r AS ( 
+					       SELECT * FROM CHL_CHANNEL WHERE CHANNEL_ID = #{parentChannelIdStartWith}
+					     union   ALL 
+					       SELECT CHL_CHANNEL.* FROM CHL_CHANNEL, r WHERE CHL_CHANNEL.CHANNEL_ID = r.PARENT_CHANNEL_ID 
+					     ) 
+					 SELECT r.CHANNEL_ID FROM r
+				) 
+				
+				]]>
+			</if>
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BAS_REGION t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BasRegion" resultMap="basRegionResultMap">
+   	<![CDATA[ SELECT * FROM BAS_REGION t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BasRegion" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BAS_REGION t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="basRegionResultMap">
+    <![CDATA[ SELECT * FROM BAS_REGION WHERE  
+				REGION_CODE=#{regionCode}
+		]]>
+	</select>
+	
+  <!-- (3-4)============================= selectByPhysicsStockId =================================== -->
+  <select id="selectByPhysicsStockId" parameterType="map" resultMap="basRegionResultMap">
+    <![CDATA[ 
+    	WITH RECURSIVE br AS ( 
+		       SELECT * FROM bas_region WHERE region_code in 
+		    	(
+		    	select wssr.region_code from ws_physics_stock_region wssr where wssr.physics_stock_id = #{physicsStockId}
+		    	)
+		     union   ALL 
+		       SELECT bas_region.* FROM bas_region, br WHERE bas_region.REGION_CODE = br.REGION_PID 
+		     ) 
+		 SELECT br.* FROM br where 1=1
+		]]>
+		<if test="lang != null" ><![CDATA[ and lang = #{lang} ]]></if>
+	</select>
+	
+  <!-- (3-4-1 带数据权限控制)============================= selectByPhysicsStockIdAndDataPermission =================================== -->
+  <select id="selectByPhysicsStockIdAndDataPermission" parameterType="map" resultMap="basRegionResultMap">
+	<![CDATA[
+		WITH RECURSIVE br AS ( 
+		       SELECT * FROM bas_region WHERE region_code in 
+		    	(select wssr.region_code from ws_physics_stock_region wssr where wssr.physics_stock_id = #{physicsStockId})
+		     union   ALL 
+		       SELECT bas_region.* FROM bas_region, br WHERE bas_region.REGION_CODE = br.REGION_PID 
+		     ) 
+		 SELECT br.* FROM br where 1=1
+	]]>	
+	
+	<if test="regionCodeIn != null">
+	<![CDATA[
+		and br.region_code in 
+	]]><foreach item="item" index="index" collection="regionCodeIn" open="(" separator="," close=")">#{item}</foreach>
+	</if>
+    <if test="lang != null" ><![CDATA[ and lang = #{lang} ]]></if>
+	</select>
+	
+  <!-- (3-5)============================= selectByRegionCode =================================== -->
+  <select id="selectByRegionCode" parameterType="map" resultMap="basRegionResultMap">
+    <![CDATA[
+    	WITH RECURSIVE br AS ( 
+		       SELECT * FROM bas_region WHERE region_code  = #{regionCode}
+		     union   ALL 
+		       SELECT bas_region.* FROM bas_region, br WHERE bas_region.REGION_CODE = br.REGION_PID 
+		     ) 
+		 SELECT distinct br.* FROM br
+    ]]>
+    <if test="lang != null" ><![CDATA[ where br.lang = #{lang} ]]></if>
+	</select>
+	
+	<!-- (3-6)============================= selectByRegionCodedesc =================================== -->
+  <select id="selectByRegionCodedesc" parameterType="map" resultMap="basRegionResultMap">
+    <![CDATA[
+    	WITH RECURSIVE br AS ( 
+		       SELECT * FROM bas_region WHERE region_code  = #{regionCode} and bas_region.lang =  #{lang}
+		     union   ALL 
+		       SELECT bas_region.* FROM bas_region, br WHERE bas_region.REGION_PID = br.REGION_CODE and bas_region.lang =  #{lang}
+		     ) 
+		 SELECT br.* FROM br
+    ]]>
+    <if test="lang != null" ><![CDATA[ where lang = #{lang} ]]></if>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BasRegion">
+		<![CDATA[
+		    INSERT INTO BAS_REGION
+		      (
+		      REGION_CODE,
+		      LANG,
+		      REGION_PID,
+		      REGION_NAME,
+		      REORDER
+		      )
+		    VALUES
+		      (			  
+					#{regionCode,jdbcType=VARCHAR}
+				,
+					#{lang,jdbcType=VARCHAR}
+				,
+					#{regionPid,jdbcType=VARCHAR}
+				,
+					#{regionName,jdbcType=VARCHAR}
+				,
+				    #{reOrder,jdbcType=DECIMAL}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BasRegion">
+    <![CDATA[ UPDATE BAS_REGION ]]>
+	    <set>  		
+    		<![CDATA[  
+					REGION_PID = #{regionPid,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					REGION_NAME = #{regionName,jdbcType=VARCHAR}
+    		]]>
+    		<![CDATA[  
+					REORDER = #{reOrder,jdbcType=DECIMAL},
+    		]]>
+	    </set>  
+			WHERE REGION_CODE=#{regionCode}
+  </update>
+  
+  <!-- (5-2)============================= updateByVoNotNull =================================== -->
+  <update id="updateByVoNotNull" parameterType="BasRegion">
+    <![CDATA[ UPDATE BAS_REGION ]]>
+	    <set>  		
+    		<if test="regionPid != null"><![CDATA[ REGION_PID = #{regionPid}, ]]></if>
+    		<if test="regionName != null"><![CDATA[ REGION_NAME = #{regionName},]]></if>
+    		<if test="reOrder != null"><![CDATA[ REORDER = #{reOrder} ]]></if>
+	    </set>  
+			WHERE REGION_CODE=#{regionCode}
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BAS_REGION  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BasRegion">
+   <![CDATA[ DELETE FROM BAS_REGION WHERE 1=1  ]]>    			
+		<if test="regionCode != null"><![CDATA[ AND REGION_CODE = #{regionCode} ]]></if>
+		<if test="regionPid != null"><![CDATA[ AND REGION_PID = #{regionPid} ]]></if>
+		<if test="regionName != null"><![CDATA[ AND REGION_NAME = #{regionName} ]]></if>
+		<if test="reOrder != null"><![CDATA[ AND REORDER = #{reOrder} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BAS_REGION WHERE 
+		REGION_CODE IN (#{regionCode})
+		]]>
+	</delete>
+  
+</mapper>

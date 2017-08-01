@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PRD_DATA_RESOURCE">
+	<resultMap type="PrdDataResource" id="prdDataResourceResultMap">
+		<id property="dataResourceId" column="DATA_RESOURCE_ID"/>   
+		<result property="prdId" column="PRD_ID"/>
+		<result property="dataResourceName" column="DATA_RESOURCE_NAME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="dataResourceId != null"><![CDATA[ AND t.DATA_RESOURCE_ID = #{dataResourceId} ]]></if>
+		<if test="dataResourceIdLike != null"><![CDATA[ AND t.DATA_RESOURCE_ID LIKE '%' || #{dataResourceIdLike} || '%' ]]></if>
+		<if test="dataResourceIdStart != null"><![CDATA[ AND t.DATA_RESOURCE_ID LIKE #{dataResourceIdStart} || '%' ]]></if>
+		<if test="dataResourceIdEnd != null"><![CDATA[ AND t.DATA_RESOURCE_ID LIKE '%' || #{dataResourceIdEnd} ]]></if>
+		<if test="dataResourceIdIn != null"><![CDATA[ AND t.DATA_RESOURCE_ID IN ]]><foreach item="item" index="index" collection="dataResourceIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="prdIdLike != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdLike} || '%' ]]></if>
+		<if test="prdIdStart != null"><![CDATA[ AND t.PRD_ID LIKE #{prdIdStart} || '%' ]]></if>
+		<if test="prdIdEnd != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdEnd} ]]></if>
+		<if test="prdIdIn != null"><![CDATA[ AND t.PRD_ID IN ]]><foreach item="item" index="index" collection="prdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="dataResourceName != null"><![CDATA[ AND t.DATA_RESOURCE_NAME = #{dataResourceName} ]]></if>
+		<if test="dataResourceNameLike != null"><![CDATA[ AND t.DATA_RESOURCE_NAME LIKE '%' || #{dataResourceNameLike} || '%' ]]></if>
+		<if test="dataResourceNameStart != null"><![CDATA[ AND t.DATA_RESOURCE_NAME LIKE #{dataResourceNameStart} || '%' ]]></if>
+		<if test="dataResourceNameEnd != null"><![CDATA[ AND t.DATA_RESOURCE_NAME LIKE '%' || #{dataResourceNameEnd} ]]></if>
+		<if test="dataResourceNameIn != null"><![CDATA[ AND t.DATA_RESOURCE_NAME IN ]]><foreach item="item" index="index" collection="dataResourceNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="dataResourceId != null"><![CDATA[ AND t.DATA_RESOURCE_ID = #{dataResourceId} ]]></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="dataResourceName != null"><![CDATA[ AND t.DATA_RESOURCE_NAME = #{dataResourceName} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'dataResourceIdAsc'"><![CDATA[ t.DATA_RESOURCE_ID asc ]]></if>
+	  			<if test="item == 'dataResourceIdDesc'"><![CDATA[ t.DATA_RESOURCE_ID desc ]]></if>
+	  			<if test="item == 'prdIdAsc'"><![CDATA[ t.PRD_ID asc ]]></if>
+	  			<if test="item == 'prdIdDesc'"><![CDATA[ t.PRD_ID desc ]]></if>
+	  			<if test="item == 'dataResourceNameAsc'"><![CDATA[ t.DATA_RESOURCE_NAME asc ]]></if>
+	  			<if test="item == 'dataResourceNameDesc'"><![CDATA[ t.DATA_RESOURCE_NAME desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="prdDataResourceResultMap">
+		<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="prdDataResourceResultMap">
+		<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="PrdDataResource" resultMap="prdDataResourceResultMap">
+   	<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="PrdDataResource" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="prdDataResourceResultMap">
+    <![CDATA[ SELECT * FROM PRD_DATA_RESOURCE WHERE  
+				DATA_RESOURCE_ID=#{dataResourceId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="PrdDataResource">
+
+		<![CDATA[
+		    INSERT INTO PRD_DATA_RESOURCE
+		      (
+		      DATA_RESOURCE_ID,
+		      PRD_ID,
+		      DATA_RESOURCE_NAME,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{dataResourceId,jdbcType=VARCHAR}
+				,
+					#{prdId,jdbcType=VARCHAR}
+				,
+					#{dataResourceName,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="PrdDataResource">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					PRD_ID = #{prdId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					DATA_RESOURCE_NAME = #{dataResourceName,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE DATA_RESOURCE_ID=#{dataResourceId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="PrdDataResource">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE ]]>
+	    <set>  		
+    		<if test="prdId != null"><![CDATA[ PRD_ID = #{prdId}, ]]></if>
+    		<if test="dataResourceName != null"><![CDATA[ DATA_RESOURCE_NAME = #{dataResourceName}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE DATA_RESOURCE_ID=#{dataResourceId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE DATA_RESOURCE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM PRD_DATA_RESOURCE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="PrdDataResource">
+   <![CDATA[ DELETE FROM PRD_DATA_RESOURCE WHERE 1=1  ]]>    			
+		<![CDATA[ AND DATA_RESOURCE_ID = #{dataResourceId} ]]>
+		<![CDATA[ AND PRD_ID = #{prdId} ]]>
+		<![CDATA[ AND DATA_RESOURCE_NAME = #{dataResourceName} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM PRD_DATA_RESOURCE WHERE 
+		DATA_RESOURCE_ID IN (#{dataResourceId})
+		]]>
+	</delete>
+  
+</mapper>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_UPLOAD_FILE">
+	<resultMap type="SysUploadFile" id="sysUploadFileResultMap">
+		<id property="fileId" column="FILE_ID"/>   
+		<result property="fileType" column="FILE_TYPE"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileName" column="FILE_NAME"/>
+		<result property="fileStatus" column="FILE_STATUS"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="fileIdGt != null"><![CDATA[ AND t.FILE_ID > #{fileIdGt} ]]></if>
+		<if test="fileIdGte != null"><![CDATA[ AND t.FILE_ID >= #{fileIdGte} ]]></if>
+		<if test="fileIdLt != null"><![CDATA[ AND t.FILE_ID < #{fileIdLt} ]]></if>
+		<if test="fileIdLte != null"><![CDATA[ AND t.FILE_ID <= #{fileIdLte} ]]></if>
+		<if test="fileIdIn != null"><![CDATA[ AND t.FILE_ID IN ]]><foreach item="item" index="index" collection="fileIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileType != null"><![CDATA[ AND t.FILE_TYPE = #{fileType} ]]></if>
+		<if test="fileTypeLike != null"><![CDATA[ AND t.FILE_TYPE LIKE '%' || #{fileTypeLike} || '%' ]]></if>
+		<if test="fileTypeStart != null"><![CDATA[ AND t.FILE_TYPE LIKE #{fileTypeStart} || '%' ]]></if>
+		<if test="fileTypeEnd != null"><![CDATA[ AND t.FILE_TYPE LIKE '%' || #{fileTypeEnd} ]]></if>
+		<if test="fileTypeIn != null"><![CDATA[ AND t.FILE_TYPE IN ]]><foreach item="item" index="index" collection="fileTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="filePath != null"><![CDATA[ AND t.FILE_PATH = #{filePath} ]]></if>
+		<if test="filePathLike != null"><![CDATA[ AND t.FILE_PATH LIKE '%' || #{filePathLike} || '%' ]]></if>
+		<if test="filePathStart != null"><![CDATA[ AND t.FILE_PATH LIKE #{filePathStart} || '%' ]]></if>
+		<if test="filePathEnd != null"><![CDATA[ AND t.FILE_PATH LIKE '%' || #{filePathEnd} ]]></if>
+		<if test="filePathIn != null"><![CDATA[ AND t.FILE_PATH IN ]]><foreach item="item" index="index" collection="filePathIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileNameLike != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameLike} || '%' ]]></if>
+		<if test="fileNameStart != null"><![CDATA[ AND t.FILE_NAME LIKE #{fileNameStart} || '%' ]]></if>
+		<if test="fileNameEnd != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameEnd} ]]></if>
+		<if test="fileNameIn != null"><![CDATA[ AND t.FILE_NAME IN ]]><foreach item="item" index="index" collection="fileNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileStatus != null"><![CDATA[ AND t.FILE_STATUS = #{fileStatus} ]]></if>
+		<if test="fileStatusLike != null"><![CDATA[ AND t.FILE_STATUS LIKE '%' || #{fileStatusLike} || '%' ]]></if>
+		<if test="fileStatusStart != null"><![CDATA[ AND t.FILE_STATUS LIKE #{fileStatusStart} || '%' ]]></if>
+		<if test="fileStatusEnd != null"><![CDATA[ AND t.FILE_STATUS LIKE '%' || #{fileStatusEnd} ]]></if>
+		<if test="fileStatusIn != null"><![CDATA[ AND t.FILE_STATUS IN ]]><foreach item="item" index="index" collection="fileStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="fileType != null"><![CDATA[ AND t.FILE_TYPE = #{fileType} ]]></if>
+		<if test="filePath != null"><![CDATA[ AND t.FILE_PATH = #{filePath} ]]></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileStatus != null"><![CDATA[ AND t.FILE_STATUS = #{fileStatus} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'fileIdAsc'"><![CDATA[ t.FILE_ID asc ]]></if>
+	  			<if test="item == 'fileIdDesc'"><![CDATA[ t.FILE_ID desc ]]></if>
+	  			<if test="item == 'fileTypeAsc'"><![CDATA[ t.FILE_TYPE asc ]]></if>
+	  			<if test="item == 'fileTypeDesc'"><![CDATA[ t.FILE_TYPE desc ]]></if>
+	  			<if test="item == 'filePathAsc'"><![CDATA[ t.FILE_PATH asc ]]></if>
+	  			<if test="item == 'filePathDesc'"><![CDATA[ t.FILE_PATH desc ]]></if>
+	  			<if test="item == 'fileNameAsc'"><![CDATA[ t.FILE_NAME asc ]]></if>
+	  			<if test="item == 'fileNameDesc'"><![CDATA[ t.FILE_NAME desc ]]></if>
+	  			<if test="item == 'fileStatusAsc'"><![CDATA[ t.FILE_STATUS asc ]]></if>
+	  			<if test="item == 'fileStatusDesc'"><![CDATA[ t.FILE_STATUS desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysUploadFileResultMap">
+		<![CDATA[ SELECT * FROM SYS_UPLOAD_FILE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_UPLOAD_FILE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysUploadFileResultMap">
+		<![CDATA[ SELECT * FROM SYS_UPLOAD_FILE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_UPLOAD_FILE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysUploadFile" resultMap="sysUploadFileResultMap">
+   	<![CDATA[ SELECT * FROM SYS_UPLOAD_FILE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysUploadFile" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_UPLOAD_FILE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysUploadFileResultMap">
+    <![CDATA[ SELECT * FROM SYS_UPLOAD_FILE WHERE  
+				FILE_ID=#{fileId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysUploadFile" useGeneratedKeys="true" keyProperty="fileId">
+				<!-- <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="fileId">  
+		        	SELECT nextval('SEQ_SYS_UPLOAD_FILE') AS fileId
+		        </selectKey> -->
+
+		<![CDATA[
+		    INSERT INTO SYS_UPLOAD_FILE
+		      (
+		     
+		      FILE_TYPE,
+		      FILE_PATH,
+		      FILE_NAME,
+		      FILE_STATUS,
+		      CREATE_TIME,
+		      CREATER,
+		      MODIFY_TIME,
+		      MODIFIER
+		      )
+		    VALUES
+		      (			  
+					
+					#{fileType,jdbcType=VARCHAR}
+				,
+					#{filePath,jdbcType=VARCHAR}
+				,
+					#{fileName,jdbcType=VARCHAR}
+				,
+					#{fileStatus,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysUploadFile">
+    <![CDATA[ UPDATE SYS_UPLOAD_FILE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_PATH = #{filePath,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_NAME = #{fileName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_STATUS = #{fileStatus,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE FILE_ID=#{fileId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysUploadFile">
+    <![CDATA[ UPDATE SYS_UPLOAD_FILE ]]>
+	    <set>  		
+    		<if test="fileType != null"><![CDATA[ FILE_TYPE = #{fileType}, ]]></if>
+    		<if test="filePath != null"><![CDATA[ FILE_PATH = #{filePath}, ]]></if>
+    		<if test="fileName != null"><![CDATA[ FILE_NAME = #{fileName}, ]]></if>
+    		<if test="fileStatus != null"><![CDATA[ FILE_STATUS = #{fileStatus}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier} ]]></if>
+	    </set>  
+			WHERE FILE_ID=#{fileId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_UPLOAD_FILE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE FILE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_UPLOAD_FILE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysUploadFile">
+   <![CDATA[ DELETE FROM SYS_UPLOAD_FILE WHERE 1=1  ]]>    			
+		<![CDATA[ AND FILE_ID = #{fileId} ]]>
+		<![CDATA[ AND FILE_TYPE = #{fileType} ]]>
+		<![CDATA[ AND FILE_PATH = #{filePath} ]]>
+		<![CDATA[ AND FILE_NAME = #{fileName} ]]>
+		<![CDATA[ AND FILE_STATUS = #{fileStatus} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_UPLOAD_FILE WHERE 
+		FILE_ID IN (#{fileId})
+		]]>
+	</delete>
+  
+</mapper>

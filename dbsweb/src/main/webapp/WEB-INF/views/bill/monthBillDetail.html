@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>月账单明细页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	$(function () {
+		/***加载获取月账单详情列表方法***/
+		getList();	
+	});
+  	var totalPage;
+  	var totalRecords;
+  	var page = 1;
+  	var rows = 10;
+  	var monthId = ${monthId?if_exists};
+  	var param = {};
+  	function getList(){
+		param["page"] = page;
+		param["rows"] = rows;
+		param["monthId"] = monthId;
+		getData();
+  	}
+  	
+  	  /***切换页码获取数据***/
+	  function changPage(){
+		page = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+	    param["page"] = page;
+	    getList();
+	  }
+	  
+	  function getData(){
+	  	$.ajax({
+  			type: "POST",
+  			url: '${ctx}/author/bill/getMonthBillDetail',
+  			data: param,
+  			datatype: "json",
+  			success: function(data){
+  				if(data != null){
+  					var monthBillList = data.rows;
+  					totalPage = data.totalPage;
+  					totalRecords = data.totalNumber;
+  					$("#monthBillList").empty();
+  					var temp = "";
+  					for (i in monthBillList){
+  						var prdUnit = monthBillList[i].prdUnit==1?"按数据结果条数计算":"按数据结果容量计算(MB)";
+  						var prdPrice = monthBillList[i].prdUnit==1?"￥"+monthBillList[i].prdPrice+"/条":"￥"+monthBillList[i].prdPrice+"/MB";
+						var dataResult = monthBillList[i].prdUnit==1?monthBillList[i].rowNum:monthBillList[i].dataSize;
+						var ordTime = FormatDate(monthBillList[i].ordDateBegin);
+						temp += "<tr>"
+						+ "<td>"+i+"</td>"
+						+ "<td>"+monthBillList[i].ordId+"</td>"
+						+ "<td>"+monthBillList[i].prdId+"</td>"
+						+ "<td>"+monthBillList[i].prdName+"</td>"
+						+ "<td>"+prdUnit+"</td>"
+						+ "<td>"+prdPrice+"</td>"
+						+ "<td>"+ordTime+"</td>"
+						+ "<td>"+dataResult+"</td>"
+						+ "<td>"+monthBillList[i].consumAmout+"</td>"
+						+ "</tr>";
+						
+  					}
+  					$("#monthBillList").append(temp);
+  					toPage();	
+  				}else{
+  					$("#monthBillList").empty();
+  					$("#kkpager").hide();
+  					addStr =  "<div class=\"panel panel-secondary empty\"><section><div class=\"panel-body\"><p class=\"text-c c-orange\">无任何记录！</p></div></<section></div>";
+					$("#monthBillList").append(addStr);
+  				}
+  			},
+  			error: function(data){
+  				
+  			}
+	  	});
+	  }
+    </script>
+    <!-- 加载分页控件 -->
+	<script type="text/javascript">		
+		  /***格式化时间***/
+		  function FormatDate (strTime) {
+		      var date = new Date(strTime);
+		      var mon;var day;var hour;var min;var ses;
+		      var  temp=date.getMonth()+1;
+		      if(temp<10){mon="0"+temp;}else {mon=temp;}
+		      if(date.getDate()<10){day="0"+date.getDate();}else {day=date.getDate();}
+		      if(date.getHours()<10){hour="0"+date.getHours();}else {hour=date.getHours();}
+		      if(date.getMinutes()<10){min="0"+date.getMinutes();}else {min=date.getMinutes();}
+		      if(date.getSeconds()<10){ses="0"+date.getSeconds();}else {ses=date.getSeconds();}
+		      return date.getFullYear()+"-"+mon+"-"+day+" " +hour+":"+min;
+		  }
+		
+		function toPage(){
+			kkpager.total = totalPage;
+			kkpager.totalRecords = totalRecords;
+			kkpager.pno = page;
+			kkpager.hasPrv = (kkpager.pno > 1);
+			kkpager.hasNext = (kkpager.pno < kkpager.total);
+			kkpager.generPageHtml({
+			     pno : page,
+			     mode : 'click', 
+			     total : totalPage,  
+			     totalRecords : totalRecords,
+			     click : function(n){
+			         this.selectPage(n);
+			  		 changPage();
+			         return false;
+			     },
+			     getHref : function(n){
+			         return 'javascript:void(0)';
+			     }
+				 });
+		}
+		
+		
+	</script>
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->    
+     <article class="article-box">
+        <div class="Detail-cont">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4>${year?if_exists}年${month?if_exists}月账单明细 </h4></div>
+              
+             <div class="panel-body">
+                   <div class="text-r"><a 
+            class="btn btn-primary f-12" href="${ctx}/author/bill/doMBListDetailExport?monthId=${monthId?if_exists}">导出</a> <a class="btn btn-close f-12" href="javascript:history.go(-1);">返回</a></div>
+                    <table class="table table-primary mt-10">
+                   <thead><tr>
+                       <th>序号</th>                  
+                       <th>工单号</th>                  
+                       <th>产品ID</th>
+                       <th>产品名称</th>
+                       <th>产品计量单位</th>  
+                       <th>产品单位价格（元）</th>  
+                       <th>工单执行时间</th>  
+                       <th>数据结果计量</th>  
+                       <th>计费金额（元）</th>  
+                   </tr></thead>
+                   <tbody id="monthBillList"></tbody>
+                </table>  
+                 <div id="kkpager"></div>
+             </div>
+         </section>
+       
+          </div>    
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

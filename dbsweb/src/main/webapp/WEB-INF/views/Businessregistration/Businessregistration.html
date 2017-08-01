@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户注册页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <link rel="Bookmark" href="${ctx}/img/favorite.png">
+    <link rel="Shortcut Icon" href="${ctx}/img/favorite.png" />
+    <link rel="stylesheet" href="${ctx}/css/reset.css">
+	<link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${ctx}/css/general.css">
+	<link rel="stylesheet" href="${ctx}/css/layout.css">
+	<link rel="stylesheet" href="${ctx}/css/core.css">
+	<link rel="stylesheet" href="${ctx}/css/components.css">
+	<link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+	<script type="text/javascript" src="${ctx}/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="${ctx}/js/validate/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/validate/additional-methods.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/validate/messages_zh.js"></script>
+	<script type="text/javascript" src="${ctx}/js/kkpager/kkpager.js"></script>
+	<script type="text/javascript" src="${ctx}/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/jquery.form.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    
+    <!--[if lt IE 9]>
+   	  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  <script src="http://malsup.github.io/jquery.form.js"></script>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+   
+
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">	
+     	var rootPath ="${ctx}";
+     	/***光标指引到用户账户输入框***/
+		function setfocus(){
+			$("#UserName").focus();
+		}
+    	//校验
+    	function checkUsername(){
+    		
+	    	var  username =$("#UserName").val();
+	    	var  UserNameHide =$("#UserNameHide").val();
+	    	
+	    	if (username==""){
+	    		/* $("#usercheckTip").show(); */
+	    		$("#usercheckTip").hide();
+	    	} else {
+	    		if (username.search(/^(([a-zA-Z][a-zA-Z0-9]{4,19})|([\u4E00-\u9FA5]{5,10}))$/)<0){
+	    			$("#usercheckTip").show();
+	    			return false;
+	    		} else {
+	    						
+		    		 var  username =$("#UserName").val();
+				    	$.ajax({	
+						url:rootPath+"/registration/registrationUserSame?UserName="+username,
+						type:"post",
+						/* async: false, */
+						dataType:"json",
+						success:function(response) {
+						var flag = response.flag;
+							if(flag=="true") {//已经被注册
+								$("#usercheckTip1").show();
+								$("#UserNameHide").attr("value","2");
+							}else {
+								$("#usercheckTip").hide();
+				    			$("#usercheckTip1").hide();
+							}
+						},
+						error:function() {
+							return false;
+						}
+					}); 
+		    	}
+    		}
+    		if (UserNameHide=="2"){
+    			return false;
+    		} else{
+    			return true;
+    		}
+    	
+   		}
+    	//校验必须是数字或者字母
+		function checkNumStr(){
+		
+			  var  userpassword =$("#UserPassword").val();
+			  var  uspassword = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{8,18}/;
+			  if(userpassword == ""){
+			  	 /* $("#UserPasswordTip").show(); */
+			  	 	$("#UserPasswordTip").hide();
+			  }else {
+			  	if(!uspassword.test(userpassword)){
+			  		$("#UserPasswordTip").show();
+			  		 return false;
+			  	}else{
+	    			$("#UserPasswordTip").hide();
+	    			return true;
+			  	}
+	    	}
+		}
+		//密码比较
+		function passwordsame(){
+			var SedPassword=$("#SedPassword").val();
+		 	var  username =$("#UserPassword").val();
+		
+			if(SedPassword==username){
+			$("#passwordsameTip").hide();
+				return true;
+			} else {
+				$("#passwordsameTip").show();
+				return false;
+			}
+		}
+		//姓名
+		function Namecheck(){
+			var RegularExp=/^[\u4e00-\u9fa5]{2,20}$|^[A-Za-z]{2,20}$/;
+			var Name=$("#Name").val();
+			if (Name==""){
+				$("#NameTip").hide();
+			}else{
+				if (!RegularExp.test(Name)){
+					 $("#NameTip").show(); 
+				 	return false;
+				} else {
+					$("#NameTip").hide();
+					return true;
+				}
+			}
+		
+		}
+		//手机号校验
+		function mobliecheck(){
+			var Mobile=$("#Mobile").val();
+			var RegularExp=/^[1][358][0-9]{9}$/;
+			if (Mobile == ""){
+				$("#MobileTip").hide();
+			}else{
+				if(!RegularExp.test(Mobile)){
+			  	 	$("#MobileTip").show();
+		            return false;
+			  	}else {
+	    			$("#MobileTip").hide();
+	    			return true;
+	    		}
+			}
+		}
+		//身份证号
+		function IdCardcheck(){
+			var IdCard=$("#IdCard").val();
+			var length =IdCard.length;
+			var RegularExp=/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;//18位
+			var RegularExp2=/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;//15位
+			
+			if (IdCard==""){
+				 $("#IdCardTip").hide();
+		               /* return false; */
+			}else{
+				if(length*1<15){
+				  		$("#IdCardTip").show();
+			   	          return false;
+					}
+				if(length==16){
+						$("#IdCardTip").show();
+			   	          return false;
+				}
+				if(length==17){
+						$("#IdCardTip").show();
+			   	          return false;
+				}
+			
+				if (length==15){
+				 	 if(!RegularExp2.test(IdCard)){
+				  		   $("#IdCardTip").show();
+			               return false;
+				 	 }else {
+		    			$("#IdCardTip").hide();
+		    			return true;
+		    		}
+				 }else if(length==18){
+				  	if(!RegularExp.test(IdCard)){
+				  			 $("#IdCardTip").show();
+			                 return false;
+				 	 }else {
+		    			$("#IdCardTip").hide();
+		    			return true;
+		    		}
+				 }
+			} 
+			
+			
+		}
+		//联系地址
+		function Addresscheck(){
+			var  Address=$("#Address").val();
+			if (Address==null||Address==""){
+				/* $("#AddressTip").show(); */
+				 return false;
+			} else {
+				$("#AddressTip").hide();
+				return true;
+			}
+		}
+		//邮箱
+		function Emailcheck(){
+			var Email=$("#Email").val();
+			var RegularExp=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+			if(Email == ""){
+				$("#EmailTip").hide();
+			}else {
+			  if(!RegularExp.test(Email)){
+			  	 $("#EmailTip").show();
+		               return false;
+			  }else {
+	    		$("#EmailTip").hide();
+	    		return true;
+	    	}
+			}
+		}
+		//机构名称
+		function orgNamecheck(){
+			var  orgName=$("#orgName").val();
+			if (orgName==null||orgName==""){
+				/* $("#orgNameTip").show(); */
+				 return false;
+			} else {
+				$("#orgNameTip").hide();
+				return true;
+			}
+		}
+		//机构地址
+		function orgAddresscheck(){
+			var  orgAddresse=$("#orgAddress").val();
+			if (orgAddresse==null||orgAddresse==""){
+			/* 	$("#orgAddresseTip").show(); */
+				 return false;
+			} else {
+				$("#orgAddresseTip").hide();
+				return true;
+			}
+		}
+		//工商编号
+		function bussNumcheck(){
+		
+			var  BUSSINESS_NUM=$("#BUSSINESS_NUM").val();
+			var RegularExp=/^[0-9]*$/;
+			if(BUSSINESS_NUM==""){
+				$("#BUSSINESS_NUMTip").hide();
+			}else{
+				if (!RegularExp.test(BUSSINESS_NUM)){
+					$("#BUSSINESS_NUMTip").show();
+					 return false;
+				} else {
+					$("#BUSSINESS_NUMTip").hide();
+					return true;
+				}
+			}
+		}
+		//联系电话
+		function busstelenocheck(){
+			var bussteleno=$("#BUSS_TELE_NO").val();
+			var RegularExp=/^[0-9]*$/;
+			//var RegularExp=/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[0|8|9])\d{8}$)/;
+			 if(!RegularExp.test(bussteleno) ||(bussteleno == "")){
+			  	 $("#BUSS_TELE_NOTip").show();
+		               return false;
+			  }else {
+	    		$("#BUSS_TELE_NOTip").hide();
+	    		return true;
+	    	}
+		}
+		//同意协议
+		function agreecheck(){
+			 var agree = $("input[type='checkbox']").is(':checked');
+			if (agree==true){
+				$("#agreeTip").hide();
+				return true;
+			}else{
+				$("#agreeTip").show();
+				return false;
+			}
+			
+		}
+		function checkFile(){
+			var fileSize = 0; 
+			var filemaxsize = 1024*5;//5M 
+			var target = document.getElementById("uploadfile"); 
+			/* fileSize =  target.files[0].size;  */
+			var uploadfil = $("#uploadfile").val();
+			if (uploadfil==""){
+				$("#fileSelect").show();
+				return false;
+			}else{
+				 //上传文件不为空，需要对文件格式判断
+				var arr = uploadfil.split(".");
+			    if(arr[arr.length-1]!="rar"&&arr[arr.length-1]!="zip"){
+			    	$("#fileSelect").show;
+					return false;
+                }else{
+            		$("#fileSelect").hide();
+					return true;
+               } 
+			}
+		}
+		//clear
+		function clear(){
+			$("#UserName").attr("value","");
+			$("#Name").attr("value","");
+			$("#Mobile").attr("value","");
+			$("#IdCard").attr("value","");
+			$("#Address").attr("value","");
+			$("#Email").attr("value","");
+			$("#orgName").attr("value","");
+			$("#orgAddress").attr("value","");
+			$("#BUSSINESS_NUM").attr("value","");
+			$("#BUSS_TELE_NO").attr("value","");
+			$("#uploadfile1").attr("value","");
+		}
+		/* function saveFile(){
+    		$("#userForm2").submit();
+    	} */
+    	//商户注册提交
+    	function tosubmint(){
+    		//用户名
+    		var  username =$("#UserName").val();
+    		if(username==""){
+    			$("#usercheckTip").show();
+    			return false;
+    		}else{
+	    		//用户密码
+	    		var  userpassword =$("#UserPassword").val();
+	    		if(userpassword==""){
+	    			 $("#UserPasswordTip").show();
+	    			 return false;
+	    		}else{
+			    		//密码比较
+			    		var SedPassword=$("#SedPassword").val();
+			    		if(SedPassword==""){
+			    			 $("#passwordsameTip").show();
+			    			 return false;
+			    		}else{
+								//用户名
+					    		var Name=$("#Name").val();
+					    		if(Name== ""){
+					    			$("#NameTip").show();
+					    			 return false;
+					    		}else{
+						    		
+						    		//用户号码
+						    		var Mobile=$("#Mobile").val();
+						    		if(Mobile== ""){
+						    			$("#MobileTip").show();
+						    			return false;
+						    		}else{
+							    		//身份证
+							    		var IdCard=$("#IdCard").val();
+							    		if(IdCard== ""){
+							    			$("#IdCardTip").show();
+							    			return false;
+							    		} else {
+									    		//联系地址
+									    		var  Address=$("#Address").val();
+									    		if(Address== ""){
+									    			$("#AddressTip").show();
+									    			return false;
+									    		} else{
+											    		//email
+											    		var Email=$("#Email").val();
+											    		if(Email== ""){
+											    			$("#EmailTip").show();
+											    			return false;									
+									    				}else{
+												    		//机构名称
+												    		var  orgName=$("#orgName").val();
+												    		if(orgName== ""){
+												    			$("#orgNameTip").show();
+												    			return false;
+												    		}else{
+													    		//机构地址
+													    		var  orgAddresse=$("#orgAddress").val();
+													    		if(orgAddresse== ""){
+													    			$("#orgAddresseTip").show();
+													    			return false;
+													    		}else{
+														    		//工商编号
+														    		var  BUSSINESS_NUM=$("#BUSSINESS_NUM").val();
+														    		if(BUSSINESS_NUM== ""){
+														    			$("#BUSSINESS_NUMTip").show();
+														    			return false;
+														    		}else{
+														    		
+															    		//联系电话
+															    		var bussteleno=$("#BUSS_TELE_NO").val();
+															    		if(bussteleno== ""){
+															    			$("#BUSS_TELE_NOTip").show();
+															    			return false;
+															    		}else{
+																    		//证扫描件
+																    		var uploadfil = $("#uploadfile").val();
+																    		if(uploadfil== ""){
+																    			$("#fileSelect").show();
+																    			return false;
+																    		}else{
+																	    		//协议
+																	    		var agree = $("input[type='checkbox']").is(':checked');
+																	    		if(agree==false){
+																	    			$("#agreeTip").show();
+																	    			return false;
+																	    		}
+																    		}
+															    		}
+														    		}
+													    		}
+												    		}
+									    				}
+									    		}
+							    		}
+						    		}
+					    		}
+			    		}
+	    		}
+    		}
+    		if(checkFile()){
+    		
+    				//$("#registerForm").submit();
+    					$("#registerForm").attr("enctype","multipart/form-data");
+    						$("#registerForm").ajaxSubmit({
+								type: "post",
+								url: rootPath +'/registration/registrationSave',
+								dataType:"json",
+								success: function (result) {
+									var bussSave = result.bussSave;//商户保存标识
+									var upFileflag = result.upFileflag;//上传标识
+									var FileOverSize = result.FileOverSize;//上传标识
+									if(FileOverSize){//首先判断返回来的参数是否上传文件过大//true继续
+										if(upFileflag){//其次执行上传功能的成功与否判断
+												if(bussSave){//最后对用户信息的保存成功与否提示
+													$.jBox.tip('新增成功！','success');
+													clear();
+													setTimeout('document.location.href="${ctx}/login"',3000);
+												}else{
+													return false;
+												}
+										}else{
+												return false;
+										}
+									}else{
+										$.jBox.error("请选择5M以内的压缩文件进行上传！","提示");
+										return false;
+									}	
+								},
+								error : function(result){
+									$("#registerForm").attr("enctype","multipart/form-data");
+									$.jBox.error("商户注册失败，请检查商户注册资料！","提示");
+								}
+							});}
+    	}
+    	
+  
+    	
+    </script>
+ 
+<script type="text/javascript">  
+    i = 1;  
+    j = 1;  
+    $(document).ready(function(){  
+          
+        $("#btn_add1").click(function(){  
+            document.getElementById("newUpload1").innerHTML+='<div id="div_'+i+'"><input  name="file" type="file"  /><input type="button" value="删除"  onclick="del_1('+i+')"/></div>';  
+              i = i + 1;  
+        });  
+          
+        $("#btn_add2").click(function(){  
+            document.getElementById("newUpload2").innerHTML+='<div id="div_'+j+'"><input  name="file_'+j+'" type="file"  /><input type="button" value="删除"  onclick="del_2('+j+')"/></div>';  
+              j = j + 1;  
+        });  
+    });  
+  
+    function del_1(o){  
+     document.getElementById("newUpload1").removeChild(document.getElementById("div_"+o));  
+    }  
+      
+    function del_2(o){  
+         document.getElementById("newUpload2").removeChild(document.getElementById("div_"+o));  
+    } 
+     
+  
+</script>      
+</head>
+
+<body onload="setfocus()">
+    <!------------------------HEADER---------------------------->
+    <header class="navbar-wrapper">
+        <div class="navbar navbar-blue">
+            <div class="container-fluid cl">
+                <a class="logo navbar-logo" href="#"><img src="${ctx}/img/logo.png" alt="logo"></a>
+                <a class="logo navbar-slogan" href="#">中国联通大数据应用模型孵化平台</a>
+            </div>
+        </div>
+    </header>
+
+    <!------------------------REGISTER---------------------------->
+    <div class="register-wrap">
+        <h4 class="tit c-blue"><b>商户注册</b></h4>
+        <form  id="registerForm" method="post" enctype="multipart/form-data" >
+            <section class=" panel panel-primary register-panel">
+                <div class="panel-header">
+                    <h4>账户信息</h4></div>
+                <div class="panel-body">
+
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="UserName" id="UserName"  onblur="checkUsername();" placeholder="5-20个字母或字母+数字，或5-10个中文"  maxlength="32">
+                            <input type="hidden" class="input-text" name="UserNameHide" id="UserNameHide"   maxlength="32" value="1">
+                            <span style="color: #ee3170;font-size: 14px;display:none" id="usercheckTip" name="usercheckTip" id="usercheckTip">注册用户名必须为字母，或者字母+数字，或者全中文，字母是5-20个字符，中文是5-10个</span>
+                            <span style="color: #ee3170;font-size: 14px;display:none" id="usercheckTip1" name="usercheckTip1" >该用户已经被注册，请重新填写</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="password" class="input-text" id="UserPassword" name="UserPassword" minlength="8" maxlength="18" onblur="checkNumStr();"placeholder="8-18位数字与字母组合的字符串">
+                             <span style="color: #ee3170;font-size: 14px;display:none" id="UserPasswordTip" name="UserPasswordTip" >请输入8～18位数字加字母组合的密码</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>确认密码：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="password" class="input-text" name="SedPassword"  id="SedPassword" placeholder="请再次输入密码" onblur="passwordsame();" maxlength="18">
+                       		<span style="color: #ee3170;font-size: 14px;display:none" id="passwordsameTip" name="passwordsameTip" >密码与确认密码不一致</span>
+                        
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-header">
+                    <h4>商户信息</h4></div>
+                <div class="panel-body">
+
+
+                    
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="Name" id ="Name" placeholder="请输入你的姓名"maxlength="32"  onblur="Namecheck();">
+                            <span style="color: #ee3170;font-size: 14px;display:none" id="NameTip" name="NameTip" >2-20位字符，可由中文或英文组成</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>手机号码：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="Mobile" id ="Mobile" maxlength="11" onblur="mobliecheck();" placeholder="请输入你的手机号码">
+                        	<span style="color: #ee3170;font-size: 14px;display:none" id="MobileTip" name="MobileTip" >请输入正确的手机号码</span>
+                        
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" style="" for=""><b>*</b>身份证号码：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="IdCard"  id ="IdCard" maxlength="18" onblur="IdCardcheck();" placeholder="请输入你的身份证号码">
+                            <span style="color: #ee3170;font-size: 14px;display:none" id="IdCardTip" name="IdCardTip" >请输入正确的身份证号码</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>联系地址：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="Address" id ="Address" placeholder="请输入你的居住地址" onblur="Addresscheck();" maxlength="200">
+                       		 <span style="color: #ee3170;font-size: 14px;display:none" id="AddressTip" name="AddressTip" >请输入联系地址</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>EMAIL：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" name="Email" id ="Email" placeholder="请输入你的邮箱地址" onblur="Emailcheck();" maxlength="50">
+                             <span style="color: #ee3170;font-size: 14px;display:none" id="EmailTip" name="EmailTip" >请输入正确的邮箱地址</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>机构名称：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" id="orgName" name="orgName" placeholder="请输入归属机构单位名称" onblur="orgNamecheck();" maxlength="100">
+                              <span style="color: #ee3170;font-size: 14px;display:none" id="orgNameTip" name="orgNameTip" >请输入归属机构单位名称</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>机构地址：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" id="orgAddress" name="orgAddress" placeholder="请输入归属机构单位地址" onblur="orgAddresscheck();" maxlength="150">
+                               <span style="color: #ee3170;font-size: 14px;display:none" id="orgAddresseTip" name="orgAddressTip" >请输入归属机构单位地址</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>工商编号：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text" id="BUSSINESS_NUM" name="BUSSINESS_NUM" onblur="bussNumcheck();" placeholder="请输入工商编号">
+                               <span style="color: #ee3170;font-size: 14px;display:none" id="BUSSINESS_NUMTip" name="BUSSINESS_NUMTip" maxlength="50">请输入正确的工商编号</span>
+                        </div>
+                    </div>
+                     <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>联系电话：</label>
+                        <div class="formControls col-sm-9">
+                            <input type="text" class="input-text"  id="BUSS_TELE_NO" name="BUSS_TELE_NO"placeholder="请输入联系电话" onblur="busstelenocheck();" maxlength="20">
+                             <span style="color: #ee3170;font-size: 14px;display:none" id="BUSS_TELE_NOTip" name="BUSS_TELE_NOTip" >请输入正确的联系号码</span>
+                        </div>
+                    </div>
+                 
+                    <div class="form-group row cl">
+                        <label class="col-sm-3 form-label" for=""><b>*</b>证扫描件：</label>
+                        <div class="formControls col-sm-9"> <span class="btn-upload">
+									<input style="width:290px" class="input-text upload-url" type="text" name="uploadfile1" id="uploadfile" readonly="" onblur="checkFile();">
+									<a href="javascript:void();" class="btn btn-primary-outline upload-btn ml-20 f-12"><i class="fa fa-cloud-upload "></i>&nbsp;&nbsp; 选择文件</a>
+									<input type="file"  name="upload" id="upload" accept=".rar,.zip" onchange="document.getElementById('uploadfile').value=this.value;" class="input-file valid">
+									</span> 
+									<span style="color: #ee3170;font-size: 14px;display:none" id="fileSelect" name="fileSelect" >请选择压缩文件上传</span>
+									<p class="mt-10 f-12">请上传用户商户身份证复印件，营业执照复印件、组织机构代码证复印
+件，多个复印件请压缩上传。
+									</p>
+									</div>
+
+
+                    </div>
+ 
+                    <div class="form-group row cl">
+                        <div class="col-sm-8 col-sm-offset-3">
+                            <input type="checkbox" checked id="agree" name="agree" onblur="agreecheck();">
+                            <label for="">我同意签署<a href="">《xxx协议》</a></label>
+                            <span style="color: #ee3170;font-size: 14px;display:none" id="agreeTip" name="agreeTip" >请同意协议并勾选</span>
+                        </div>
+                    </div>
+                    <div class="form-group row cl mb-30">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <input  type="button"  class="btn btn-primary btn-block"  onclick="tosubmint();" value="提交">
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </form>
+           <!--   <form name="userForm2" action="/registration/upload2" enctype="multipart/form-data" method="post"">  
+        <div id="newUpload2">  
+            <input type="file" name="file">  
+        </div>  
+        <input type="button" id="btn_add2" value="增加一行" >  
+        <input type="submit" value="上传" />  
+          
+          
+    </form>   -->
+
+    </div>
+
+	     <footer class="footer ">
+        <div class="container-fluid">
+            <p>Copyright &copy;1999-2016&nbsp;中国联通&nbsp;版权所有
+                <br> 经营许可编号：
+                <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">***ICP备****号</a>
+                <br>
+            </p>
+        </div>
+    </footer>
+    <!------------------------FOOTER---------------------------->
+   
+
+</body>
+  	
+</html>

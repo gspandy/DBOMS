@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UPLOAD_FILE">
+	<resultMap type="UploadFile" id="uploadFileResultMap">
+		<id property="uploadId" column="UPLOAD_ID"/>   
+		<result property="serialNum" column="SERIAL_NUM"/>
+		<result property="operId" column="OPER_ID"/>
+		<result property="fileUrl" column="FILE_URL"/>
+		<result property="fileName" column="FILE_NAME"/>
+		<result property="status" column="STATUS"/>
+		<result property="creator" column="CREATOR"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="uploadId != null"><![CDATA[ AND t.UPLOAD_ID = #{uploadId} ]]></if>
+		<if test="uploadIdLike != null"><![CDATA[ AND t.UPLOAD_ID LIKE '%' || #{uploadIdLike} || '%' ]]></if>
+		<if test="uploadIdStart != null"><![CDATA[ AND t.UPLOAD_ID LIKE #{uploadIdStart} || '%' ]]></if>
+		<if test="uploadIdEnd != null"><![CDATA[ AND t.UPLOAD_ID LIKE '%' || #{uploadIdEnd} ]]></if>
+		<if test="uploadIdIn != null"><![CDATA[ AND t.UPLOAD_ID IN ]]><foreach item="item" index="index" collection="uploadIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="serialNumLike != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumLike} || '%' ]]></if>
+		<if test="serialNumStart != null"><![CDATA[ AND t.SERIAL_NUM LIKE #{serialNumStart} || '%' ]]></if>
+		<if test="serialNumEnd != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumEnd} ]]></if>
+		<if test="serialNumIn != null"><![CDATA[ AND t.SERIAL_NUM IN ]]><foreach item="item" index="index" collection="serialNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="operIdLike != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdLike} || '%' ]]></if>
+		<if test="operIdStart != null"><![CDATA[ AND t.OPER_ID LIKE #{operIdStart} || '%' ]]></if>
+		<if test="operIdEnd != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdEnd} ]]></if>
+		<if test="operIdIn != null"><![CDATA[ AND t.OPER_ID IN ]]><foreach item="item" index="index" collection="operIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileUrl != null"><![CDATA[ AND t.FILE_URL = #{fileUrl} ]]></if>
+		<if test="fileUrlLike != null"><![CDATA[ AND t.FILE_URL LIKE '%' || #{fileUrlLike} || '%' ]]></if>
+		<if test="fileUrlStart != null"><![CDATA[ AND t.FILE_URL LIKE #{fileUrlStart} || '%' ]]></if>
+		<if test="fileUrlEnd != null"><![CDATA[ AND t.FILE_URL LIKE '%' || #{fileUrlEnd} ]]></if>
+		<if test="fileUrlIn != null"><![CDATA[ AND t.FILE_URL IN ]]><foreach item="item" index="index" collection="fileUrlIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileNameLike != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameLike} || '%' ]]></if>
+		<if test="fileNameStart != null"><![CDATA[ AND t.FILE_NAME LIKE #{fileNameStart} || '%' ]]></if>
+		<if test="fileNameEnd != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameEnd} ]]></if>
+		<if test="fileNameIn != null"><![CDATA[ AND t.FILE_NAME IN ]]><foreach item="item" index="index" collection="fileNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creator != null"><![CDATA[ AND t.CREATOR = #{creator} ]]></if>
+		<if test="creatorLike != null"><![CDATA[ AND t.CREATOR LIKE '%' || #{creatorLike} || '%' ]]></if>
+		<if test="creatorStart != null"><![CDATA[ AND t.CREATOR LIKE #{creatorStart} || '%' ]]></if>
+		<if test="creatorEnd != null"><![CDATA[ AND t.CREATOR LIKE '%' || #{creatorEnd} ]]></if>
+		<if test="creatorIn != null"><![CDATA[ AND t.CREATOR IN ]]><foreach item="item" index="index" collection="creatorIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="uploadId != null"><![CDATA[ AND t.UPLOAD_ID = #{uploadId} ]]></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="fileUrl != null"><![CDATA[ AND t.FILE_URL = #{fileUrl} ]]></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="creator != null"><![CDATA[ AND t.CREATOR = #{creator} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'uploadIdAsc'"><![CDATA[ t.UPLOAD_ID asc ]]></if>
+	  			<if test="item == 'uploadIdDesc'"><![CDATA[ t.UPLOAD_ID desc ]]></if>
+	  			<if test="item == 'serialNumAsc'"><![CDATA[ t.SERIAL_NUM asc ]]></if>
+	  			<if test="item == 'serialNumDesc'"><![CDATA[ t.SERIAL_NUM desc ]]></if>
+	  			<if test="item == 'operIdAsc'"><![CDATA[ t.OPER_ID asc ]]></if>
+	  			<if test="item == 'operIdDesc'"><![CDATA[ t.OPER_ID desc ]]></if>
+	  			<if test="item == 'fileUrlAsc'"><![CDATA[ t.FILE_URL asc ]]></if>
+	  			<if test="item == 'fileUrlDesc'"><![CDATA[ t.FILE_URL desc ]]></if>
+	  			<if test="item == 'fileNameAsc'"><![CDATA[ t.FILE_NAME asc ]]></if>
+	  			<if test="item == 'fileNameDesc'"><![CDATA[ t.FILE_NAME desc ]]></if>
+	  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+	  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+	  			<if test="item == 'creatorAsc'"><![CDATA[ t.CREATOR asc ]]></if>
+	  			<if test="item == 'creatorDesc'"><![CDATA[ t.CREATOR desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="uploadFileResultMap">
+		<![CDATA[ SELECT * FROM UPLOAD_FILE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM UPLOAD_FILE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="uploadFileResultMap">
+		<![CDATA[ SELECT * FROM UPLOAD_FILE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM UPLOAD_FILE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="UploadFile" resultMap="uploadFileResultMap">
+   	<![CDATA[ SELECT * FROM UPLOAD_FILE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="UploadFile" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM UPLOAD_FILE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="uploadFileResultMap">
+    <![CDATA[ SELECT * FROM UPLOAD_FILE WHERE  
+				UPLOAD_ID=#{uploadId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="UploadFile" useGeneratedKeys="true" keyProperty="id">
+
+		<![CDATA[
+		    INSERT INTO UPLOAD_FILE
+		      (
+		      SERIAL_NUM,
+		      OPER_ID,
+		      FILE_URL,
+		      FILE_NAME,
+		      STATUS,
+		      CREATOR,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{serialNum,jdbcType=VARCHAR}
+				,
+					#{operId,jdbcType=VARCHAR}
+				,
+					#{fileUrl,jdbcType=VARCHAR}
+				,
+					#{fileName,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=VARCHAR}
+				,
+					#{creator,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="UploadFile">
+    <![CDATA[ UPDATE UPLOAD_FILE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SERIAL_NUM = #{serialNum,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					OPER_ID = #{operId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_NAME = #{fileName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STATUS = #{status,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CREATOR = #{creator,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE UPLOAD_ID=#{uploadId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="UploadFile">
+    <![CDATA[ UPDATE UPLOAD_FILE ]]>
+	    <set>  		
+    		<if test="serialNum != null"><![CDATA[ SERIAL_NUM = #{serialNum}, ]]></if>
+    		<if test="operId != null"><![CDATA[ OPER_ID = #{operId}, ]]></if>
+    		<if test="fileUrl != null"><![CDATA[ FILE_URL = #{fileUrl}, ]]></if>
+    		<if test="fileName != null"><![CDATA[ FILE_NAME = #{fileName}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="creator != null"><![CDATA[ CREATOR = #{creator}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE UPLOAD_ID=#{uploadId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE UPLOAD_FILE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE UPLOAD_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM UPLOAD_FILE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="UploadFile">
+   <![CDATA[ DELETE FROM UPLOAD_FILE WHERE 1=1  ]]>    			
+		<![CDATA[ AND UPLOAD_ID = #{uploadId} ]]>
+		<![CDATA[ AND SERIAL_NUM = #{serialNum} ]]>
+		<![CDATA[ AND OPER_ID = #{operId} ]]>
+		<![CDATA[ AND FILE_URL = #{fileUrl} ]]>
+		<![CDATA[ AND FILE_NAME = #{fileName} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND CREATOR = #{creator} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM UPLOAD_FILE WHERE 
+		UPLOAD_ID IN (#{uploadId})
+		]]>
+	</delete>
+    <!-- (9)============================= updateByserNum =================================== -->
+  <update id="updateByserNum" parameterType="java.lang.String">
+    <![CDATA[ UPDATE UPLOAD_FILE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = '2',
+		]]>
+	    </set>  
+			WHERE SERIAL_NUM = #{serNum}
+  </update>
+</mapper>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_BSS_OPERATOR">
+	<resultMap type="SysBssOperator" id="sysBssOperatorResultMap">
+		<id property="openStaffCode" column="OPEN_STAFF_CODE"/>   
+		<result property="staffName" column="STAFF_NAME"/>
+		<result property="leaderStaffCode" column="LEADER_STAFF_CODE"/>
+		<result property="regionCode" column="REGION_CODE"/>
+		<result property="regionName" column="REGION_NAME"/>
+		<result property="channelCode" column="CHANNEL_CODE"/>
+		<result property="sonChannel" column="SON_CHANNEL"/>
+		<result property="staffTelno" column="STAFF_TELNO"/>
+		<result property="orderOrigin" column="ORDER_ORIGIN"/>
+		<result property="originCode" column="ORIGIN_CODE"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="openStaffCode != null"><![CDATA[ AND t.OPEN_STAFF_CODE = #{openStaffCode} ]]></if>
+		<if test="openStaffCodeLike != null"><![CDATA[ AND t.OPEN_STAFF_CODE LIKE '%' || #{openStaffCodeLike} || '%' ]]></if>
+		<if test="openStaffCodeStart != null"><![CDATA[ AND t.OPEN_STAFF_CODE LIKE #{openStaffCodeStart} || '%' ]]></if>
+		<if test="openStaffCodeEnd != null"><![CDATA[ AND t.OPEN_STAFF_CODE LIKE '%' || #{openStaffCodeEnd} ]]></if>
+		<if test="openStaffCodeIn != null"><![CDATA[ AND t.OPEN_STAFF_CODE IN ]]><foreach item="item" index="index" collection="openStaffCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="staffName != null"><![CDATA[ AND t.STAFF_NAME = #{staffName} ]]></if>
+		<if test="staffNameLike != null"><![CDATA[ AND t.STAFF_NAME LIKE '%' || #{staffNameLike} || '%' ]]></if>
+		<if test="staffNameStart != null"><![CDATA[ AND t.STAFF_NAME LIKE #{staffNameStart} || '%' ]]></if>
+		<if test="staffNameEnd != null"><![CDATA[ AND t.STAFF_NAME LIKE '%' || #{staffNameEnd} ]]></if>
+		<if test="staffNameIn != null"><![CDATA[ AND t.STAFF_NAME IN ]]><foreach item="item" index="index" collection="staffNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="leaderStaffCode != null"><![CDATA[ AND t.LEADER_STAFF_CODE = #{leaderStaffCode} ]]></if>
+		<if test="leaderStaffCodeLike != null"><![CDATA[ AND t.LEADER_STAFF_CODE LIKE '%' || #{leaderStaffCodeLike} || '%' ]]></if>
+		<if test="leaderStaffCodeStart != null"><![CDATA[ AND t.LEADER_STAFF_CODE LIKE #{leaderStaffCodeStart} || '%' ]]></if>
+		<if test="leaderStaffCodeEnd != null"><![CDATA[ AND t.LEADER_STAFF_CODE LIKE '%' || #{leaderStaffCodeEnd} ]]></if>
+		<if test="leaderStaffCodeIn != null"><![CDATA[ AND t.LEADER_STAFF_CODE IN ]]><foreach item="item" index="index" collection="leaderStaffCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="regionCodeLike != null"><![CDATA[ AND t.REGION_CODE LIKE '%' || #{regionCodeLike} || '%' ]]></if>
+		<if test="regionCodeStart != null"><![CDATA[ AND t.REGION_CODE LIKE #{regionCodeStart} || '%' ]]></if>
+		<if test="regionCodeEnd != null"><![CDATA[ AND t.REGION_CODE LIKE '%' || #{regionCodeEnd} ]]></if>
+		<if test="regionCodeIn != null"><![CDATA[ AND t.REGION_CODE IN ]]><foreach item="item" index="index" collection="regionCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="regionName != null"><![CDATA[ AND t.REGION_NAME = #{regionName} ]]></if>
+		<if test="regionNameLike != null"><![CDATA[ AND t.REGION_NAME LIKE '%' || #{regionNameLike} || '%' ]]></if>
+		<if test="regionNameStart != null"><![CDATA[ AND t.REGION_NAME LIKE #{regionNameStart} || '%' ]]></if>
+		<if test="regionNameEnd != null"><![CDATA[ AND t.REGION_NAME LIKE '%' || #{regionNameEnd} ]]></if>
+		<if test="regionNameIn != null"><![CDATA[ AND t.REGION_NAME IN ]]><foreach item="item" index="index" collection="regionNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="channelCode != null"><![CDATA[ AND t.CHANNEL_CODE = #{channelCode} ]]></if>
+		<if test="channelCodeLike != null"><![CDATA[ AND t.CHANNEL_CODE LIKE '%' || #{channelCodeLike} || '%' ]]></if>
+		<if test="channelCodeStart != null"><![CDATA[ AND t.CHANNEL_CODE LIKE #{channelCodeStart} || '%' ]]></if>
+		<if test="channelCodeEnd != null"><![CDATA[ AND t.CHANNEL_CODE LIKE '%' || #{channelCodeEnd} ]]></if>
+		<if test="channelCodeIn != null"><![CDATA[ AND t.CHANNEL_CODE IN ]]><foreach item="item" index="index" collection="channelCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="sonChannel != null"><![CDATA[ AND t.SON_CHANNEL = #{sonChannel} ]]></if>
+		<if test="sonChannelLike != null"><![CDATA[ AND t.SON_CHANNEL LIKE '%' || #{sonChannelLike} || '%' ]]></if>
+		<if test="sonChannelStart != null"><![CDATA[ AND t.SON_CHANNEL LIKE #{sonChannelStart} || '%' ]]></if>
+		<if test="sonChannelEnd != null"><![CDATA[ AND t.SON_CHANNEL LIKE '%' || #{sonChannelEnd} ]]></if>
+		<if test="sonChannelIn != null"><![CDATA[ AND t.SON_CHANNEL IN ]]><foreach item="item" index="index" collection="sonChannelIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="staffTelno != null"><![CDATA[ AND t.STAFF_TELNO = #{staffTelno} ]]></if>
+		<if test="staffTelnoLike != null"><![CDATA[ AND t.STAFF_TELNO LIKE '%' || #{staffTelnoLike} || '%' ]]></if>
+		<if test="staffTelnoStart != null"><![CDATA[ AND t.STAFF_TELNO LIKE #{staffTelnoStart} || '%' ]]></if>
+		<if test="staffTelnoEnd != null"><![CDATA[ AND t.STAFF_TELNO LIKE '%' || #{staffTelnoEnd} ]]></if>
+		<if test="staffTelnoIn != null"><![CDATA[ AND t.STAFF_TELNO IN ]]><foreach item="item" index="index" collection="staffTelnoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="orderOrigin != null"><![CDATA[ AND t.ORDER_ORIGIN = #{orderOrigin} ]]></if>
+		<if test="orderOriginLike != null"><![CDATA[ AND t.ORDER_ORIGIN LIKE '%' || #{orderOriginLike} || '%' ]]></if>
+		<if test="orderOriginStart != null"><![CDATA[ AND t.ORDER_ORIGIN LIKE #{orderOriginStart} || '%' ]]></if>
+		<if test="orderOriginEnd != null"><![CDATA[ AND t.ORDER_ORIGIN LIKE '%' || #{orderOriginEnd} ]]></if>
+		<if test="orderOriginIn != null"><![CDATA[ AND t.ORDER_ORIGIN IN ]]><foreach item="item" index="index" collection="orderOriginIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="originCode != null"><![CDATA[ AND t.ORIGIN_CODE = #{originCode} ]]></if>
+		<if test="originCodeLike != null"><![CDATA[ AND t.ORIGIN_CODE LIKE '%' || #{originCodeLike} || '%' ]]></if>
+		<if test="originCodeStart != null"><![CDATA[ AND t.ORIGIN_CODE LIKE #{originCodeStart} || '%' ]]></if>
+		<if test="originCodeEnd != null"><![CDATA[ AND t.ORIGIN_CODE LIKE '%' || #{originCodeEnd} ]]></if>
+		<if test="originCodeIn != null"><![CDATA[ AND t.ORIGIN_CODE IN ]]><foreach item="item" index="index" collection="originCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="openStaffCode != null"><![CDATA[ AND t.OPEN_STAFF_CODE = #{openStaffCode} ]]></if>
+		<if test="staffName != null"><![CDATA[ AND t.STAFF_NAME = #{staffName} ]]></if>
+		<if test="leaderStaffCode != null"><![CDATA[ AND t.LEADER_STAFF_CODE = #{leaderStaffCode} ]]></if>
+		<if test="regionCode != null"><![CDATA[ AND t.REGION_CODE = #{regionCode} ]]></if>
+		<if test="regionName != null"><![CDATA[ AND t.REGION_NAME = #{regionName} ]]></if>
+		<if test="channelCode != null"><![CDATA[ AND t.CHANNEL_CODE = #{channelCode} ]]></if>
+		<if test="sonChannel != null"><![CDATA[ AND t.SON_CHANNEL = #{sonChannel} ]]></if>
+		<if test="staffTelno != null"><![CDATA[ AND t.STAFF_TELNO = #{staffTelno} ]]></if>
+		<if test="orderOrigin != null"><![CDATA[ AND t.ORDER_ORIGIN = #{orderOrigin} ]]></if>
+		<if test="originCode != null"><![CDATA[ AND t.ORIGIN_CODE = #{originCode} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'openStaffCodeAsc'"><![CDATA[ t.OPEN_STAFF_CODE asc ]]></if>
+	  			<if test="item == 'openStaffCodeDesc'"><![CDATA[ t.OPEN_STAFF_CODE desc ]]></if>
+	  			<if test="item == 'staffNameAsc'"><![CDATA[ t.STAFF_NAME asc ]]></if>
+	  			<if test="item == 'staffNameDesc'"><![CDATA[ t.STAFF_NAME desc ]]></if>
+	  			<if test="item == 'leaderStaffCodeAsc'"><![CDATA[ t.LEADER_STAFF_CODE asc ]]></if>
+	  			<if test="item == 'leaderStaffCodeDesc'"><![CDATA[ t.LEADER_STAFF_CODE desc ]]></if>
+	  			<if test="item == 'regionCodeAsc'"><![CDATA[ t.REGION_CODE asc ]]></if>
+	  			<if test="item == 'regionCodeDesc'"><![CDATA[ t.REGION_CODE desc ]]></if>
+	  			<if test="item == 'regionNameAsc'"><![CDATA[ t.REGION_NAME asc ]]></if>
+	  			<if test="item == 'regionNameDesc'"><![CDATA[ t.REGION_NAME desc ]]></if>
+	  			<if test="item == 'channelCodeAsc'"><![CDATA[ t.CHANNEL_CODE asc ]]></if>
+	  			<if test="item == 'channelCodeDesc'"><![CDATA[ t.CHANNEL_CODE desc ]]></if>
+	  			<if test="item == 'sonChannelAsc'"><![CDATA[ t.SON_CHANNEL asc ]]></if>
+	  			<if test="item == 'sonChannelDesc'"><![CDATA[ t.SON_CHANNEL desc ]]></if>
+	  			<if test="item == 'staffTelnoAsc'"><![CDATA[ t.STAFF_TELNO asc ]]></if>
+	  			<if test="item == 'staffTelnoDesc'"><![CDATA[ t.STAFF_TELNO desc ]]></if>
+	  			<if test="item == 'orderOriginAsc'"><![CDATA[ t.ORDER_ORIGIN asc ]]></if>
+	  			<if test="item == 'orderOriginDesc'"><![CDATA[ t.ORDER_ORIGIN desc ]]></if>
+	  			<if test="item == 'originCodeAsc'"><![CDATA[ t.ORIGIN_CODE asc ]]></if>
+	  			<if test="item == 'originCodeDesc'"><![CDATA[ t.ORIGIN_CODE desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysBssOperatorResultMap">
+		<![CDATA[ SELECT * FROM SYS_BSS_OPERATOR t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_BSS_OPERATOR t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysBssOperatorResultMap">
+		<![CDATA[ SELECT * FROM SYS_BSS_OPERATOR t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_BSS_OPERATOR t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysBssOperator" resultMap="sysBssOperatorResultMap">
+   	<![CDATA[ SELECT * FROM SYS_BSS_OPERATOR t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysBssOperator" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_BSS_OPERATOR t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="sysBssOperatorResultMap">
+    <![CDATA[ SELECT * FROM SYS_BSS_OPERATOR WHERE  
+				OPEN_STAFF_CODE=#{openStaffCode}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysBssOperator">
+
+		<![CDATA[
+		    INSERT INTO SYS_BSS_OPERATOR
+		      (
+		      OPEN_STAFF_CODE,
+		      STAFF_NAME,
+		      LEADER_STAFF_CODE,
+		      REGION_CODE,
+		      REGION_NAME,
+		      CHANNEL_CODE,
+		      SON_CHANNEL,
+		      STAFF_TELNO,
+		      ORDER_ORIGIN,
+		      ORIGIN_CODE
+		      )
+		    VALUES
+		      (			  
+					#{openStaffCode,jdbcType=VARCHAR}
+				,
+					#{staffName,jdbcType=VARCHAR}
+				,
+					#{leaderStaffCode,jdbcType=VARCHAR}
+				,
+					#{regionCode,jdbcType=VARCHAR}
+				,
+					#{regionName,jdbcType=VARCHAR}
+				,
+					#{channelCode,jdbcType=VARCHAR}
+				,
+					#{sonChannel,jdbcType=VARCHAR}
+				,
+					#{staffTelno,jdbcType=VARCHAR}
+				,
+					#{orderOrigin,jdbcType=VARCHAR}
+				,
+					#{originCode,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysBssOperator">
+    <![CDATA[ UPDATE SYS_BSS_OPERATOR ]]>
+	    <set>  		
+    		<![CDATA[ 
+					STAFF_NAME = #{staffName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					LEADER_STAFF_CODE = #{leaderStaffCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					REGION_NAME = #{regionName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					SON_CHANNEL = #{sonChannel,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STAFF_TELNO = #{staffTelno,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORDER_ORIGIN = #{orderOrigin,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					ORIGIN_CODE = #{originCode,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE OPEN_STAFF_CODE=#{openStaffCode}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysBssOperator">
+    <![CDATA[ UPDATE SYS_BSS_OPERATOR ]]>
+	    <set>  		
+    		<if test="staffName != null"><![CDATA[ STAFF_NAME = #{staffName}, ]]></if>
+    		<if test="leaderStaffCode != null"><![CDATA[ LEADER_STAFF_CODE = #{leaderStaffCode}, ]]></if>
+    		<if test="regionCode != null"><![CDATA[ REGION_CODE = #{regionCode}, ]]></if>
+    		<if test="regionName != null"><![CDATA[ REGION_NAME = #{regionName}, ]]></if>
+    		<if test="channelCode != null"><![CDATA[ CHANNEL_CODE = #{channelCode}, ]]></if>
+    		<if test="sonChannel != null"><![CDATA[ SON_CHANNEL = #{sonChannel}, ]]></if>
+    		<if test="staffTelno != null"><![CDATA[ STAFF_TELNO = #{staffTelno}, ]]></if>
+    		<if test="orderOrigin != null"><![CDATA[ ORDER_ORIGIN = #{orderOrigin}, ]]></if>
+    		<if test="originCode != null"><![CDATA[ ORIGIN_CODE = #{originCode} ]]></if>
+	    </set>  
+			WHERE OPEN_STAFF_CODE=#{openStaffCode}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_BSS_OPERATOR ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE OPEN_STAFF_CODE IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_BSS_OPERATOR  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysBssOperator">
+   <![CDATA[ DELETE FROM SYS_BSS_OPERATOR WHERE 1=1  ]]>    			
+		<![CDATA[ AND OPEN_STAFF_CODE = #{openStaffCode} ]]>
+		<![CDATA[ AND STAFF_NAME = #{staffName} ]]>
+		<![CDATA[ AND LEADER_STAFF_CODE = #{leaderStaffCode} ]]>
+		<![CDATA[ AND REGION_CODE = #{regionCode} ]]>
+		<![CDATA[ AND REGION_NAME = #{regionName} ]]>
+		<![CDATA[ AND CHANNEL_CODE = #{channelCode} ]]>
+		<![CDATA[ AND SON_CHANNEL = #{sonChannel} ]]>
+		<![CDATA[ AND STAFF_TELNO = #{staffTelno} ]]>
+		<![CDATA[ AND ORDER_ORIGIN = #{orderOrigin} ]]>
+		<![CDATA[ AND ORIGIN_CODE = #{originCode} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM SYS_BSS_OPERATOR WHERE 
+		OPEN_STAFF_CODE IN (#{openStaffCode})
+		]]>
+	</delete>
+  
+</mapper>

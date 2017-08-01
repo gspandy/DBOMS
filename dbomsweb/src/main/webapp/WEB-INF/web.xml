@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+		 id="WebApp_ID" version="2.5">
+	<display-name>wcs-web</display-name>
+
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<!-- 开发时把provider也拉进来方便开发,不需要每次都启动provider来开启服务 部署时候需要把provider删去 -->
+ 		<param-value>
+			WEB-INF/spring-servlet.xml,classpath*:dboms-application.xml
+		</param-value> 
+		
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 登录过滤器配置 -->
+	<filter>
+	    <filter-name>CheckLoginFilter</filter-name>
+	    <filter-class>com.tydic.dbs.commons.CheckLoginFilter</filter-class>
+	    <init-param>
+	        <param-name>loginStrings</param-name><!-- 对登录页面不进行过滤 -->
+	        <param-value>sysLogin/toLogin.do;sysLogin/checkSysLogin.do;index.jsp;yeepay/pay.do;yeepay/callback.do</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>includeStrings</param-name><!-- 只对指定过滤参数后缀进行过滤 -->
+	        <param-value>.do;.jsp</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>redirectUrl</param-name><!-- 未通过跳转到登录界面 -->
+	        <param-value>sysLogin/toLogin.do</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>disableFilter</param-name><!-- Y:过滤无效 -->
+	        <param-value>N</param-value>
+	    </init-param>
+	</filter>
+	<filter-mapping>
+	    <filter-name>CheckLoginFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>*.sync</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 验证码生成工具类配置 -->
+	<servlet>
+    	<servlet-name>ValidateCodeServlet</servlet-name>
+    	<servlet-class>com.tydic.dbs.commons.ValidateCodeServlet</servlet-class>
+	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>ValidateCodeServlet</servlet-name>
+    	<url-pattern>/ValidateCodeServlet</url-pattern>
+	</servlet-mapping>
+
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+	<error-code>400</error-code>
+	<location>/404.do</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.do</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500.do</location>
+	</error-page>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/WEB-INF/c.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/c-1_0-rt.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/c-1_0-rt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/x.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/x.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/x-1_0-rt.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/x-1_0-rt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/sql.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/sql.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/sql-1_0-rt.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/sql-1_0-rt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/fmt.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/fmt-1_0-rt.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/fmt-1_0-rt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/fn.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/fn.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/oscache.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/oscache.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/spring.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/spring.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/spring-form.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tld/spring-form.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+
+	<mime-mapping>
+		<extension>htc</extension>
+		<mime-type>text/plain</mime-type>
+	</mime-mapping>
+
+	<mime-mapping>
+		<extension>wsdl</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>xsd</extension>
+		<mime-type>text/xml</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>rar</extension>
+		<mime-type>application/rar</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>chm</extension>
+		<mime-type>application/mshelp</mime-type>
+	</mime-mapping>
+</web-app>

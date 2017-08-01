@@ -1,0 +1,64 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/<@s.theme 'kf.src'/>/css/kflayout.css" />
+<script type="text/javascript" src="${ctx}/<@s.theme 'kf.src'/>/js/common.js"></script>
+<script type="text/javascript">
+<!--
+var g_IsShow="N";
+var g_IsLoad="N";
+
+function getUccJs(){
+   if(g_IsLoad=="N"){
+	   var iHead = document.getElementsByTagName('HEAD').item(0);  //引入UCC JS 
+	   var iScript= document.createElement("script");   
+	   iScript.type = "text/javascript";
+	   var addr=window.location.href;
+	   if(addr.indexOf("iservice.seatelgroup.com")){
+	      iScript.src="${uccIserviceUrl}";
+	   }
+	   if(addr.indexOf("shop.seatelgroup.com")){   
+	      iScript.src="${uccShopUrl}"; 
+	   } 
+	   iHead.appendChild(iScript);
+	   setTimeout(function(){
+	      showUcc();
+	      },500);
+   }else {
+       showUcc();
+   }
+}
+
+function showUcc(){
+   if(window.UccWebChat2015==undefined){
+      setTimeout(function(){
+      showUcc();
+      },500);
+      return false;
+   }
+   g_IsLoad="Y";
+   if(g_IsShow=="N"){
+       window.UccWebChat2015.show();
+       setTimeout(function(){
+           $("[id^=divWebChatMsgId_] >div > div:last").click(
+	           function (){
+	               g_IsShow="N";
+	           });
+	       $("[id^=divWebChatMsgId_]").css("z-index","9999999");
+        },5);
+   }
+   g_IsShow="Y";
+}
+
+//-->
+</script>
+<div class="suspend">
+  <dl>
+    <dt class="IE6PNG"></dt>
+    <!-- <dd class="suspendQQ"><a href="javascript:void(0)" target="_blank"></a></dd> -->
+    <!-- <dd class="suspendTel"><a href="javascript:void(0);"></a></dd> -->
+    <dd class="suspendKF"><a href="javascript:void(0);" onclick="getUccJs();"></a></dd>
+  </dl>
+</div>
+<!--[if IE 6]><script type="text/javascript" src="common/js/IE6PNG.js"></script>
+<script type="text/javascript">PNGmin.fix(".IE6PNG");</script><![endif]-->
+<script type="text/javascript">           
+Common.init();
+</script>

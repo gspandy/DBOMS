@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_SMS">
+	<resultMap type="SysSms" id="sysSmsResultMap">
+		<id property="smsId" column="SMS_ID"/>   
+		<result property="calledNum" column="CALLED_NUM"/>
+		<result property="content" column="CONTENT"/>
+		<result property="userType" column="USER_TYPE"/>
+		<result property="result" column="RESULT"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="callingNum" column="CALLING_NUM"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="smsId != null"><![CDATA[ AND t.SMS_ID = #{smsId} ]]></if>
+		<if test="smsIdGt != null"><![CDATA[ AND t.SMS_ID > #{smsIdGt} ]]></if>
+		<if test="smsIdGte != null"><![CDATA[ AND t.SMS_ID >= #{smsIdGte} ]]></if>
+		<if test="smsIdLt != null"><![CDATA[ AND t.SMS_ID < #{smsIdLt} ]]></if>
+		<if test="smsIdLte != null"><![CDATA[ AND t.SMS_ID <= #{smsIdLte} ]]></if>
+		<if test="smsIdIn != null"><![CDATA[ AND t.SMS_ID IN ]]><foreach item="item" index="index" collection="smsIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="calledNum != null"><![CDATA[ AND t.CALLED_NUM = #{calledNum} ]]></if>
+		<if test="calledNumLike != null"><![CDATA[ AND t.CALLED_NUM LIKE '%' || #{calledNumLike} || '%' ]]></if>
+		<if test="calledNumStart != null"><![CDATA[ AND t.CALLED_NUM LIKE #{calledNumStart} || '%' ]]></if>
+		<if test="calledNumEnd != null"><![CDATA[ AND t.CALLED_NUM LIKE '%' || #{calledNumEnd} ]]></if>
+		<if test="calledNumIn != null"><![CDATA[ AND t.CALLED_NUM IN ]]><foreach item="item" index="index" collection="calledNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="content != null"><![CDATA[ AND t.CONTENT = #{content} ]]></if>
+		<if test="contentLike != null"><![CDATA[ AND t.CONTENT LIKE '%' || #{contentLike} || '%' ]]></if>
+		<if test="contentStart != null"><![CDATA[ AND t.CONTENT LIKE #{contentStart} || '%' ]]></if>
+		<if test="contentEnd != null"><![CDATA[ AND t.CONTENT LIKE '%' || #{contentEnd} ]]></if>
+		<if test="contentIn != null"><![CDATA[ AND t.CONTENT IN ]]><foreach item="item" index="index" collection="contentIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="userType != null"><![CDATA[ AND t.USER_TYPE = #{userType} ]]></if>
+		<if test="userTypeLike != null"><![CDATA[ AND t.USER_TYPE LIKE '%' || #{userTypeLike} || '%' ]]></if>
+		<if test="userTypeStart != null"><![CDATA[ AND t.USER_TYPE LIKE #{userTypeStart} || '%' ]]></if>
+		<if test="userTypeEnd != null"><![CDATA[ AND t.USER_TYPE LIKE '%' || #{userTypeEnd} ]]></if>
+		<if test="userTypeIn != null"><![CDATA[ AND t.USER_TYPE IN ]]><foreach item="item" index="index" collection="userTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="result != null"><![CDATA[ AND t.RESULT = #{result} ]]></if>
+		<if test="resultLike != null"><![CDATA[ AND t.RESULT LIKE '%' || #{resultLike} || '%' ]]></if>
+		<if test="resultStart != null"><![CDATA[ AND t.RESULT LIKE #{resultStart} || '%' ]]></if>
+		<if test="resultEnd != null"><![CDATA[ AND t.RESULT LIKE '%' || #{resultEnd} ]]></if>
+		<if test="resultIn != null"><![CDATA[ AND t.RESULT IN ]]><foreach item="item" index="index" collection="resultIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="callingNum != null"><![CDATA[ AND t.CALLING_NUM = #{callingNum} ]]></if>
+		<if test="callingNumLike != null"><![CDATA[ AND t.CALLING_NUM LIKE '%' || #{callingNumLike} || '%' ]]></if>
+		<if test="callingNumStart != null"><![CDATA[ AND t.CALLING_NUM LIKE #{callingNumStart} || '%' ]]></if>
+		<if test="callingNumEnd != null"><![CDATA[ AND t.CALLING_NUM LIKE '%' || #{callingNumEnd} ]]></if>
+		<if test="callingNumIn != null"><![CDATA[ AND t.CALLING_NUM IN ]]><foreach item="item" index="index" collection="callingNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="smsId != null"><![CDATA[ AND t.SMS_ID = #{smsId} ]]></if>
+		<if test="calledNum != null"><![CDATA[ AND t.CALLED_NUM = #{calledNum} ]]></if>
+		<if test="content != null"><![CDATA[ AND t.CONTENT = #{content} ]]></if>
+		<if test="userType != null"><![CDATA[ AND t.USER_TYPE = #{userType} ]]></if>
+		<if test="result != null"><![CDATA[ AND t.RESULT = #{result} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="callingNum != null"><![CDATA[ AND t.CALLING_NUM = #{callingNum} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'smsIdAsc'"><![CDATA[ t.SMS_ID asc ]]></if>
+	  			<if test="item == 'smsIdDesc'"><![CDATA[ t.SMS_ID desc ]]></if>
+	  			<if test="item == 'calledNumAsc'"><![CDATA[ t.CALLED_NUM asc ]]></if>
+	  			<if test="item == 'calledNumDesc'"><![CDATA[ t.CALLED_NUM desc ]]></if>
+	  			<if test="item == 'contentAsc'"><![CDATA[ t.CONTENT asc ]]></if>
+	  			<if test="item == 'contentDesc'"><![CDATA[ t.CONTENT desc ]]></if>
+	  			<if test="item == 'userTypeAsc'"><![CDATA[ t.USER_TYPE asc ]]></if>
+	  			<if test="item == 'userTypeDesc'"><![CDATA[ t.USER_TYPE desc ]]></if>
+	  			<if test="item == 'resultAsc'"><![CDATA[ t.RESULT asc ]]></if>
+	  			<if test="item == 'resultDesc'"><![CDATA[ t.RESULT desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'callingNumAsc'"><![CDATA[ t.CALLING_NUM asc ]]></if>
+	  			<if test="item == 'callingNumDesc'"><![CDATA[ t.CALLING_NUM desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysSmsResultMap">
+		<![CDATA[ SELECT * FROM SYS_SMS t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_SMS t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysSmsResultMap">
+		<![CDATA[ SELECT * FROM SYS_SMS t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_SMS t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysSms" resultMap="sysSmsResultMap">
+   	<![CDATA[ SELECT * FROM SYS_SMS t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysSms" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_SMS t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysSmsResultMap">
+    <![CDATA[ SELECT * FROM SYS_SMS WHERE  
+				SMS_ID=#{smsId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysSms" useGeneratedKeys="true" keyProperty="smsId">
+				<!--  
+				<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="smsId">  
+		        	SELECT nextval('SEQ_SYS_SMS') AS smsId
+		        </selectKey>
+				-->
+		<![CDATA[
+		    INSERT INTO SYS_SMS
+		      (
+		      SMS_ID,
+		      CALLED_NUM,
+		      CONTENT,
+		      USER_TYPE,
+		      RESULT,
+		      CREATE_TIME,
+		      CALLING_NUM
+		      )
+		    VALUES
+		      (			  
+					#{smsId,jdbcType=INTEGER}
+				,
+					#{calledNum,jdbcType=VARCHAR}
+				,
+					#{content,jdbcType=VARCHAR}
+				,
+					#{userType,jdbcType=VARCHAR}
+				,
+					#{result,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{callingNum,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysSms">
+    <![CDATA[ UPDATE SYS_SMS ]]>
+	    <set>  		
+    		<![CDATA[ 
+					CALLED_NUM = #{calledNum,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CONTENT = #{content,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					USER_TYPE = #{userType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					RESULT = #{result,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					CALLING_NUM = #{callingNum,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE SMS_ID=#{smsId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysSms">
+    <![CDATA[ UPDATE SYS_SMS ]]>
+	    <set>  		
+    		<if test="calledNum != null"><![CDATA[ CALLED_NUM = #{calledNum}, ]]></if>
+    		<if test="content != null"><![CDATA[ CONTENT = #{content}, ]]></if>
+    		<if test="userType != null"><![CDATA[ USER_TYPE = #{userType}, ]]></if>
+    		<if test="result != null"><![CDATA[ RESULT = #{result}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="callingNum != null"><![CDATA[ CALLING_NUM = #{callingNum} ]]></if>
+	    </set>  
+			WHERE SMS_ID=#{smsId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_SMS ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE SMS_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_SMS  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysSms">
+   <![CDATA[ DELETE FROM SYS_SMS WHERE 1=1  ]]>    			
+		<![CDATA[ AND SMS_ID = #{smsId} ]]>
+		<![CDATA[ AND CALLED_NUM = #{calledNum} ]]>
+		<![CDATA[ AND CONTENT = #{content} ]]>
+		<![CDATA[ AND USER_TYPE = #{userType} ]]>
+		<![CDATA[ AND RESULT = #{result} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND CALLING_NUM = #{callingNum} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_SMS WHERE 
+		SMS_ID IN (#{smsId})
+		]]>
+	</delete>
+  
+</mapper>

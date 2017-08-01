@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_DATA_FACTOR">
+	<resultMap type="SysDataFactor" id="sysDataFactorResultMap">
+		<id property="factorId" column="FACTOR_ID"/>   
+		<result property="factorName" column="FACTOR_NAME"/>
+		<result property="tabNameEn" column="TAB_NAME_EN"/>
+		<result property="tabNameCn" column="TAB_NAME_CN"/>
+		<result property="attrNameEn" column="ATTR_NAME_EN"/>
+		<result property="attrNameCn" column="ATTR_NAME_CN"/>
+		<result property="factorVal" column="FACTOR_VAL"/>
+		<result property="memo" column="MEMO"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">
+		<if test="factorId != null"><![CDATA[ AND t.FACTOR_ID = #{factorId} ]]></if>
+		<if test="factorIdGt != null"><![CDATA[ AND t.FACTOR_ID > #{factorIdGt} ]]></if>
+		<if test="factorIdGte != null"><![CDATA[ AND t.FACTOR_ID >= #{factorIdGte} ]]></if>
+		<if test="factorIdLt != null"><![CDATA[ AND t.FACTOR_ID < #{factorIdLt} ]]></if>
+		<if test="factorIdLte != null"><![CDATA[ AND t.FACTOR_ID <= #{factorIdLte} ]]></if>
+		<if test="factorIdIn != null"><![CDATA[ AND t.FACTOR_ID IN ]]><foreach item="item" index="index" collection="factorIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="factorName != null"><![CDATA[ AND t.FACTOR_NAME = #{factorName} ]]></if>
+		<if test="factorNameLike != null"><![CDATA[ AND t.FACTOR_NAME LIKE '%' || #{factorNameLike} || '%' ]]></if>
+		<if test="factorNameStart != null"><![CDATA[ AND t.FACTOR_NAME LIKE #{factorNameStart} || '%' ]]></if>
+		<if test="factorNameEnd != null"><![CDATA[ AND t.FACTOR_NAME LIKE '%' || #{factorNameEnd} ]]></if>
+		<if test="factorNameIn != null"><![CDATA[ AND t.FACTOR_NAME IN ]]><foreach item="item" index="index" collection="factorNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="tabNameEn != null"><![CDATA[ AND t.TAB_NAME_EN = #{tabNameEn} ]]></if>
+		<if test="tabNameEnLike != null"><![CDATA[ AND t.TAB_NAME_EN LIKE '%' || #{tabNameEnLike} || '%' ]]></if>
+		<if test="tabNameEnStart != null"><![CDATA[ AND t.TAB_NAME_EN LIKE #{tabNameEnStart} || '%' ]]></if>
+		<if test="tabNameEnEnd != null"><![CDATA[ AND t.TAB_NAME_EN LIKE '%' || #{tabNameEnEnd} ]]></if>
+		<if test="tabNameEnIn != null"><![CDATA[ AND t.TAB_NAME_EN IN ]]><foreach item="item" index="index" collection="tabNameEnIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="tabNameCn != null"><![CDATA[ AND t.TAB_NAME_CN = #{tabNameCn} ]]></if>
+		<if test="tabNameCnLike != null"><![CDATA[ AND t.TAB_NAME_CN LIKE '%' || #{tabNameCnLike} || '%' ]]></if>
+		<if test="tabNameCnStart != null"><![CDATA[ AND t.TAB_NAME_CN LIKE #{tabNameCnStart} || '%' ]]></if>
+		<if test="tabNameCnEnd != null"><![CDATA[ AND t.TAB_NAME_CN LIKE '%' || #{tabNameCnEnd} ]]></if>
+		<if test="tabNameCnIn != null"><![CDATA[ AND t.TAB_NAME_CN IN ]]><foreach item="item" index="index" collection="tabNameCnIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="attrNameEn != null"><![CDATA[ AND t.ATTR_NAME_EN = #{attrNameEn} ]]></if>
+		<if test="attrNameEnLike != null"><![CDATA[ AND t.ATTR_NAME_EN LIKE '%' || #{attrNameEnLike} || '%' ]]></if>
+		<if test="attrNameEnStart != null"><![CDATA[ AND t.ATTR_NAME_EN LIKE #{attrNameEnStart} || '%' ]]></if>
+		<if test="attrNameEnEnd != null"><![CDATA[ AND t.ATTR_NAME_EN LIKE '%' || #{attrNameEnEnd} ]]></if>
+		<if test="attrNameEnIn != null"><![CDATA[ AND t.ATTR_NAME_EN IN ]]><foreach item="item" index="index" collection="attrNameEnIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="attrNameCn != null"><![CDATA[ AND t.ATTR_NAME_CN = #{attrNameCn} ]]></if>
+		<if test="attrNameCnLike != null"><![CDATA[ AND t.ATTR_NAME_CN LIKE '%' || #{attrNameCnLike} || '%' ]]></if>
+		<if test="attrNameCnStart != null"><![CDATA[ AND t.ATTR_NAME_CN LIKE #{attrNameCnStart} || '%' ]]></if>
+		<if test="attrNameCnEnd != null"><![CDATA[ AND t.ATTR_NAME_CN LIKE '%' || #{attrNameCnEnd} ]]></if>
+		<if test="attrNameCnIn != null"><![CDATA[ AND t.ATTR_NAME_CN IN ]]><foreach item="item" index="index" collection="attrNameCnIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="factorVal != null"><![CDATA[ AND t.FACTOR_VAL = #{factorVal} ]]></if>
+		<if test="factorValLike != null"><![CDATA[ AND t.FACTOR_VAL LIKE '%' || #{factorValLike} || '%' ]]></if>
+		<if test="factorValStart != null"><![CDATA[ AND t.FACTOR_VAL LIKE #{factorValStart} || '%' ]]></if>
+		<if test="factorValEnd != null"><![CDATA[ AND t.FACTOR_VAL LIKE '%' || #{factorValEnd} ]]></if>
+		<if test="factorValIn != null"><![CDATA[ AND t.FACTOR_VAL IN ]]><foreach item="item" index="index" collection="factorValIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="memo != null"><![CDATA[ AND t.MEMO = #{memo} ]]></if>
+		<if test="memoLike != null"><![CDATA[ AND t.MEMO LIKE '%' || #{memoLike} || '%' ]]></if>
+		<if test="memoStart != null"><![CDATA[ AND t.MEMO LIKE #{memoStart} || '%' ]]></if>
+		<if test="memoEnd != null"><![CDATA[ AND t.MEMO LIKE '%' || #{memoEnd} ]]></if>
+		<if test="memoIn != null"><![CDATA[ AND t.MEMO IN ]]><foreach item="item" index="index" collection="memoIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeGt != null"><![CDATA[ AND t.CREATE_TIME > #{createTimeGt} ]]></if>
+		<if test="createTimeGte != null"><![CDATA[ AND t.CREATE_TIME >= #{createTimeGte} ]]></if>
+		<if test="createTimeLt != null"><![CDATA[ AND t.CREATE_TIME < #{createTimeLt} ]]></if>
+		<if test="createTimeLte != null"><![CDATA[ AND t.CREATE_TIME <= #{createTimeLte} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeGt != null"><![CDATA[ AND t.MODIFY_TIME > #{modifyTimeGt} ]]></if>
+		<if test="modifyTimeGte != null"><![CDATA[ AND t.MODIFY_TIME >= #{modifyTimeGte} ]]></if>
+		<if test="modifyTimeLt != null"><![CDATA[ AND t.MODIFY_TIME < #{modifyTimeLt} ]]></if>
+		<if test="modifyTimeLte != null"><![CDATA[ AND t.MODIFY_TIME <= #{modifyTimeLte} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="factorId != null"><![CDATA[ AND t.FACTOR_ID = #{factorId} ]]></if>
+		<if test="factorName != null"><![CDATA[ AND t.FACTOR_NAME = #{factorName} ]]></if>
+		<if test="tabNameEn != null"><![CDATA[ AND t.TAB_NAME_EN = #{tabNameEn} ]]></if>
+		<if test="tabNameCn != null"><![CDATA[ AND t.TAB_NAME_CN = #{tabNameCn} ]]></if>
+		<if test="attrNameEn != null"><![CDATA[ AND t.ATTR_NAME_EN = #{attrNameEn} ]]></if>
+		<if test="attrNameCn != null"><![CDATA[ AND t.ATTR_NAME_CN = #{attrNameCn} ]]></if>
+		<if test="factorVal != null"><![CDATA[ AND t.FACTOR_VAL = #{factorVal} ]]></if>
+		<if test="memo != null"><![CDATA[ AND t.MEMO = #{memo} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'factorIdAsc'"><![CDATA[ t.FACTOR_ID asc ]]></if>
+	  			<if test="item == 'factorIdDesc'"><![CDATA[ t.FACTOR_ID desc ]]></if>
+	  			<if test="item == 'factorNameAsc'"><![CDATA[ t.FACTOR_NAME asc ]]></if>
+	  			<if test="item == 'factorNameDesc'"><![CDATA[ t.FACTOR_NAME desc ]]></if>
+	  			<if test="item == 'tabNameEnAsc'"><![CDATA[ t.TAB_NAME_EN asc ]]></if>
+	  			<if test="item == 'tabNameEnDesc'"><![CDATA[ t.TAB_NAME_EN desc ]]></if>
+	  			<if test="item == 'tabNameCnAsc'"><![CDATA[ t.TAB_NAME_CN asc ]]></if>
+	  			<if test="item == 'tabNameCnDesc'"><![CDATA[ t.TAB_NAME_CN desc ]]></if>
+	  			<if test="item == 'attrNameEnAsc'"><![CDATA[ t.ATTR_NAME_EN asc ]]></if>
+	  			<if test="item == 'attrNameEnDesc'"><![CDATA[ t.ATTR_NAME_EN desc ]]></if>
+	  			<if test="item == 'attrNameCnAsc'"><![CDATA[ t.ATTR_NAME_CN asc ]]></if>
+	  			<if test="item == 'attrNameCnDesc'"><![CDATA[ t.ATTR_NAME_CN desc ]]></if>
+	  			<if test="item == 'factorValAsc'"><![CDATA[ t.FACTOR_VAL asc ]]></if>
+	  			<if test="item == 'factorValDesc'"><![CDATA[ t.FACTOR_VAL desc ]]></if>
+	  			<if test="item == 'memoAsc'"><![CDATA[ t.MEMO asc ]]></if>
+	  			<if test="item == 'memoDesc'"><![CDATA[ t.MEMO desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysDataFactorResultMap">
+		<![CDATA[ SELECT * FROM SYS_DATA_FACTOR t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_FACTOR t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysDataFactorResultMap">
+		<![CDATA[ SELECT * FROM SYS_DATA_FACTOR t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_FACTOR t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysDataFactor" resultMap="sysDataFactorResultMap">
+   	<![CDATA[ SELECT * FROM SYS_DATA_FACTOR t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysDataFactor" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_DATA_FACTOR t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="java.lang.Long" resultMap="sysDataFactorResultMap">
+    	<![CDATA[ SELECT * FROM SYS_DATA_FACTOR WHERE FACTOR_ID=#{factorId} ]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysDataFactor">
+		<![CDATA[
+		    INSERT INTO SYS_DATA_FACTOR
+		      (
+		      FACTOR_ID,
+		      FACTOR_NAME,
+		      TAB_NAME_EN,
+		      TAB_NAME_CN,
+		      ATTR_NAME_EN,
+		      ATTR_NAME_CN,
+		      FACTOR_VAL,
+		      MEMO,
+		      CREATE_TIME,
+		      CREATER,
+		      MODIFY_TIME,
+		      MODIFIER,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{factorId,jdbcType=DECIMAL}
+				,
+					#{factorName,jdbcType=VARCHAR}
+				,
+					#{tabNameEn,jdbcType=VARCHAR}
+				,
+					#{tabNameCn,jdbcType=VARCHAR}
+				,
+					#{attrNameEn,jdbcType=VARCHAR}
+				,
+					#{attrNameCn,jdbcType=VARCHAR}
+				,
+					#{factorVal,jdbcType=VARCHAR}
+				,
+					#{memo,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysDataFactor">
+    <![CDATA[ UPDATE SYS_DATA_FACTOR ]]>
+	    <set>  		
+    		<![CDATA[  
+					FACTOR_NAME = #{factorName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					TAB_NAME_EN = #{tabNameEn,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					TAB_NAME_CN = #{tabNameCn,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					ATTR_NAME_EN = #{attrNameEn,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					ATTR_NAME_CN = #{attrNameCn,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					FACTOR_VAL = #{factorVal,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					MEMO = #{memo,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[  
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[  
+					MODIFIER = #{modifier,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE FACTOR_ID=#{factorId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysDataFactor">
+    <![CDATA[ UPDATE SYS_DATA_FACTOR ]]>
+	    <set>  		
+    		<if test="factorName != null"><![CDATA[ FACTOR_NAME = #{factorName}, ]]></if>
+    		<if test="tabNameEn != null"><![CDATA[ TAB_NAME_EN = #{tabNameEn}, ]]></if>
+    		<if test="tabNameCn != null"><![CDATA[ TAB_NAME_CN = #{tabNameCn}, ]]></if>
+    		<if test="attrNameEn != null"><![CDATA[ ATTR_NAME_EN = #{attrNameEn}, ]]></if>
+    		<if test="attrNameCn != null"><![CDATA[ ATTR_NAME_CN = #{attrNameCn}, ]]></if>
+    		<if test="factorVal != null"><![CDATA[ FACTOR_VAL = #{factorVal}, ]]></if>
+    		<if test="memo != null"><![CDATA[ MEMO = #{memo}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE FACTOR_ID=#{factorId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_DATA_FACTOR ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE FACTOR_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_DATA_FACTOR  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysDataFactor">
+   <![CDATA[ DELETE FROM SYS_DATA_FACTOR WHERE 1=1  ]]>    			
+		<if test="factorId != null"><![CDATA[ AND FACTOR_ID = #{factorId} ]]></if>
+		<if test="factorName != null"><![CDATA[ AND FACTOR_NAME = #{factorName} ]]></if>
+		<if test="tabNameEn != null"><![CDATA[ AND TAB_NAME_EN = #{tabNameEn} ]]></if>
+		<if test="tabNameCn != null"><![CDATA[ AND TAB_NAME_CN = #{tabNameCn} ]]></if>
+		<if test="attrNameEn != null"><![CDATA[ AND ATTR_NAME_EN = #{attrNameEn} ]]></if>
+		<if test="attrNameCn != null"><![CDATA[ AND ATTR_NAME_CN = #{attrNameCn} ]]></if>
+		<if test="factorVal != null"><![CDATA[ AND FACTOR_VAL = #{factorVal} ]]></if>
+		<if test="memo != null"><![CDATA[ AND MEMO = #{memo} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND CREATE_TIME = #{createTime} ]]></if>
+		<if test="creater != null"><![CDATA[ AND CREATER = #{creater} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND MODIFIER = #{modifier} ]]></if>
+		<if test="remark != null"><![CDATA[ AND REMARK = #{remark} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   		<![CDATA[ DELETE FROM SYS_DATA_FACTOR WHERE FACTOR_ID = #{factorId} ]]>
+	</delete>
+  
+</mapper>

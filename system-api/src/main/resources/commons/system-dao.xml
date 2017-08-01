@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<!-- DAO数据持久层配置 -->
+	<bean id="sysMenuDao" class="com.tydic.dbs.system.menu.dao.SysMenuDao" autowire="byName" />
+	<bean id="sysOperatorDao" class="com.tydic.dbs.system.operator.dao.SysOperatorDao" autowire="byName" />
+	<bean id="sysOperGroupDao" class="com.tydic.dbs.system.userGroup.dao.SysOperGroupDao" autowire="byName" />
+	<bean id="sysLoginLogDao" class="com.tydic.dbs.system.log.dao.SysLoginLogDao" autowire="byName" />
+	<bean id="sysFunOperateDao" class="com.tydic.dbs.system.menu.dao.SysFunOperateDao" autowire="byName" />
+	<bean id="sysOrganizeDao" class="com.tydic.dbs.system.organize.dao.SysOrganizeDao" autowire="byName" />
+	<bean id="sysRoleDao" class="com.tydic.dbs.system.role.dao.SysRoleDao" autowire="byName" />
+	<bean id="sysRoleMenuDao" class="com.tydic.dbs.system.role.dao.SysRoleMenuDao" autowire="byName" />
+	<bean id="sysUserGroupDao" class="com.tydic.dbs.system.userGroup.dao.SysUserGroupDao" autowire="byName" />
+	<bean id="sysUserGroupRoleDao" class="com.tydic.dbs.system.userGroup.dao.SysUserGroupRoleDao" autowire="byName" />
+	<bean id="sysChanOperRelDao" class="com.tydic.dbs.system.operator.dao.SysChanOperRelDao" autowire="byName" />
+	<bean id="sysPermissionDao" class="com.tydic.dbs.system.role.dao.SysPermissionDao" autowire="byName" />
+	<bean id="sysDataPermissionDao" class="com.tydic.dbs.system.role.dao.SysDataPermissionDao" autowire="byName" />
+	<bean id="sysUploadFileDao" class="com.tydic.dbs.system.sysUploadFile.dao.SysUploadFileDao" autowire="byName" />
+	<bean id="basRegionDao" class="com.tydic.dbs.system.basRegion.dao.BasRegionDao" autowire="byName"/>
+	<bean id="sysLoginSmsDao" class="com.tydic.dbs.system.SysLoginSms.dao.SysLoginSmsDao" autowire="byName" />
+	<bean id="infFileLogDao" class="com.tydic.dbs.system.log.dao.InfFileLogDao" autowire="byName" />
+	<bean id="infIndentDao" class="com.tydic.dbs.system.log.dao.InfIndentDao" autowire="byName" />
+	<bean id="uploadFileDao" class="com.tydic.dbs.system.log.dao.UploadFileDao" autowire="byName" />
+	<bean id="sysSmsDao" class="com.tydic.dbs.system.sms.dao.SysSmsDao" autowire="byName" />
+
+</beans>

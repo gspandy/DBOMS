@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<bean id="ordInfoDao" class="com.tydic.dbs.order.dao.OrdInfoDao" autowire="byName" />
+	<bean id="ordLogDao" class="com.tydic.dbs.order.dao.OrdLogDao" autowire="byName" />
+	<bean id="ordPrdDao" class="com.tydic.dbs.order.dao.OrdPrdDao" autowire="byName" />
+	<bean id="ordRusultDao" class="com.tydic.dbs.order.dao.OrdRusultDao" autowire="byName" />
+	<bean id="ordResultFileDao" class="com.tydic.dbs.order.dao.OrdResultFileDao" autowire="byName" />
+	<bean id="ordResultFileHisDao" class="com.tydic.dbs.order.dao.OrdResultFileHisDao" autowire="byName" />
+</beans>

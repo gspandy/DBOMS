@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="INF_FILE_LOG">
+	<resultMap type="InfFileLog" id="infFileLogResultMap">
+		<id property="infLogId" column="INF_LOG_ID"/>
+		<result property="serialNum" column="SERIAL_NUM"/>
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="operId" column="OPER_ID"/>
+		<result property="infCode" column="INF_CODE"/>
+		<result property="infName" column="INF_NAME"/>
+		<result property="infFileName" column="INF_FILE_NAME"/>
+		<result property="status" column="STATUS"/>
+		<result property="creator" column="CREATOR"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">
+		<if test="infLogId != null"><![CDATA[ AND t.INF_LOG_ID = #{infLogId} ]]></if>
+		<if test="infLogIdLike != null"><![CDATA[ AND t.INF_LOG_ID LIKE '%' || #{infLogIdLike} || '%' ]]></if>
+		<if test="infLogIdStart != null"><![CDATA[ AND t.INF_LOG_ID LIKE #{infLogIdStart} || '%' ]]></if>
+		<if test="infLogIdEnd != null"><![CDATA[ AND t.INF_LOG_ID LIKE '%' || #{infLogIdEnd} ]]></if>
+		<if test="infLogIdIn != null"><![CDATA[ AND t.INF_LOG_ID IN ]]><foreach item="item" index="index" collection="infLogIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="serialNumLike != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumLike} || '%' ]]></if>
+		<if test="serialNumStart != null"><![CDATA[ AND t.SERIAL_NUM LIKE #{serialNumStart} || '%' ]]></if>
+		<if test="serialNumEnd != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumEnd} ]]></if>
+		<if test="serialNumIn != null"><![CDATA[ AND t.SERIAL_NUM IN ]]><foreach item="item" index="index" collection="serialNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="operIdLike != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdLike} || '%' ]]></if>
+		<if test="operIdStart != null"><![CDATA[ AND t.OPER_ID LIKE #{operIdStart} || '%' ]]></if>
+		<if test="operIdEnd != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdEnd} ]]></if>
+		<if test="operIdIn != null"><![CDATA[ AND t.OPER_ID IN ]]><foreach item="item" index="index" collection="operIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="infCode != null"><![CDATA[ AND t.INF_CODE = #{infCode} ]]></if>
+		<if test="infCodeLike != null"><![CDATA[ AND t.INF_CODE LIKE '%' || #{infCodeLike} || '%' ]]></if>
+		<if test="infCodeStart != null"><![CDATA[ AND t.INF_CODE LIKE #{infCodeStart} || '%' ]]></if>
+		<if test="infCodeEnd != null"><![CDATA[ AND t.INF_CODE LIKE '%' || #{infCodeEnd} ]]></if>
+		<if test="infCodeIn != null"><![CDATA[ AND t.INF_CODE IN ]]><foreach item="item" index="index" collection="infCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="infName != null"><![CDATA[ AND t.INF_NAME = #{infName} ]]></if>
+		<if test="infNameLike != null"><![CDATA[ AND t.INF_NAME LIKE '%' || #{infNameLike} || '%' ]]></if>
+		<if test="infNameStart != null"><![CDATA[ AND t.INF_NAME LIKE #{infNameStart} || '%' ]]></if>
+		<if test="infNameEnd != null"><![CDATA[ AND t.INF_NAME LIKE '%' || #{infNameEnd} ]]></if>
+		<if test="infNameIn != null"><![CDATA[ AND t.INF_NAME IN ]]><foreach item="item" index="index" collection="infNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="infFileName != null"><![CDATA[ AND t.INF_FILE_NAME = #{infFileName} ]]></if>
+		<if test="infFileNameLike != null"><![CDATA[ AND t.INF_FILE_NAME LIKE '%' || #{infFileNameLike} || '%' ]]></if>
+		<if test="infFileNameStart != null"><![CDATA[ AND t.INF_FILE_NAME LIKE #{infFileNameStart} || '%' ]]></if>
+		<if test="infFileNameEnd != null"><![CDATA[ AND t.INF_FILE_NAME LIKE '%' || #{infFileNameEnd} ]]></if>
+		<if test="infFileNameIn != null"><![CDATA[ AND t.INF_FILE_NAME IN ]]><foreach item="item" index="index" collection="infFileNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creator != null"><![CDATA[ AND t.CREATOR = #{creator} ]]></if>
+		<if test="creatorLike != null"><![CDATA[ AND t.CREATOR LIKE '%' || #{creatorLike} || '%' ]]></if>
+		<if test="creatorStart != null"><![CDATA[ AND t.CREATOR LIKE #{creatorStart} || '%' ]]></if>
+		<if test="creatorEnd != null"><![CDATA[ AND t.CREATOR LIKE '%' || #{creatorEnd} ]]></if>
+		<if test="creatorIn != null"><![CDATA[ AND t.CREATOR IN ]]><foreach item="item" index="index" collection="creatorIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+
+	<sql id="conditionByVO">
+		<if test="infLogId != null"><![CDATA[ AND t.INF_LOG_ID = #{infLogId} ]]></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="infCode != null"><![CDATA[ AND t.INF_CODE = #{infCode} ]]></if>
+		<if test="infName != null"><![CDATA[ AND t.INF_NAME = #{infName} ]]></if>
+		<if test="infFileName != null"><![CDATA[ AND t.INF_FILE_NAME = #{infFileName} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="creator != null"><![CDATA[ AND t.CREATOR = #{creator} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+
+	<sql id="orderByFragment">
+		<if test="orderBy!= null">
+			<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+				<if test="item == 'infLogIdAsc'"><![CDATA[ t.INF_LOG_ID asc ]]></if>
+				<if test="item == 'infLogIdDesc'"><![CDATA[ t.INF_LOG_ID desc ]]></if>
+				<if test="item == 'serialNumAsc'"><![CDATA[ t.SERIAL_NUM asc ]]></if>
+				<if test="item == 'serialNumDesc'"><![CDATA[ t.SERIAL_NUM desc ]]></if>
+				<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+				<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+				<if test="item == 'operIdAsc'"><![CDATA[ t.OPER_ID asc ]]></if>
+				<if test="item == 'operIdDesc'"><![CDATA[ t.OPER_ID desc ]]></if>
+				<if test="item == 'infCodeAsc'"><![CDATA[ t.INF_CODE asc ]]></if>
+				<if test="item == 'infCodeDesc'"><![CDATA[ t.INF_CODE desc ]]></if>
+				<if test="item == 'infNameAsc'"><![CDATA[ t.INF_NAME asc ]]></if>
+				<if test="item == 'infNameDesc'"><![CDATA[ t.INF_NAME desc ]]></if>
+				<if test="item == 'infFileNameAsc'"><![CDATA[ t.INF_FILE_NAME asc ]]></if>
+				<if test="item == 'infFileNameDesc'"><![CDATA[ t.INF_FILE_NAME desc ]]></if>
+				<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+				<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+				<if test="item == 'creatorAsc'"><![CDATA[ t.CREATOR asc ]]></if>
+				<if test="item == 'creatorDesc'"><![CDATA[ t.CREATOR desc ]]></if>
+				<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+				<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+				<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+				<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+			</foreach>
+		</if>
+	</sql>
+
+	<sql id="orderByFragment2">
+		<if test="orderBy!= null">
+			<![CDATA[ order by ${orderBy}  ]]>
+		</if>
+	</sql>
+
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="infFileLogResultMap">
+		<![CDATA[ SELECT * FROM INF_FILE_LOG t ]]>
+	</select>
+
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM INF_FILE_LOG t ]]>
+	</select>
+
+	<!-- (2-1)============================= selectByParams =================================== -->
+	<select id="selectByParams" parameterType="map" resultMap="infFileLogResultMap">
+		<![CDATA[ SELECT * FROM INF_FILE_LOG t ]]>
+		<where>
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+
+	<!-- (2-2)============================= selectByParamsCount =================================== -->
+	<select id="selectByParamsCount" parameterType="map" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM INF_FILE_LOG t ]]>
+		<where>
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="InfFileLog" resultMap="infFileLogResultMap">
+		<![CDATA[ SELECT * FROM INF_FILE_LOG t ]]>
+		<where>
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+
+	<!-- (3-2)============================= selectByVOCount =================================== -->
+	<select id="selectByVOCount" parameterType="InfFileLog" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM INF_FILE_LOG t ]]>
+		<where>
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+
+
+	<!-- (3-3)============================= selectByPk =================================== -->
+	<select id="selectByPk" parameterType="java.lang.String" resultMap="infFileLogResultMap">
+		<![CDATA[ SELECT * FROM INF_FILE_LOG WHERE
+				INF_LOG_ID=#{infLogId}
+		]]>
+	</select>
+
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="InfFileLog" useGeneratedKeys="true" keyProperty="id">
+
+		<![CDATA[
+		    INSERT INTO INF_FILE_LOG
+		      (
+		      SERIAL_NUM,
+		      BUSS_ID,
+		      OPER_ID,
+		      INF_CODE,
+		      INF_NAME,
+		      INF_FILE_NAME,
+		      STATUS,
+		      CREATOR,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{serialNum,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{operId,jdbcType=VARCHAR}
+				,
+					#{infCode,jdbcType=VARCHAR}
+				,
+					#{infName,jdbcType=VARCHAR}
+				,
+					#{infFileName,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=VARCHAR}
+				,
+					#{creator,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+	</insert>
+
+	<!-- (5-1)============================= updateByVO =================================== -->
+	<update id="updateByVO" parameterType="InfFileLog">
+		<![CDATA[ UPDATE INF_FILE_LOG ]]>
+		<set>
+			<![CDATA[
+					SERIAL_NUM = #{serialNum,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					OPER_ID = #{operId,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					INF_CODE = #{infCode,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					INF_NAME = #{infName,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					INF_FILE_NAME = #{infFileName,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					STATUS = #{status,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					CREATOR = #{creator,jdbcType=VARCHAR},
+    		]]>
+			<if test="createTime != null">
+				<![CDATA[
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+			</if>
+			<![CDATA[
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+		</set>
+		WHERE INF_LOG_ID=#{infLogId}
+	</update>
+
+	<!-- (5-2)============================= updateByVO2 =================================== -->
+	<update id="updateByVoNotNull" parameterType="InfFileLog">
+		<![CDATA[ UPDATE INF_FILE_LOG ]]>
+		<set>
+			<if test="serialNum != null"><![CDATA[ SERIAL_NUM = #{serialNum}, ]]></if>
+			<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+			<if test="operId != null"><![CDATA[ OPER_ID = #{operId}, ]]></if>
+			<if test="infCode != null"><![CDATA[ INF_CODE = #{infCode}, ]]></if>
+			<if test="infName != null"><![CDATA[ INF_NAME = #{infName}, ]]></if>
+			<if test="infFileName != null"><![CDATA[ INF_FILE_NAME = #{infFileName}, ]]></if>
+			<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+			<if test="creator != null"><![CDATA[ CREATOR = #{creator}, ]]></if>
+			<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+			<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+		</set>
+		WHERE INF_LOG_ID=#{infLogId}
+	</update>
+
+	<!-- (5-3)============================= updateStatus =================================== -->
+	<update id="updateStatus" parameterType="map">
+		<![CDATA[ UPDATE INF_FILE_LOG ]]>
+		<set>
+			<![CDATA[
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+		</set>
+		WHERE INF_LOG_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+
+	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+		<![CDATA[ DELETE FROM INF_FILE_LOG  ]]>
+	</delete>
+
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="InfFileLog">
+   <![CDATA[ DELETE FROM INF_FILE_LOG WHERE 1=1  ]]>    			
+		<![CDATA[ AND INF_LOG_ID = #{infLogId} ]]>
+		<![CDATA[ AND SERIAL_NUM = #{serialNum} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND OPER_ID = #{operId} ]]>
+		<![CDATA[ AND INF_CODE = #{infCode} ]]>
+		<![CDATA[ AND INF_NAME = #{infName} ]]>
+		<![CDATA[ AND INF_FILE_NAME = #{infFileName} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND CREATOR = #{creator} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM INF_FILE_LOG WHERE 
+		INF_LOG_ID IN (#{infLogId})
+		]]>
+	</delete>
+
+	<select id="selectByInfNameCount" parameterType="java.lang.String" resultMap="infFileLogResultMap">
+		<![CDATA[ SELECT * FROM INF_FILE_LOG t ]]>
+		<where>
+			<![CDATA[ 1=1 ]]>
+			<![CDATA[AND INF_CODE=#{infName} ORDER BY INF_LOG_ID DESC ]]>
+		</where>
+	</select>
+</mapper>

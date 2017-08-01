@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ORD_RESULT_FILE">
+	<resultMap type="OrdResultFile" id="ordResultFileResultMap">
+		<id property="fileId" column="FILE_ID"/>   
+		<result property="serialNum" column="SERIAL_NUM"/>
+		<result property="ordId" column="ORD_ID" />
+		<result property="fileName" column="FILE_NAME"/>
+		<result property="fileUrl" column="FILE_URL"/>
+		<result property="ftpIp" column="FTP_IP"/>
+		<result property="ftpPort" column="FTP_PORT"/>
+		<result property="ftpUser" column="FTP_USER"/>
+		<result property="ftpPass" column="FTP_PASS"/>
+		<result property="ftpPath" column="FTP_PATH"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="state" column="STATE"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="fileIdLike != null"><![CDATA[ AND t.FILE_ID LIKE '%' || #{fileIdLike} || '%' ]]></if>
+		<if test="fileIdStart != null"><![CDATA[ AND t.FILE_ID LIKE #{fileIdStart} || '%' ]]></if>
+		<if test="fileIdEnd != null"><![CDATA[ AND t.FILE_ID LIKE '%' || #{fileIdEnd} ]]></if>
+		<if test="fileIdIn != null"><![CDATA[ AND t.FILE_ID IN ]]><foreach item="item" index="index" collection="fileIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="serialNumLike != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumLike} || '%' ]]></if>
+		<if test="serialNumStart != null"><![CDATA[ AND t.SERIAL_NUM LIKE #{serialNumStart} || '%' ]]></if>
+		<if test="serialNumEnd != null"><![CDATA[ AND t.SERIAL_NUM LIKE '%' || #{serialNumEnd} ]]></if>
+		<if test="serialNumIn != null"><![CDATA[ AND t.SERIAL_NUM IN ]]><foreach item="item" index="index" collection="serialNumIn" open="(" separator="," close=")">#{item}</foreach></if>
+
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordIdLike != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdLike} || '%' ]]></if>
+		<if test="ordIdStart != null"><![CDATA[ AND t.ORD_ID LIKE #{ordIdStart} || '%' ]]></if>
+		<if test="ordIdEnd != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdEnd} ]]></if>
+		<if test="ordIdIn != null"><![CDATA[ AND t.ORD_ID IN ]]><foreach item="item" index="index" collection="ordIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileNameLike != null"><![CDATA[ AND t.FILE_NAME LIKE '%' || #{fileNameLike} || '%' ]]></if>
+
+		<if test="fileNameIn != null"><![CDATA[ AND t.FILE_NAME IN ]]><foreach item="item" index="index" collection="fileNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fileUrl != null"><![CDATA[ AND t.FILE_URL = #{fileUrl} ]]></if>
+		<if test="fileUrlLike != null"><![CDATA[ AND t.FILE_URL LIKE '%' || #{fileUrlLike} || '%' ]]></if>
+		<if test="fileUrlStart != null"><![CDATA[ AND t.FILE_URL LIKE #{fileUrlStart} || '%' ]]></if>
+		<if test="fileUrlEnd != null"><![CDATA[ AND t.FILE_URL LIKE '%' || #{fileUrlEnd} ]]></if>
+		<if test="fileUrlIn != null"><![CDATA[ AND t.FILE_URL IN ]]><foreach item="item" index="index" collection="fileUrlIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="state != null"><![CDATA[ AND t.STATE = #{state} ]]></if>
+		<if test="stateLike != null"><![CDATA[ AND t.STATE LIKE '%' || #{stateLike} || '%' ]]></if>
+		<if test="stateStart != null"><![CDATA[ AND t.STATE LIKE #{stateStart} || '%' ]]></if>
+		<if test="stateEnd != null"><![CDATA[ AND t.STATE LIKE '%' || #{stateEnd} ]]></if>
+		<if test="stateIn != null"><![CDATA[ AND t.STATE IN ]]><foreach item="item" index="index" collection="stateIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="fileId != null"><![CDATA[ AND t.FILE_ID = #{fileId} ]]></if>
+		<if test="serialNum != null"><![CDATA[ AND t.SERIAL_NUM = #{serialNum} ]]></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="fileName != null"><![CDATA[ AND t.FILE_NAME = #{fileName} ]]></if>
+		<if test="fileUrl != null"><![CDATA[ AND t.FILE_URL = #{fileUrl} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="state != null"><![CDATA[ AND t.STATE = #{state} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'fileIdAsc'"><![CDATA[ t.FILE_ID asc ]]></if>
+	  			<if test="item == 'fileIdDesc'"><![CDATA[ t.FILE_ID desc ]]></if>
+	  			<if test="item == 'serialNumAsc'"><![CDATA[ t.SERIAL_NUM asc ]]></if>
+	  			<if test="item == 'serialNumDesc'"><![CDATA[ t.SERIAL_NUM desc ]]></if>
+	  			<if test="item == 'fileNameAsc'"><![CDATA[ t.FILE_NAME asc ]]></if>
+	  			<if test="item == 'fileNameDesc'"><![CDATA[ t.FILE_NAME desc ]]></if>
+	  			<if test="item == 'fileUrlAsc'"><![CDATA[ t.FILE_URL asc ]]></if>
+	  			<if test="item == 'fileUrlDesc'"><![CDATA[ t.FILE_URL desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'stateAsc'"><![CDATA[ t.STATE asc ]]></if>
+	  			<if test="item == 'stateDesc'"><![CDATA[ t.STATE desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="ordResultFileResultMap">
+		<![CDATA[ SELECT * FROM ORD_RESULT_FILE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM ORD_RESULT_FILE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="ordResultFileResultMap">
+		<![CDATA[ SELECT * FROM ORD_RESULT_FILE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_RESULT_FILE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="OrdResultFile" resultMap="ordResultFileResultMap">
+   	<![CDATA[ SELECT * FROM ORD_RESULT_FILE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="OrdResultFile" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_RESULT_FILE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="ordResultFileResultMap">
+    <![CDATA[ SELECT * FROM ORD_RESULT_FILE WHERE  
+				FILE_ID=#{fileId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="OrdResultFile" useGeneratedKeys="true" keyProperty="fileId">
+
+		<![CDATA[
+		    INSERT INTO ORD_RESULT_FILE
+		      (
+		      SERIAL_NUM,
+		      ORD_ID,
+		      FILE_NAME,
+		      FILE_URL,
+		      FTP_IP,
+		      FTP_PORT,
+		      FTP_USER,
+		      FTP_PASS,
+		      FTP_PATH,
+		      CREATE_TIME,
+		      STATE
+		      )
+		    VALUES
+		      (
+					#{serialNum,jdbcType=VARCHAR}
+				,
+					#{ordId,jdbcType=VARCHAR}
+				,
+					#{fileName,jdbcType=VARCHAR}
+				,
+					#{fileUrl,jdbcType=VARCHAR}
+				,
+					#{ftpIp,jdbcType=VARCHAR}
+				,
+					#{ftpPort,jdbcType=DECIMAL}
+				,
+					#{ftpUser,jdbcType=VARCHAR}
+				,
+					#{ftpPass,jdbcType=VARCHAR}
+				,
+					#{ftpPath,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{state,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="OrdResultFile">
+    <![CDATA[ UPDATE ORD_RESULT_FILE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SERIAL_NUM = #{serialNum,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_NAME = #{fileName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					FTP_IP = #{ftpIp,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					FTP_PORT = #{ftpPort,jdbcType=DECIMAL},
+    		]]>
+			<![CDATA[
+					FTP_USER = #{ftpUser,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					FTP_PASS = #{ftpPass,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					FTP_PATH = #{ftpPath,jdbcType=VARCHAR},
+    		]]>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					STATE = #{state,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE FILE_ID=#{fileId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="OrdResultFile">
+    <![CDATA[ UPDATE ORD_RESULT_FILE ]]>
+	    <set>  		
+    		<if test="serialNum != null"><![CDATA[ SERIAL_NUM = #{serialNum}, ]]></if>
+    		<if test="fileName != null"><![CDATA[ FILE_NAME = #{fileName}, ]]></if>
+    		<if test="fileUrl != null"><![CDATA[ FILE_URL = #{fileUrl}, ]]></if>
+			<if test="ftpIp != null"><![CDATA[ FTP_IP = #{ftpIp}, ]]></if>
+			<if test="ftpPort != null"><![CDATA[ FTP_PORT = #{ftpPort}, ]]></if>
+			<if test="ftpUser != null"><![CDATA[ FTP_USER = #{ftpUser}, ]]></if>
+			<if test="ftpPass != null"><![CDATA[ FTP_PASS = #{ftpPass}, ]]></if>
+			<if test="ftpPath != null"><![CDATA[ FTP_PATH = #{ftpPath}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="state != null"><![CDATA[ STATE = #{state} ]]></if>
+	    </set>  
+			WHERE FILE_ID=#{fileId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE ORD_RESULT_FILE ]]>
+	    <set>
+		<![CDATA[  
+			STATE = #{state,jdbcType=VARCHAR},
+		]]>
+	    </set>  
+			WHERE FILE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM ORD_RESULT_FILE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="OrdResultFile">
+   <![CDATA[ DELETE FROM ORD_RESULT_FILE WHERE 1=1  ]]>    			
+		<![CDATA[ AND FILE_ID = #{fileId} ]]>
+		<![CDATA[ AND SERIAL_NUM = #{serialNum} ]]>
+		<![CDATA[ AND FILE_NAME = #{fileName} ]]>
+		<![CDATA[ AND FILE_URL = #{fileUrl} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND STATE = #{state} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_RESULT_FILE WHERE 
+		FILE_ID IN (#{fileId})
+		]]>
+	</delete>
+  
+</mapper>

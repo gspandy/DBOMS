@@ -1,0 +1,198 @@
+<script type="text/javascript">
+<!--
+	$(document).ready(function(){
+		$.ajaxSetup ({
+			cache: false
+		});
+		$.ajax({
+			url : rootPath + "/menu/getI18N",
+			dataType : "json",
+			success : function(data) {
+				
+				var objStr=$("#firstfoot");
+				var addStr="";
+				var local=data.language;
+				var theme=data.location;
+				var recId=data.recId;
+				addStr=addStr+"<dt id='comprehend'>"
+				+ "<dd><a href='${recruitUrl}&locale="+local+"&theme="+theme+"' skipIndex='1' id='recruit'></a></dd>"
+				+ "<dd><a href='${aboutUsUrl}?recId="+recId+"&locale="+local+"&theme="+theme+"' skipIndex='2' id='about'></a></dd>"
+				+ "<dd><a href='${contactUsUrl}?locale="+local+"&theme="+theme+"' skipIndex='3' id='contract'></a></dd>"
+				+ "<dd><a href='${saeaNewsUrl}&locale="+local+"&theme="+theme+"' skipIndex='4' id='newsCenter'></a></dd>"
+				+ "<dd><a href='"+rootPath+"${downloadClientUrl}' skipIndex='5' id='mobileClient'></a></dd>"
+				+ "</dt>";
+				
+				objStr.html('');
+		        objStr.append(addStr);
+			
+				$("#comprehend").html(data.comprehend);
+				$("#recruit").html(data.recruit);
+				$("#about").html(data.about);
+				$("#contract").html(data.contract);
+				$("#newsCenter").html(data.newsCenter);
+				$("#mobileClient").html(data.mobileClient);
+				
+				$("#cooperate").html(data.cooperate);
+				$("#store").html(data.store);
+				$("#recommend").html(data.recommend);
+				$("#supplier").html(data.supplier);
+				$("#partner").html(data.partner);
+				
+				
+				$("#shoppingGuide").html(data.shoppingGuide);
+				$("#orderSearch").html(data.orderSearch);
+				$("#goodsGuide").html(data.goodsGuide);
+				$("#hotPromotion").html(data.hotPromotion);
+				$("#GoodsSearch").html(data.GoodsSearch);
+				
+				
+				$("#payEnsure").html(data.payEnsure);
+				$("#seatel").html(data.seatel);
+				$("#creditPay").html(data.creditPay);
+				$("#linePay").html(data.linePay);
+				$("#otherPay").html(data.otherPay);
+				
+				$("#logisticsHelp").html(data.logisticsHelp);
+				$("#ondelive").html(data.ondelive);
+				$("#policyReturn").html(data.policyReturn);
+				$("#clientCustom").html(data.clientCustom);
+				$("#onlineCustom").html(data.onlineCustom);
+				$("#faq").html(data.faq);
+				
+				$("#servicePhone").html(data.servicePhone);
+				$("#spcService").html(data.spcService);
+				$("#serviceHour").html(data.serviceHour);
+				$("#workDay").html(data.workDay);
+				$("#btn").val(data.askfor);
+				$("#totalVisitorCount").html(data.totalVisitorCount);
+			
+			}
+	});
+	//给<a 添加 事件
+	$(".fsep dd a").on("click",function(){
+		var skipIndex = $(this).attr("skipIndex");
+		if($.isNumeric(skipIndex)){
+			if(skipIndex!=21){
+				document.location.href=rootPath+"/helpcenter/index?skipIndex="+skipIndex;
+			}
+			
+		}else{
+			document.location.href=rootPath+"/login";
+		}
+		
+	});
+});
+//-->
+
+
+/***在线客服***/
+var g_IsShow="N";
+var g_IsLoad="N";
+
+function getUccJs(){
+   if(g_IsLoad=="N"){
+	   var iHead = document.getElementsByTagName('HEAD').item(0);  //引入UCC JS 
+	   var iScript= document.createElement("script");   
+	   iScript.type = "text/javascript";
+	   var addr=window.location.href;
+	   if(addr.indexOf("iservice.seatelgroup.com")!=-1){
+	      iScript.src="${uccIserviceUrl}";
+	   }
+	   if(addr.indexOf("shop.seatelgroup.com")!=-1){   
+	      iScript.src="${uccShopUrl}";
+	   }
+	   iHead.appendChild(iScript);
+	   setTimeout(function(){
+	      showUcc();
+	      },500);
+   }else {
+       showUcc();
+   }
+}
+
+function showUcc(){
+   if(window.UccWebChat2015==undefined){
+      setTimeout(function(){
+      showUcc();
+      },500);
+      return false;
+   }
+   g_IsLoad="Y";
+   if(g_IsShow=="N"){
+       window.UccWebChat2015.show();
+       setTimeout(function(){
+           $("[id^=divWebChatMsgId_] >div > div:last").click(
+	           function (){
+	               g_IsShow="N";
+	           });
+	       $("[id^=divWebChatMsgId_]").css("z-index","9999999");
+        },5);
+   }
+   g_IsShow="Y";
+}
+
+</script>
+ <div class="footnav">
+ 	<div class="wrap graylink">
+    <div class="fsep">
+       <dl id="firstfoot">
+         <dt id="comprehend"></dt>
+         <dd><a href="javascript:void(0);" skipIndex="1" id="recruit"></a></dd>
+         <dd><a href="javascript:void(0);" skipIndex="2" id="about"></a></dd>
+         <dd><a href="javascript:void(0);" skipIndex="3" id="contract"></a></dd>
+         <dd><a href="javascript:void(0);" skipIndex="4" id="newsCenter"></a></dd>  
+         <dd><a href="${downloadClientUrl}" skipIndex="5" id="mobileClient"></a></dd>       
+       </dl>
+    </div>
+    <div class="fsep">
+       <dl>
+         <dt id="cooperate"></dt>
+         <dd style="display:none"><a href="#" skipIndex="6" id="store"></a></dd>
+         <dd style="display:none"><a href="#" skipIndex="7" id="recommend"></a></dd>
+         <dd><a href="#" skipIndex="8" id="supplier"></a></dd>
+         <dd><a href="#" skipIndex="9" id="partner"></a></dd>       
+       </dl>
+    </div>
+    <div class="fsep">
+       <dl>
+         <dt id="shoppingGuide"></dt>
+         <dd><a href="#" skipIndex="10" id="orderSearch"></a></dd>
+         <dd style="display:none"><a href="#" skipIndex="11" id="goodsGuide"></a></dd>
+         <dd><a href="${ctx}/goods/index" skipIndex="12" id="hotPromotion"></a></dd>
+         <dd><a href="#" skipIndex="13" id="GoodsSearch"></a></dd>       
+       </dl>
+    </div>
+     <div class="fsep">
+       <dl>
+         <dt id="payEnsure"></dt>
+         <dd><a href="#" skipIndex="14" id="seatel"></a></dd>
+         <dd style="display:none"><a href="#" skipIndex="15" id="creditPay"></a></dd>
+         <!--  <dd><a href="#" skipIndex="16" id="linePay"></a></dd>-->
+         <dd><a href="#" skipIndex="17" id="otherPay"></a></dd>       
+       </dl>
+    </div>
+     <div class="fsep">
+       <dl>
+         <dt id="logisticsHelp"></dt>
+         <dd><a href="#" skipIndex="18" id="ondelive"></a></dd>
+         <dd><a href="#" skipIndex="19" id="policyReturn"></a></dd>
+         <dd><a href="#" skipIndex="20" id="clientCustom"></a></dd>
+         <dd><a href="javascript:void(0);" onclick="getUccJs();" skipIndex="21" id="onlineCustom"></a></dd> 
+         <dd><a href="#" skipIndex="22" id="faq"></a></dd>       
+       </dl>
+    </div>
+    <div class="rsep">
+       <span id="servicePhone"></span>：<span>+ 65 2481 3468</span><br>
+       <span id="serviceHour"></span>：<span id="workDay"></span>  09:00-18:00<br>
+       <span id="totalVisitorCount"></span>：<span>${visitorCount?if_exists}</span><br>
+       <input id="btn" class="f_btn" type="button" value="">
+    </div> 
+ </div></div> <!----------footnav end-------------->
+ <input type="hidden" value="${skipIndex?if_exists}" id="skipIndex" >
+ <div class="cpyr"><div class="wrap graylink clearfix">
+     <div class="fc">Copyright &copy; 2014-2015 South East Asia Telecom Group Ltd</div>
+     <!-- <div class="ftool"><span>Follow Us: </span><a href="#" class="fbk">facebook</a><a href="#" class="tt">twiter</a><a href="#" class="wx">weixin</a><select><option>简体中文</option><option>English</option><option>高棉语</option></select></div> -->
+ </div>
+ 
+ 
+ </div>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "${env.mybatis.url}">
+<configuration>
+	<properties>
+       	<property name="dialect" value="mysql"/>
+    </properties>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="OrdInfo" type="com.tydic.dbs.order.vo.OrdInfo"/>
+		<typeAlias alias="OrdInfoVo" type="com.tydic.dbs.order.vo.OrdInfoVo"/>
+		<typeAlias alias="OrdLog" type="com.tydic.dbs.order.vo.OrdLog"/>
+		<typeAlias alias="OrdPrd" type="com.tydic.dbs.order.vo.OrdPrd"/>
+		<typeAlias alias="OrdRusult" type="com.tydic.dbs.order.vo.OrdRusult"/>
+		<typeAlias alias="OrdPrdAndData" type="com.tydic.dbs.order.vo.OrdPrdAndData"/>
+		<typeAlias alias="OrdAndPrd" type="com.tydic.dbs.order.vo.OrdAndPrd"/>
+		<typeAlias alias="OrdResultFile" type="com.tydic.dbs.order.vo.OrdResultFile" />
+		<typeAlias alias="OrdResultFileHis" type="com.tydic.dbs.order.vo.OrdResultFileHis" />
+	</typeAliases>
+	<plugins>
+       	<plugin interceptor="com.tydic.commons.dao.PaginationInterceptor"/>
+    </plugins>
+	<mappers>
+		<mapper resource="com/tydic/dbs/order/mapper/OrdInfoMapper.xml"/>
+		<mapper resource="com/tydic/dbs/order/mapper/OrdLogMapper.xml"/>
+		<mapper resource="com/tydic/dbs/order/mapper/OrdPrdMapper.xml"/>
+		<mapper resource="com/tydic/dbs/order/mapper/OrdRusultMapper.xml"/>
+
+		<mapper resource="com/tydic/dbs/order/mapper/OrdResultFileMapper.xml"/>
+		<mapper resource="com/tydic/dbs/order/mapper/OrdResultFileHisMapper.xml"/>
+	</mappers>
+</configuration>

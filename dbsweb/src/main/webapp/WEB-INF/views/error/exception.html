@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>错误页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+
+    <#include "/views/common/head.html"/>
+
+
+
+
+    <script type="text/javascript" src="${ctx}/js/app.js"></script>
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+</head>
+
+<body>
+<!------------------------HEADER---------------------------->
+<#if Session['loginMember']??>
+<#include "/views/common/header.html"/>
+
+<!------------------------SIDEBAR-------------------------->
+<#include "/views/common/aside.html"/>
+</#if>
+    <!-------------------------CONT---------------------------->
+    <article class="article-box">
+        <div class="error-cont  ">
+            <div class="panel error-panel mt-10 ">
+                <div class="panel-body text-c ">
+                   <div class=" mt-90 mb-50"><img src="${ctx}/img/error_icon.png" width="108" height="108" 商户配置图标 alt=""></div>
+                   <h4 class="mb-50"><#if exception.message??>${exception.message}<#else>哎呀...您访问的页面可能有点问题，请稍后再尝试一下吧</#if></h4>
+                    <#if Session['loginMember']??>
+                   <a class="btn btn-primary" href="javascript:window.history.go(-1)">返回</a>
+                        </#if>
+                </div>          
+            </div> 
+        </div>
+    </article>
+
+    <!------------------------FOOTER---------------------------->
+    <footer class="footer">
+        <div class="container-fluid">
+            <p>Copyright &copy;1999-2016&nbsp;中国联通&nbsp;版权所有
+                <br> 经营许可编号：
+                <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">***ICP备****号</a>
+                <br>
+            </p>
+        </div>
+    </footer>
+
+
+
+
+
+</body>
+
+</html>

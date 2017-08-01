@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<bean id="bussInfoDao" class="com.tydic.dbs.buyer.dao.BussInfoDao" autowire="byName" />
+	<bean id="bussItResourceDao" class="com.tydic.dbs.buyer.dao.BussItResourceDao" autowire="byName" />
+	<bean id="bussTenantDao" class="com.tydic.dbs.buyer.dao.BussTenantDao" autowire="byName" />
+	<bean id="bussTenantRoleDao" class="com.tydic.dbs.buyer.dao.BussTenantRoleDao" autowire="byName" />
+	<bean id="bussDataPemissionDao" class="com.tydic.dbs.buyer.dao.BussDataPemissionDao" autowire="byName"/>
+	<bean id="bussAuditStatusDao" class="com.tydic.dbs.buyer.dao.BussAuditStatusDao" autowire="byName" />
+	<bean id="interfaceLogDao" class="com.tydic.dbs.buyer.dao.InterfaceLogDao" autowire="byName" />
+	<bean id="appInfoDao" class="com.tydic.dbs.buyer.dao.AppInfoDao" autowire="byName" />
+	<bean id="dataPermissonCfgDao" class="com.tydic.dbs.buyer.dao.DataPermissonCfgDao" autowire="byName"/>
+</beans>

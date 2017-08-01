@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户信息查询页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	$(function () {
+		/***未左边导航添加样式***/
+		var aa = $("#menu1");
+		$("#menu1").parent(".info").show();
+		$("#menu1").addClass("active").siblings().removeClass("active");
+	
+	});
+    
+    	function down(fileId){
+  		if (fileId=='null') {
+  	  		return false;
+		}
+  		$("#fileCode").val(fileId);
+  		$("#downFile").submit();
+  	}
+  	  	
+  	function updateBuyer(){
+  		document.location.href="${ctx}/author/bussinfo/updateBuyer";
+  	}
+  	
+  	
+    </script> 
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->
+	 <form style="display:none;" id="downFile" name="downFile" action="${ctx}/author/product/downFile.do" method="post">
+		<input id="fileCode" name="fileCode" value="" />
+	</form>   
+     <article class="article-box">
+        <div class="Detail-cont">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4>商户资料</h4></div>
+              <div class="panel-seheader">
+                     <h5>商户资料</h5>
+              </div>
+             <div class="panel-body">
+                
+                 <p><b class="c-red">* </b>账号：${loginMemberVo.bussAccount?if_exists}</p>
+                 <p><b class="c-red">* </b>姓名：${loginMemberVo.bussName?if_exists}</p>
+                 <p><b class="c-red">* </b>手机号码：${loginMemberVo.bussMobileNo?if_exists}</p>
+                 <p><b class="c-red">* </b>身份证号码：${loginMemberVo.bussCredNo?if_exists}</p>
+                 <p><b class="c-red">* </b>联系地址：${loginMemberVo.bussAddress?if_exists}</p>
+                 <p><b class="c-red">* </b>EMAIL：${loginMemberVo.bussEmail?if_exists}</p>
+                 <p><b class="c-red">* </b>机构地址：${loginMemberVo.orgAddress?if_exists}</p>
+                 <p><b class="c-red">* </b>工商编号：${loginMemberVo.bussinessNum?if_exists}</p>
+                 <p><b class="c-red">* </b>联系电话：${loginMemberVo.bussTeleNo?if_exists}</p>
+                 <p><b class="c-red">* </b>证扫描件：<a class="c-primary" href="javascript:void();" onclick="down('${loginMemberVo.fileId?if_exists}')">${loginMemberVo.uploadFileName?if_exists}</a></p>
+             </div>
+         </section>
+        <section class="panel panel-secondary">
+            <div class="panel-header"><h4>商户审核</h4></div>
+            <div class="panel-body ">
+            	<#if loginMemberVo?? >
+	            	<#if loginMemberVo.bussStatus =='02'>
+	            		<p>审核结果：<span class="c-green f-16"><i class="fa fa-check-square-o "></i> 审核通过</span></p>
+	            	<#elseif loginMemberVo.bussStatus =='03'>
+	            		<p class="c-red f-16"><i class="fa fa-times "></i> 审核不通过</p>
+	            	</#if>            		
+            	</#if>                 
+                <p>审核意见：${loginMemberVo.suggestion?if_exists}</p> 
+               
+            </div>
+        </section>
+         <div class="btn-wrap mt-20 ml-80">
+             <button class="btn btn-primary" onclick="updateBuyer()">修改</button>
+             <button class="btn btn-primary" onclick="javascript :history.back(-1)">返回</button>
+         </div>
+          </div>    
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

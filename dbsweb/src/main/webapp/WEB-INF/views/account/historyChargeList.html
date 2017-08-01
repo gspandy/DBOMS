@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>历史计费清单页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/css/reset.css">
+    <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${ctx}/css/general.css">
+    <link rel="stylesheet" href="${ctx}/css/layout.css">
+    <link rel="stylesheet" href="${ctx}/css/core.css">
+    <link rel="stylesheet" href="${ctx}/css/components.css">
+    <link rel="stylesheet" href="${ctx}/js/kkpager/kkpager_blue.css">
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/additional-methods.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/validate/messages_zh.js"></script>
+    <script type="text/javascript" src="${ctx}/js/kkpager/kkpager.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modalmanager.js"></script>
+    <script type="text/javascript" src="${ctx}/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('.pngfix,.icon');</script>
+    <![endif]-->
+</head>
+<script type="text/javascript">
+    var totalPage;
+    var totalRecords;
+    var pageNo = 1;
+	var rootPath ="${ctx}";
+	$(function () {
+        $("#menu5").parent(".info").show();
+        $("#menu5").addClass("active").siblings().removeClass("active");
+        getHistoryChargeList();
+    });
+    function getHistoryChargeList(type){
+        if(type=="1"){
+            pageNo = 1;
+        }
+        var ordId=$("#ordId").val();
+        var prdId=$("#prdId").val();
+        var prdName=$("#prdName").val();
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+        $.ajax({
+            url : rootPath+"/author/billingList/getHistoryChargeList",
+            type : 'post',
+            data : {"pageNo" : pageNo,
+                    "ordId":ordId,
+                    "prdId":prdId,
+                    "prdName":prdName,
+                    "startTime":startTime,
+                    "endTime":endTime},
+            dataType : 'json',
+            success : function(result){
+                var list=result.objects;
+                var html="";
+                $("#historyList").html("");
+                var total=0;
+				for(var i in list){
+					html +="<tr>";
+					html +="<td>"+list[i].ORD_ID+"</td>";
+					html +="<td>"+list[i].PRD_ID+"</td>";
+					html +="<td>"+list[i].PRD_NAME+"</td>";
+                    var unit="";
+                    if(list[i].PRD_UNIT=="2"){
+                        unit="MB";
+                        html +="<td>"+unit+"</td>";
+                    }else if(list[i].PRD_UNIT=="1"){
+                        unit="条";
+                        html +="<td>"+unit+"</td>";
+                    }else{
+                        html +="<td>"+unit+"</td>";
+                    }
+                    html +="<td><b class='c-orange'> ￥"+list[i].PRD_PRICE+"/" +unit+"</b></td>";
+                    var time=FormatDate(list[i].RUN_TIME);
+                    html +="<td>"+time+"</td>";
+                    var sum="";
+                    if(list[i].PRD_UNIT=="2"){
+                        html +="<td>"+list[i].RESULT_COUNT+"</td>";
+                        sum=(Number(list[i].PRD_PRICE)*Number(list[i].RESULT_COUNT)).toFixed(2);
+                    }else if(list[i].PRD_UNIT=="1"){
+                        html +="<td>"+list[i].RESULT_COUNT+"</td>";
+                        sum=(Number(list[i].PRD_PRICE)*Number(list[i].RESULT_COUNT)).toFixed(2);
+                    }else{
+                        html +="<td></td>";
+                        sum="";
+                    }
+                    total=(Number(total)+Number(list[i].PAY_AMOUNT));
+                    html +="<td><b class='c-orange'>"+list[i].PAY_AMOUNT+"</b></td>";
+					html +="</tr>";
+				}
+				$("#historyList").html(html);
+                $("#total").empty();
+                $("#total").append(total.toFixed(1));
+                totalPage = result.totalPage;
+                totalRecords = result.totalNumber;
+                pageNo = result.currentPage;
+                toPage();
+            },
+            error :function(){
+                return false;
+            }
+
+        });
+    }
+
+    function toPage(){
+        //alert("总页数"+totalPage+"-总数据"+totalRecords+"-当前页"+pageNo);
+        kkpager.total = totalPage;
+        kkpager.totalRecords = totalRecords;
+        kkpager.pno = pageNo;
+        kkpager.hasPrv = (kkpager.pno > 1)
+        kkpager.hasNext = (kkpager.pno < kkpager.total);
+        kkpager.generPageHtml({
+            pno : pageNo,
+            mode : 'click',
+            total : totalPage,
+            totalRecords : totalRecords,
+            click : function(n){
+                this.selectPage(n);
+                changPage();
+                return false;
+            },
+            getHref : function(n){
+                return "javascript:void(0)";
+            }
+        });
+    }
+    //切换页码获取数据
+    function changPage(){
+        pageNo = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+        getHistoryChargeList();
+    }
+
+    //格式化时间
+    function FormatDate (strTime) {
+        var date = new Date(strTime);
+        var mon;var day;var hour;var min;
+        var  temp=date.getMonth()+1;
+        if (strTime==undefined){return "";}
+        if(temp<10){mon="0"+temp;}else {mon=temp;}
+        if(date.getDate()<10){day="0"+date.getDate();}else {day=date.getDate();}
+        if(date.getHours()<10){hour="0"+date.getHours();}else {hour=date.getHours();}
+        if(date.getMinutes()<10){min="0"+date.getMinutes();}else {min=date.getMinutes();}
+        return date.getFullYear()+"-"+mon+"-"+day+" "+hour+":"+min;
+    }
+
+    function doExport(){
+        $("form[name='searchForm']").submit();
+    }
+</script>
+<body>
+<!------------------------HEADER---------------------------->
+<#include "/views/common/header.html"/>
+<!------------------------SIDEBAR-------------------------->
+<#include "/views/common/aside.html"/>
+<!-------------------------CONT---------------------------->
+<article class="article-box">
+    <div class="List-cont">
+        <section class="panel panel-primary search-panel ">
+            <div class="panel-header"><h4>历史计费清单</h4></div>
+            <div class="panel-body">
+                <div class="search-form">
+                    <form id="searchForm" name="searchForm" action="${ctx}/author/billingList/doExport" method="post">
+                        <div class="row cl">
+                            <div class="col-sm-4">
+                                <label class="form-label" for="">工单号：</label><div class="formControls formControls-max"><input type="text" class="input-text input-max" name="ordId" id="ordId"></div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label" for="">产品ID：</label><div class="formControls"><input type="text" class="input-text" name="prdId" id="prdId"></div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label" for="">产品名称：</label><div class="formControls"><input type="text" class="input-text" name="prdName" id="prdName"></div>
+                            </div>
+                            <div class="col-sm-2">
+
+                            </div>
+
+                        </div>
+                        <div class="row mt-10 cl">
+                            <div class="col-sm-4">
+                                <label class="form-label" for="">执行时间：</label><div class="formControls formControls-max"><input type="text" name="startTime" id="startTime" class="input-text input-min" onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM-dd',skin:'whyGreen'})" value="${(ordPrd.ordDatebegin?string("yyyy-MM-dd"))!''}" >--
+                                <input type="text" name="endTime" id="endTime" class="input-text input-min" onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM-dd',skin:'whyGreen'})" value="${(ordPrd.ordDatebegin?string("yyyy-MM-dd"))!''}" ></div>
+                            </div>
+
+
+
+                            <div class="col-sm-8 text-r">
+                                <a onclick="getHistoryChargeList('1')" class="btn btn-primary">查询</a>
+                                <a onclick="doExport()" class="btn btn-primary-outline">导出</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <div class="panel panel-default mt-10">
+            <div class="panel-body">
+                <div class="text-r "> 合计金额： <b class="f-20 c-orange" id="total"></b> 元</div>
+                <table class="table table-primary mt-10">
+                    <thead><tr>
+                        <th>工单号</th>
+                        <th>产品ID</th>
+                        <th>产品名称</th>
+                        <th>产品计量单位</th>
+                        <th>产品单价(元)</th>
+                        <th>工单执行时间</th>
+                        <th>数据结果计量</th>
+                        <th>计费金额（元）</th>
+
+                    </tr></thead>
+                    <tbody id="historyList">
+
+                    </tbody>
+                </table>
+                <div id="kkpager"></div>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!------------------------FOOTER---------------------------->
+<#include "/views/common/footer.html"/>
+
+<!--------------------------MODAL---------------------------->
+</body>
+</html>

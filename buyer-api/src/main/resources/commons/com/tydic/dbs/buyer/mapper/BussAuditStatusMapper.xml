@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BUSS_AUDIT_STATUS">
+	<resultMap type="BussAuditStatus" id="bussAuditStatusResultMap">
+		<id property="id" column="ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="type" column="TYPE"/>
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="status" column="STATUS"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="id != null"><![CDATA[ AND t.ID = #{id} ]]></if>
+		<if test="idLike != null"><![CDATA[ AND t.ID LIKE '%' || #{idLike} || '%' ]]></if>
+		<if test="idStart != null"><![CDATA[ AND t.ID LIKE #{idStart} || '%' ]]></if>
+		<if test="idEnd != null"><![CDATA[ AND t.ID LIKE '%' || #{idEnd} ]]></if>
+		<if test="idIn != null"><![CDATA[ AND t.ID IN ]]><foreach item="item" index="index" collection="idIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="type != null"><![CDATA[ AND t.TYPE = #{type} ]]></if>
+		<if test="typeLike != null"><![CDATA[ AND t.TYPE LIKE '%' || #{typeLike} || '%' ]]></if>
+		<if test="typeStart != null"><![CDATA[ AND t.TYPE LIKE #{typeStart} || '%' ]]></if>
+		<if test="typeEnd != null"><![CDATA[ AND t.TYPE LIKE '%' || #{typeEnd} ]]></if>
+		<if test="typeIn != null"><![CDATA[ AND t.TYPE IN ]]><foreach item="item" index="index" collection="typeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="auditStatus != null"><![CDATA[ AND t.AUDIT_STATUS = #{auditStatus} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="id != null"><![CDATA[ AND t.ID = #{id} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="type != null"><![CDATA[ AND t.TYPE = #{type} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="auditStatus != null"><![CDATA[ AND t.AUDIT_STATUS = #{auditStatus} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'idAsc'"><![CDATA[ t.ID asc ]]></if>
+	  			<if test="item == 'idDesc'"><![CDATA[ t.ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'typeAsc'"><![CDATA[ t.TYPE asc ]]></if>
+	  			<if test="item == 'typeDesc'"><![CDATA[ t.TYPE desc ]]></if>
+	  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+	  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="bussAuditStatusResultMap">
+		<![CDATA[ SELECT * FROM BUSS_AUDIT_STATUS t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BUSS_AUDIT_STATUS t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="bussAuditStatusResultMap">
+		<![CDATA[ SELECT * FROM BUSS_AUDIT_STATUS t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_AUDIT_STATUS t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BussAuditStatus" resultMap="bussAuditStatusResultMap">
+   	<![CDATA[ SELECT * FROM BUSS_AUDIT_STATUS t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BussAuditStatus" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_AUDIT_STATUS t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="bussAuditStatusResultMap">
+    <![CDATA[ SELECT * FROM BUSS_AUDIT_STATUS WHERE  
+				ID=#{id}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BussAuditStatus" useGeneratedKeys="true" keyProperty="id">
+
+		<![CDATA[
+		    INSERT INTO BUSS_AUDIT_STATUS
+		      (
+		      BUSS_ID,
+		      TYPE,
+		      AUDIT_STATUS,
+		      STATUS,
+		      REMARK
+		      )
+		    VALUES
+		      (
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{type,jdbcType=VARCHAR}
+				,
+					#{auditStatus,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=VARCHAR}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BussAuditStatus">
+    <![CDATA[ UPDATE BUSS_AUDIT_STATUS ]]>
+	    <set>  		
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					TYPE = #{type,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STATUS = #{status,jdbcType=VARCHAR},
+    		]]>
+			<![CDATA[
+					AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE ID=#{id}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="BussAuditStatus">
+    <![CDATA[ UPDATE BUSS_AUDIT_STATUS ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="type != null"><![CDATA[ TYPE = #{type}, ]]></if>
+			<if test="auditStatus != null"><![CDATA[ AUDIT_STATUS = #{auditStatus}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE ID=#{id}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE BUSS_AUDIT_STATUS ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BUSS_AUDIT_STATUS  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BussAuditStatus">
+   <![CDATA[ DELETE FROM BUSS_AUDIT_STATUS WHERE 1=1  ]]>    			
+		<![CDATA[ AND ID = #{id} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND TYPE = #{type} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BUSS_AUDIT_STATUS WHERE 
+		ID IN (#{id})
+		]]>
+	</delete>
+
+
+	<update id="updateByBussIdAndType" parameterType="BussAuditStatus">
+		<![CDATA[ UPDATE BUSS_AUDIT_STATUS ]]>
+		<set>
+
+			<if test="auditStatus != null"><![CDATA[ AUDIT_STATUS = #{auditStatus}, ]]></if>
+			<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+			<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+		</set>
+		WHERE BUSS_ID=#{bussId} and TYPE = #{type}
+	</update>
+  
+</mapper>

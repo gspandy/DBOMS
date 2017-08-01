@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>产品列表页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    <#include "/views/common/head.html"/>
+    <!-- <script type="text/javascript" src="${ctx}/js/app.js"></script> -->
+  </head>
+  
+  <script type="text/javascript">
+  	$(function($){
+  	    $("#menu3").parent(".info").show();
+  	    $("#menu3").addClass("active").siblings().removeClass("active");
+  		firstPrdList();
+  	});
+  	function delProBefor(id,fileCode){
+  		$("#prdId").val(id);
+  		$("#fileCode").val(fileCode);
+  	}
+  	function delPro(){
+	  	$("#removeModal").modal('hide');
+  		var id = $("#prdId").val();
+  		var fileCode = $("#fileCode").val();
+  		if ($("#status").val()==2) {//状态值为2表示已审核
+  			$.jBox.error("错误信息：<br>已审核通过的产品不能删除!","提示");
+  			return false;
+		}
+  		$.ajax({
+  			type: "POST",
+  			url: "${ctx}/author/product/delPrd.do",
+  			data: {prdId:id,fileCode:fileCode},
+  			datatype: "json",
+  			success: function(data){
+  				if (!data) {
+		  			$.jBox.error("删除失败！","提示");
+				}
+  				searchPrdList();
+  			}
+  		});
+  	}
+  </script>
+  <!-- 产品新增、修改、详情 下载-->
+  <script type="text/javascript">
+  	function prdDetial(prdId,status,type){//type 0新增 1查看 2修改
+  		if (prdId!=null) {
+  	  		if (prdId=="UNCONFIG") {
+  	  			$.jBox.error("错误信息：<br>请先完成商户配置！<br>待审核通过后，方可新增产品！","提示");
+  	  			return false;
+  			} else if (prdId=="UNEXAMINE") {
+  	  			$.jBox.error("错误信息：<br>商户配置未通过审核，不能新增产品！","提示");
+  	  			return false;
+  			}
+		}
+  		if (type==2&&status==2) {//状态值为2表示已审核
+  			$.jBox.error("错误信息：<br>已审核通过的产品不能修改!","提示");
+  			return false;
+		}
+  		$("#prdId").val(prdId);
+  		$("#type").val(type);
+  		$("#detialForm").submit();
+  	}
+  	function down(fileUrl){
+  		if (fileUrl=='null') {
+  	  		return false;
+		}
+  		$("#fileCode").val(fileUrl);
+  		$("#downFile").submit();
+  	}
+  </script>
+	<form style="display:none;" id="downFile" name="downFile" action="${ctx}/author/product/downFile.do" method="post">
+		<input id="fileCode" name="fileCode" value="" />
+	</form>
+  <!-- 加载产品列表 -->
+  <script type="text/javascript">
+	var totalPage;
+	var totalRecords;
+	var pageNo = 1;
+	var param = {};
+	function firstPrdList(){
+  		var prdID = $("#prdID").val()==undefined?"":$("#prdID").val();
+  		var prdName = $("#prdName").val()==undefined?"":$("#prdName").val();
+  		var prdStatus = $("#prdStatus option:selected").val()==undefined?"":$("#prdStatus option:selected").val();
+  		param["prdID"] = prdID.trim();
+  	  	param["prdName"] = prdName.trim();
+  	    param["prdStatus"] = prdStatus;
+  	  	param["pageNo"] = pageNo;
+  	  	getProductList();
+	}
+	//查询按钮获取数据
+	function searchPrdList(){
+  		pageNo = 1;
+  		firstPrdList();
+	}
+	//切换页码获取数据
+	function changPage(){
+  		pageNo = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+  	    param["pageNo"] = pageNo;
+  	  	getProductList();
+	}
+  	function getProductList(){
+  		$.ajax({
+  			type: "POST",
+  			url: "${ctx}/author/product/getPrdList.do",
+  			data: param,
+  			datatype: "json",
+  			success: function(data){
+  				if (data!=null) {
+  					var prdInfoList = data.objects;
+					var temp = "<thead><tr><th>产品ID</th><th>产品名称</th><th>其他需求</th><th>申请人</th><th>状态</th><th width=\"150\">操作</th></tr></thead>";
+  					$("#prdLit").remove();
+  					$("#order-list").append("<table id=\"prdLit\" class=\"table table-primary\"></table>");
+  					for(x in prdInfoList){
+						var prdStatus = prdInfoList[x].prdStatus;
+						var flag = !(prdStatus==2);//是否显示编辑和删除按钮
+  						prdStatus = prdStatus=="1"?"<b class=\"c-orange\">未审核</b>":prdStatus=="2"?"<b class=\"c-green\">审核通过</b>":"<b class=\"c-red\">审核不通过</b>";
+  						var prdOthers = prdInfoList[x].prdOthers;
+  						prdOthers = prdOthers==null?"无其他需求":prdOthers;
+  						var files = prdInfoList[x].prdDataName;
+  						files = files==null?"没有需求文件":prdInfoList[x].prdDataName;
+  						temp += "<tr>"
+  						    +"<td>"+prdInfoList[x].prdId+"</td>"
+  						    +"<td>"+prdInfoList[x].prdName+"</td>"
+  						   /*  +"<td><a class=\"c-primary\" onClick=\"down(\'"+prdInfoList[x].prdDatafile+"\')\">"+files+"</a></td>" */
+  						    +"<td>"+prdOthers+"</td>"
+  						    +"<td>"+prdInfoList[x].creater+"</td>"
+  						    +"<td><b class=\"c-orange\">"+prdStatus+"</b></td>"
+  						    +"<td>"
+  						    +"<a onClick=\"prdDetial(\'"+prdInfoList[x].prdId+"\',1,1);\" class=\"btn btn-op\" title=\"查看\"><i class=\"fa fa-search\"></i></a>";
+  						if(flag){
+  							temp += "<a onClick=\"prdDetial(\'"+prdInfoList[x].prdId+"\',"+prdInfoList[x].prdStatus+",2);\" class=\"btn btn-op\" title=\"修改\"><i class=\"fa fa-edit\"></i></a>"
+  						    +"<a href=\"#removeModal\" onClick=\"delProBefor(\'"+prdInfoList[x].prdId+"\',"+prdInfoList[x].prdDatafile+");\" data-toggle=\"modal\" class=\"btn btn-op\" title=\"删除\"><i class=\"fa fa-trash\"></i></a>"
+  						}
+  						temp += "</td>"
+  						+"</tr>";
+  					}
+					$("#prdLit").append(temp);
+  					totalPage = data.totalPage;
+  					totalRecords = data.totalNumber;
+  					pageNo = data.currentPage;
+  					toPage();
+  				} else {
+  				}
+  			}
+  		});
+  	}
+    </script>
+    <!-- 加载分页控件 -->
+   <script type="text/javascript">
+  	function toPage(){
+		//alert("总页数"+totalPage+"-总数据"+totalRecords+"-当前页"+pageNo);
+  		kkpager.total = totalPage;
+  		kkpager.totalRecords = totalRecords;
+  		kkpager.pno = pageNo;
+  		kkpager.hasPrv = (kkpager.pno > 1)
+  		kkpager.hasNext = (kkpager.pno < kkpager.total);
+  		kkpager.generPageHtml({
+  		     pno : pageNo,
+  		     mode : 'click', 
+  		     total : totalPage,  
+  		     totalRecords : totalRecords,
+  		     click : function(n){
+  		         this.selectPage(n);
+  		  		 changPage();
+  		         return false;
+  		     },
+  		     getHref : function(n){
+  		         return 'javascript:void(0)';
+  		     }
+  			 });
+  	}
+  </script>
+  <body>
+  <form style="display:none;" id="detialForm" method="post" action="${ctx}/author/product/toPrdDetial.do">
+  	<input id="prdId" name="prdId" />
+  	<input id="type" name="type" />
+  	<input id="status" name="status" />
+  </form>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+<!-------------------------CONT---------------------------->      
+
+     <article class="article-box">
+        <div class="List-cont">
+         <section class="panel panel-primary search-panel ">
+             <div class="panel-header"><h4>产品列表</h4></div>
+             <div class="panel-body">
+               <div class="search-form">
+                <from id="searchForm">
+                 <div class="row cl">
+                     <div class="col-sm-3">
+                         <label class="form-label" for="">产品ID：</label><div class="formControls"><input name="prdID" id="prdID" type="text" class="input-text" ></div>
+                     </div>
+                     <div class="col-sm-3">
+                          <label class="form-label" for="">产品名称：</label><div class="formControls"><input name="prdName" id="prdName" type="text" class="input-text" ></div>
+                     </div>
+                     <div class="col-sm-3">
+                          <label class="form-label" for="">产品状态：</label>
+                          <div class="formControls">
+                              <select class="input-text" name="prdStatus" id="prdStatus">
+                                  <option value="">全部</option>
+                                  <option value="1">未审核</option>
+                                  <option value="2">审核通过</option>
+                                  <option value="3">审核不通过</option>
+                              </select>
+                          </div>
+                     </div>
+                    <div class="col-sm-3 text-r">
+                         <a onclick="searchPrdList();" class="btn btn-primary">查询</a>
+                 		 <#if auditStatusList??><!-- 判断商户是否已配置 -->
+                 		 	<#if auditStatus??><!-- 判断商户的配置状态 -->
+                 		 		<#if auditStatus=="2"><!-- 审核通过 -->
+                 		 <a onClick="prdDetial(null,1,0);" class="btn btn-primary-outline">新增</a>
+                 		 		<#else>
+                 		 <a onClick="prdDetial('UNEXAMINE',1,0);" class="btn btn-primary-outline">新增</a>
+                 		 		</#if><!-- 审核通过 -->
+                 		 	<#else>
+                 		 <a onClick="prdDetial('UNEXAMINE',1,0);" class="btn btn-primary-outline">新增</a>
+                 		 	</#if><!-- 判断商户的配置状态 -->
+                 		 <#else>
+                 		 <a onClick="prdDetial('UNCONFIG',1,0);" class="btn btn-primary-outline">新增</a>
+                 		 </#if><!-- 判断商户是否已配置 -->
+                     </div>
+                 </div>
+                </from> 
+                </div>
+		         <div id="order-list" class="product-list mt-20">
+		         	<table id="prdLit" class="table table-primary"></table>
+		         </div>
+		         <div id="kkpager" class="mt-10 ml-20 mr-30"></div>
+             </div>
+         </section>
+       </div>
+     </article>
+     <!------------------------FOOTER----------------------------> 
+  	<#include "/views/common/footer.html"/>
+  	<!--------------------------MODAL---------------------------->
+	<div id="removeModal" class="modal w300 hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-header">
+	    <h3 id="myModalLabel">删除产品</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();"><i class="fa fa-times"></i></a>
+	 </div>
+	  <div class="modal-body">
+	 <p>是否删除此产品？</p>
+	 </div>
+	  <div class="modal-footer text-c">
+	  <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">关闭</button>
+	  <button onclick="delPro();" class="btn btn-primary">确定</button> 
+	 </div>
+	</div>
+  </body>
+</html>

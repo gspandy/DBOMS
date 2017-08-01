@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<!-- 和本地bean一样实现服务 -->
+	<bean id="bussInfoService" class="com.tydic.dbs.buyer.bo.BussInfoBo">
+		<property name="bussInfoDao"><ref bean="bussInfoDao"/></property>
+		<property name="bussAuditStatusDao"><ref bean="bussAuditStatusDao" /> </property>
+	</bean>
+	<bean id="bussItResourceService" class="com.tydic.dbs.buyer.bo.BussItResourceBo">
+		<property name="bussItResourceDao"><ref bean="bussItResourceDao"/></property>
+		<property name="bussDataPemissionService"><ref bean="bussDataPemissionService"/></property>
+		<property name="bussAuditStatusService"><ref bean="bussAuditStatusService"/></property>
+	</bean>
+	<!-- 租户权限-->
+	<bean id="bussTenantService" class="com.tydic.dbs.buyer.bo.BussTenantBo">
+		<property name="bussTenantDao"><ref bean="bussTenantDao" />	</property>
+		<property name="bussTenantRoleDao"><ref bean="bussTenantRoleDao"/></property>
+    </bean>
+	<bean id="bussTenantRoleService" class="com.tydic.dbs.buyer.bo.BussTenantRoleBo">
+		<property name="bussTenantRoleDao"><ref bean="bussTenantRoleDao"  /></property>
+		<property name="bussAuditStatusService"><ref bean="bussAuditStatusService"/></property>
+	</bean>
+	<bean id="bussDataPemissionService" class="com.tydic.dbs.buyer.bo.BussDataPemissionBo">
+		<property name="bussDataPemissionDao" ><ref bean="bussDataPemissionDao"/> </property>
+		<property name="bussAuditStatusService"><ref bean="bussAuditStatusService"/></property>
+		<property name="bussItResourceService"><ref bean="bussItResourceService" /></property>
+	</bean>
+	<bean id="bussAuditStatusService" class="com.tydic.dbs.buyer.bo.BussAuditStatusBo">
+		<property name="bussAuditStatusDao"><ref bean="bussAuditStatusDao" /> </property>
+	</bean>
+
+	<bean id="interfaceLogService" class="com.tydic.dbs.buyer.bo.InterfaceLogBo">
+		<property name="interfaceLogDao"><ref bean="interfaceLogDao" /> </property>
+	</bean>
+	<bean id="appInfoService" class="com.tydic.dbs.buyer.bo.AppInfoBo">
+		<property name="appInfoDao"><ref bean="appInfoDao" /> </property>
+	</bean>
+	<bean id="dataPermissonCfgService" class="com.tydic.dbs.buyer.bo.DataPermissonCfgBo">
+		<property name="dataPermissonCfgDao"><ref bean="dataPermissonCfgDao" /> </property>
+	</bean>
+
+</beans>

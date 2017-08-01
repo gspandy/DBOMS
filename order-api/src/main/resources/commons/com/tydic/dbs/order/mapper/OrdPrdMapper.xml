@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ORD_PRD">
+	<resultMap type="OrdPrd" id="ordPrdResultMap">
+		<id property="ordPrdId" column="ORD_PRD_ID"/>   
+		<result property="ordId" column="ORD_ID"/>
+		<result property="prdId" column="PRD_ID"/>
+		<result property="startRow" column="START_ROW"/>
+		<result property="endRow" column="END_ROW"/>
+		<result property="ordDatebegin" column="ORD_DATEBEGIN"/>
+		<result property="ordDateend" column="ORD_DATEEND"/>
+		<result property="resoureId" column="RESOURE_ID"/>
+	</resultMap>
+
+	<resultMap id="ordPrdAndDataMap" type="OrdPrdAndData">
+		<id property="prdId" column="PRD_ID"/>
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="prdName" column="PRD_NAME"/>
+		<result property="prdDes" column="PRD_DES"/>
+		<result property="prdDatafile" column="PRD_DATAFILE"/>
+		<result property="prdOthers" column="PRD_OTHERS"/>
+		<result property="prdStatus" column="PRD_STATUS"/>
+		<result property="prdUnit" column="PRD_UNIT"/>
+		<result property="prdPrice" column="PRD_PRICE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="checker" column="CHECKER"/>
+		<result property="checkTime" column="CHECK_TIME"/>
+		<result property="checkOpin" column="CHECK_OPIN"/>
+		<result property="DataResourceId" column="DATA_RESOURCE_ID"/>
+		<result property="dataResourceName" column="DATA_RESOURCE_NAME"/>
+		<result property="prdDataName" column="FILE_NAME"/>
+	</resultMap>
+
+	<resultMap id="ordAndPrdMap" type="OrdAndPrd">
+		<id property="ordPrdId" column="ORD_PRD_ID"/>
+		<result property="ordId" column="ORD_ID"/>
+		<result property="prdId" column="PRD_ID"/>
+		<result property="startRow" column="START_ROW"/>
+		<result property="endRow" column="END_ROW"/>
+		<result property="ordDatebegin" column="ORD_DATEBEGIN"/>
+		<result property="ordDateend" column="ORD_DATEEND"/>
+		<result property="resoureId" column="RESOURE_ID"/>
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="prdName" column="PRD_NAME"/>
+		<result property="prdDes" column="PRD_DES"/>
+		<result property="prdDatafile" column="PRD_DATAFILE"/>
+		<result property="prdOthers" column="PRD_OTHERS"/>
+		<result property="prdStatus" column="PRD_STATUS"/>
+		<result property="prdUnit" column="PRD_UNIT"/>
+		<result property="prdPrice" column="PRD_PRICE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="creater" column="CREATER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="checker" column="CHECKER"/>
+		<result property="checkTime" column="CHECK_TIME"/>
+		<result property="checkOpin" column="CHECK_OPIN"/>
+	</resultMap>
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="ordPrdId != null"><![CDATA[ AND t.ORD_PRD_ID = #{ordPrdId} ]]></if>
+		<if test="ordPrdIdLike != null"><![CDATA[ AND t.ORD_PRD_ID LIKE '%' || #{ordPrdIdLike} || '%' ]]></if>
+		<if test="ordPrdIdStart != null"><![CDATA[ AND t.ORD_PRD_ID LIKE #{ordPrdIdStart} || '%' ]]></if>
+		<if test="ordPrdIdEnd != null"><![CDATA[ AND t.ORD_PRD_ID LIKE '%' || #{ordPrdIdEnd} ]]></if>
+		<if test="ordPrdIdIn != null"><![CDATA[ AND t.ORD_PRD_ID IN ]]><foreach item="item" index="index" collection="ordPrdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="ordIdLike != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdLike} || '%' ]]></if>
+		<if test="ordIdStart != null"><![CDATA[ AND t.ORD_ID LIKE #{ordIdStart} || '%' ]]></if>
+		<if test="ordIdEnd != null"><![CDATA[ AND t.ORD_ID LIKE '%' || #{ordIdEnd} ]]></if>
+		<if test="ordIdIn != null"><![CDATA[ AND t.ORD_ID IN ]]><foreach item="item" index="index" collection="ordIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="prdIdLike != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdLike} || '%' ]]></if>
+		<if test="prdIdStart != null"><![CDATA[ AND t.PRD_ID LIKE #{prdIdStart} || '%' ]]></if>
+		<if test="prdIdEnd != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdEnd} ]]></if>
+		<if test="prdIdIn != null"><![CDATA[ AND t.PRD_ID IN ]]><foreach item="item" index="index" collection="prdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="startRow != null"><![CDATA[ AND t.START_ROW = #{startRow} ]]></if>
+		<if test="startRowLike != null"><![CDATA[ AND t.START_ROW LIKE '%' || #{startRowLike} || '%' ]]></if>
+		<if test="startRowStart != null"><![CDATA[ AND t.START_ROW LIKE #{startRowStart} || '%' ]]></if>
+		<if test="startRowEnd != null"><![CDATA[ AND t.START_ROW LIKE '%' || #{startRowEnd} ]]></if>
+		<if test="startRowIn != null"><![CDATA[ AND t.START_ROW IN ]]><foreach item="item" index="index" collection="startRowIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="endRow != null"><![CDATA[ AND t.END_ROW = #{endRow} ]]></if>
+		<if test="endRowLike != null"><![CDATA[ AND t.END_ROW LIKE '%' || #{endRowLike} || '%' ]]></if>
+		<if test="endRowStart != null"><![CDATA[ AND t.END_ROW LIKE #{endRowStart} || '%' ]]></if>
+		<if test="endRowEnd != null"><![CDATA[ AND t.END_ROW LIKE '%' || #{endRowEnd} ]]></if>
+		<if test="endRowIn != null"><![CDATA[ AND t.END_ROW IN ]]><foreach item="item" index="index" collection="endRowIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordDatebegin != null"><![CDATA[ AND t.ORD_DATEBEGIN = #{ordDatebegin} ]]></if>
+		<if test="ordDatebeginLike != null"><![CDATA[ AND t.ORD_DATEBEGIN LIKE '%' || #{ordDatebeginLike} || '%' ]]></if>
+		<if test="ordDatebeginStart != null"><![CDATA[ AND t.ORD_DATEBEGIN LIKE #{ordDatebeginStart} || '%' ]]></if>
+		<if test="ordDatebeginEnd != null"><![CDATA[ AND t.ORD_DATEBEGIN LIKE '%' || #{ordDatebeginEnd} ]]></if>
+		<if test="ordDatebeginIn != null"><![CDATA[ AND t.ORD_DATEBEGIN IN ]]><foreach item="item" index="index" collection="ordDatebeginIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="ordDateend != null"><![CDATA[ AND t.ORD_DATEEND = #{ordDateend} ]]></if>
+		<if test="ordDateendLike != null"><![CDATA[ AND t.ORD_DATEEND LIKE '%' || #{ordDateendLike} || '%' ]]></if>
+		<if test="ordDateendStart != null"><![CDATA[ AND t.ORD_DATEEND LIKE #{ordDateendStart} || '%' ]]></if>
+		<if test="ordDateendEnd != null"><![CDATA[ AND t.ORD_DATEEND LIKE '%' || #{ordDateendEnd} ]]></if>
+		<if test="ordDateendIn != null"><![CDATA[ AND t.ORD_DATEEND IN ]]><foreach item="item" index="index" collection="ordDateendIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+		<if test="resoureIdLike != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdLike} || '%' ]]></if>
+		<if test="resoureIdStart != null"><![CDATA[ AND t.RESOURE_ID LIKE #{resoureIdStart} || '%' ]]></if>
+		<if test="resoureIdEnd != null"><![CDATA[ AND t.RESOURE_ID LIKE '%' || #{resoureIdEnd} ]]></if>
+		<if test="resoureIdIn != null"><![CDATA[ AND t.RESOURE_ID IN ]]><foreach item="item" index="index" collection="resoureIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="ordPrdId != null"><![CDATA[ AND t.ORD_PRD_ID = #{ordPrdId} ]]></if>
+		<if test="ordId != null"><![CDATA[ AND t.ORD_ID = #{ordId} ]]></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="startRow != null"><![CDATA[ AND t.START_ROW = #{startRow} ]]></if>
+		<if test="endRow != null"><![CDATA[ AND t.END_ROW = #{endRow} ]]></if>
+		<if test="ordDatebegin != null"><![CDATA[ AND t.ORD_DATEBEGIN = #{ordDatebegin} ]]></if>
+		<if test="ordDateend != null"><![CDATA[ AND t.ORD_DATEEND = #{ordDateend} ]]></if>
+		<if test="resoureId != null"><![CDATA[ AND t.RESOURE_ID = #{resoureId} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'ordPrdIdAsc'"><![CDATA[ t.ORD_PRD_ID asc ]]></if>
+	  			<if test="item == 'ordPrdIdDesc'"><![CDATA[ t.ORD_PRD_ID desc ]]></if>
+	  			<if test="item == 'ordIdAsc'"><![CDATA[ t.ORD_ID asc ]]></if>
+	  			<if test="item == 'ordIdDesc'"><![CDATA[ t.ORD_ID desc ]]></if>
+	  			<if test="item == 'prdIdAsc'"><![CDATA[ t.PRD_ID asc ]]></if>
+	  			<if test="item == 'prdIdDesc'"><![CDATA[ t.PRD_ID desc ]]></if>
+	  			<if test="item == 'startRowAsc'"><![CDATA[ t.START_ROW asc ]]></if>
+	  			<if test="item == 'startRowDesc'"><![CDATA[ t.START_ROW desc ]]></if>
+	  			<if test="item == 'endRowAsc'"><![CDATA[ t.END_ROW asc ]]></if>
+	  			<if test="item == 'endRowDesc'"><![CDATA[ t.END_ROW desc ]]></if>
+	  			<if test="item == 'ordDatebeginAsc'"><![CDATA[ t.ORD_DATEBEGIN asc ]]></if>
+	  			<if test="item == 'ordDatebeginDesc'"><![CDATA[ t.ORD_DATEBEGIN desc ]]></if>
+	  			<if test="item == 'ordDateendAsc'"><![CDATA[ t.ORD_DATEEND asc ]]></if>
+	  			<if test="item == 'ordDateendDesc'"><![CDATA[ t.ORD_DATEEND desc ]]></if>
+	  			<if test="item == 'resoureIdAsc'"><![CDATA[ t.RESOURE_ID asc ]]></if>
+	  			<if test="item == 'resoureIdDesc'"><![CDATA[ t.RESOURE_ID desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="ordPrdResultMap">
+		<![CDATA[ SELECT * FROM ORD_PRD t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM ORD_PRD t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="ordPrdResultMap">
+		<![CDATA[ SELECT * FROM ORD_PRD t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_PRD t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="OrdPrd" resultMap="ordPrdResultMap">
+   	<![CDATA[ SELECT * FROM ORD_PRD t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="OrdPrd" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM ORD_PRD t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="ordPrdResultMap">
+    <![CDATA[ SELECT * FROM ORD_PRD WHERE  
+				ORD_PRD_ID=#{ordPrdId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="OrdPrd" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+		    INSERT INTO ORD_PRD
+		      (
+		      ORD_ID,
+		      PRD_ID,
+		      START_ROW,
+		      END_ROW,
+		      ORD_DATEBEGIN,
+		      ORD_DATEEND,
+		      RESOURE_ID
+		      )
+		    VALUES
+		      (			  
+					#{ordId,jdbcType=VARCHAR}
+				,
+					#{prdId,jdbcType=VARCHAR}
+				,
+					#{startRow,jdbcType=DECIMAL}
+				,
+					#{endRow,jdbcType=DECIMAL}
+				,
+					#{ordDatebegin,jdbcType=TIMESTAMP}
+				,
+					#{ordDateend,jdbcType=TIMESTAMP}
+				,
+					#{resoureId,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="OrdPrd">
+    <![CDATA[ UPDATE ORD_PRD ]]>
+	    <set>  		
+    		<![CDATA[ 
+					PRD_ID = #{prdId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					START_ROW = #{startRow,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					END_ROW = #{endRow,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					ORD_DATEBEGIN = #{ordDatebegin,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					ORD_DATEEND = #{ordDateend,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					RESOURE_ID = #{resoureId,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE ORD_ID=#{ordId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="OrdPrd">
+    <![CDATA[ UPDATE ORD_PRD ]]>
+	    <set>  		
+    		<if test="ordId != null"><![CDATA[ ORD_ID = #{ordId}, ]]></if>
+    		<if test="prdId != null"><![CDATA[ PRD_ID = #{prdId}, ]]></if>
+    		<if test="startRow != null"><![CDATA[ START_ROW = #{startRow}, ]]></if>
+    		<if test="endRow != null"><![CDATA[ END_ROW = #{endRow}, ]]></if>
+    		<if test="ordDatebegin != null"><![CDATA[ ORD_DATEBEGIN = #{ordDatebegin}, ]]></if>
+    		<if test="ordDateend != null"><![CDATA[ ORD_DATEEND = #{ordDateend}, ]]></if>
+    		<if test="resoureId != null"><![CDATA[ RESOURE_ID = #{resoureId} ]]></if>
+	    </set>  
+			WHERE ORD_PRD_ID=#{ordPrdId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE ORD_PRD ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE ORD_PRD_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM ORD_PRD  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="OrdPrd">
+   <![CDATA[ DELETE FROM ORD_PRD WHERE 1=1  ]]>    			
+		<![CDATA[ AND ORD_PRD_ID = #{ordPrdId} ]]>
+		<![CDATA[ AND ORD_ID = #{ordId} ]]>
+		<![CDATA[ AND PRD_ID = #{prdId} ]]>
+		<![CDATA[ AND START_ROW = #{startRow} ]]>
+		<![CDATA[ AND END_ROW = #{endRow} ]]>
+		<![CDATA[ AND ORD_DATEBEGIN = #{ordDatebegin} ]]>
+		<![CDATA[ AND ORD_DATEEND = #{ordDateend} ]]>
+		<![CDATA[ AND RESOURE_ID = #{resoureId} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_PRD WHERE 
+		ORD_PRD_ID IN (#{ordPrdId})
+		]]>
+	</delete>
+	<!-- (8)============================= deleteByFk =================================== -->
+	<delete id="deleteByFk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM ORD_PRD WHERE 
+		ORD_ID IN (#{ordId})
+		]]>
+	</delete>
+	
+	<!-- (3-3)============================= getByOrdId =================================== -->
+	<select id="getByOrdId" parameterType="java.lang.String" resultMap="ordPrdResultMap">
+		<![CDATA[ SELECT * FROM ORD_PRD WHERE
+				ORD_ID=#{ordId}
+		]]>
+	</select>
+
+	<!-- (1)=====================================================selectPrdByParam=========================================================-->
+	<select id="selectPrdByParam" parameterType="java.lang.String" resultMap="ordPrdAndDataMap">
+		<![CDATA[ SELECT p.*,d.DATA_RESOURCE_ID,d.DATA_RESOURCE_NAME,s.FILE_NAME FROM PRD_INFO p LEFT JOIN PRD_DATA_RESOURCE d ON p.PRD_ID=d.PRD_ID
+			  LEFT JOIN SYS_UPLOAD_FILE s ON p.PRD_DATAFILE=s.FILE_ID WHERE 1=1 AND p.PRD_ID =#{prdId}]]>
+		<![CDATA[ORDER BY p.CREATE_TIME DESC ]]>
+	</select>
+	<select id="selectPrdInfoByOrdId" parameterType="java.lang.String" resultMap="ordAndPrdMap">
+		<![CDATA[
+			SELECT O.*, P.* FROM PRD_INFO P,ORD_PRD O WHERE P.PRD_ID= O.PRD_ID AND O.ORD_ID =#{ordId}
+	   ]]>
+	</select>
+</mapper>

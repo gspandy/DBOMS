@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation=" 
+           http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-3.1.xsd
+           http://www.springframework.org/schema/mvc 
+           http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd" default-lazy-init="true">
+
+	<!-- 添加注解驱动 -->  
+	<mvc:annotation-driven/>
+	<!-- 允许对静态资源文件的访问 --> 
+	<mvc:default-servlet-handler />
+	<!-- 对所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
+	<context:component-scan base-package="com.tydic.dbs.dbsweb">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- 当请求应用程序首页时，将执行/index请求，还可以设定成redirect -->
+	<mvc:view-controller path="/" view-name="forward:/login" />
+
+	
+	<bean id="propertyConfigurerWeb" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="localOverride" value="true" />
+		<property name="placeholderPrefix" value="$W{" />
+		<property name="placeholderSuffix" value="}" />
+		<property name="locations">
+			<list>
+				<value>classpath:conf/dbs-config.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="commonConfig" class="com.tydic.dbs.dbsweb.common.CommonConfig">
+        <property name="httpPath" value="$W{http.path}" />
+        <property name="imageRoot" value="$W{image.root.path}" />
+        <property name="httpServicePath" value="$W{http.service.path}" />
+        <property name="httpEncode" value="$W{http.encode}" />
+        <property name="httpKey" value="$W{http.key}" />
+        <property name="bussResourceUrl" value="$W{buss.resource.url}" />
+        <property name="bussTenantUrl" value="$W{buss.tenant.url}" />
+        <property name="orderApplyUrl" value="$W{order.apply.url}" />
+    </bean>
+    
+	<!-- freemarker的配置 begin -->
+	<bean id="freemarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPaths" value="/WEB-INF/" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">auto_detect</prop>
+				<prop key="template_update_delay">5</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<prop key="auto_import">ftl/taglibs.ftl as p,ftl/spring.ftl as s</prop>
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+            <map>
+            	<entry key="imageRoot" value="$W{image.root.path}" />
+                <entry key="sizeSmall" value="$W{size.small}" />
+                <entry key="sizeMiddle" value="$W{size.middle}" />
+                <entry key="sizeBig" value="$W{size.big}" />
+                <entry key="photoSavePath" value="$W{photoSavePath}" />
+                <entry key="appSmall" value="$W{app.small}" />
+				<entry key="bussinfoQueryUrl" value="$W{dbsweb.bussinfo.query.url}"></entry>
+				<entry key="bussinfoManagementUrl" value="$W{dbsweb.bussinfo.management.url}"></entry>
+				<entry key="bussinfoGuideUrl" value="$W{dbsweb.bussinfo.management.guide.url}"></entry>
+				<entry key="bussinfoAppUrl" value="$W{dbsweb.bussinfo.management.appInfo.url}"></entry>
+				<entry key="userSettingUrl" value="$W{dbsweb.bussinfo.userSetting.url}"/>
+				<entry key="bussinfoProductUrl" value="$W{dbsweb.bussinfo.product.url}"></entry>
+				<entry key="userSettingDetail" value="$W{dbsweb.bussinfo.userSettingDetail.url}"></entry>
+				<entry key="orderListUrl" value="$W{dbsweb.bussinfo.order.url}"></entry>
+				<entry key="monthBillListUrl" value="$W{dbsweb.bussinfo.month.bill.url}"></entry>
+				<entry key="historyChargeUrl" value="$W{dbsweb.bussinfo.account.historyCharge}"/>
+				<entry key="userItSettingUrl" value="$W{dbsweb.bussinfo.userItSetting.url}"/>
+				<entry key="userItSeeSettingUrl" value="$W{dbsweb.bussinfo.userItSeeSetting.url}"/>
+				<entry key="userAuthSettingUrl" value="$W{dbsweb.bussinfo.userAuthSetting.url}"/>
+				<entry key="userAuthSeeSettingUrl" value="$W{dbsweb.bussinfo.userAuthSeeSetting.url}"/>
+				<entry key="userDataSettingUrl" value="$W{dbsweb.bussinfo.userDataSetting.url}"/>
+				<entry key="userDataSeeSettingUrl" value="$W{dbsweb.bussinfo.userDataSeeSetting.url}"/>
+             </map>
+        </property>
+        
+	</bean>
+	
+
+
+	
+	<!-- Html FreeMarker视图解析 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="prefix" value="/views/"/>
+		<property name="suffix" value=".html" />
+		<property name="contentType" value="text/html;charset=utf-8" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="requestContextAttribute" value="request"/>
+	</bean>
+	
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"/>
+    </bean>
+	  
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">		
+		<property name="basenames">
+			<list>
+
+			</list>
+		</property>
+	</bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+     	<property name="maxUploadSize" value="10485760" />
+    </bean>
+    
+     <!-- Spring Json 转换输出begin -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+		<property name="messageConverters">
+			<util:list id="beanList">
+				<ref bean="mappingJacksonHttpMessageConverter"/>
+			</util:list>
+		</property>
+    </bean>
+	
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+    </bean>
+    <!-- Spring Json 转换输出end --> 
+    
+    <!-- 统一异常处理 begin -->
+
+    <bean id="exceptionResolver" class="com.tydic.dbs.dbsweb.common.CustomSimpleMappingExceptionResolver">
+      <property name="exceptionMappings">   
+        <props>     
+          <prop key="com.tydic.dbs.commons.exception.BizException">error/exception</prop>
+          <prop key="java.lang.Exception">error/exception</prop> 
+          <prop key="java.lang.RuntimeException">error/exception</prop>                   
+       </props>   
+     </property>   
+    </bean>
+    <bean id="fileUnil" class="com.tydic.dbs.dbsweb.common.FileUnil">
+	</bean>
+   
+    <!-- 统一异常处理 end -->
+
+</beans>

@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.tydic.dbs</groupId>
+    <artifactId>module</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>module</name>
+    <description>module package</description>
+
+    <modules>
+        <module>../parent</module>
+        <module>../commons</module>
+        <module>../commons-api</module>
+        <module>../system-api</module>
+        <module>../system-provider</module>
+        <module>../product-api</module>
+        <module>../product-provider</module>
+        <module>../billing-api</module>
+        <module>../billing-provider</module>
+        <module>../buyer-api</module>
+        <module>../buyer-provider</module>
+        <module>../order-api</module>
+        <module>../order-provider</module>
+
+        <module>../dbsweb</module>
+        <module>../dbomsweb</module>
+        
+        <module>../dboms-service</module>
+        
+    </modules>
+</project>

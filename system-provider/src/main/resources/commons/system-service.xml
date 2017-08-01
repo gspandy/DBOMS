@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	                       http://www.springframework.org/schema/tx 
+	                       http://www.springframework.org/schema/tx/spring-tx.xsd 
+	                       http://www.springframework.org/schema/aop 
+	                       http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-lazy-init="true">
+	
+	<!-- 和本地bean一样实现服务 -->
+	<bean id="sysMenuService" class="com.tydic.dbs.system.menu.bo.SysMenuBo">
+		<property name="sysMenuDao"><ref bean="sysMenuDao"/></property>
+	</bean>
+	<bean id="sysOperatorService" class="com.tydic.dbs.system.operator.bo.SysOperatorBo">
+		<property name="sysOperatorDao"><ref bean="sysOperatorDao"/></property>
+		<!--  
+		<property name="sysOperGroupDao"><ref bean="sysOperGroupDao"/></property>
+		-->
+		<property name="sysLoginLogDao"><ref bean="sysLoginLogDao"/></property>
+		<property name="sysRoleDao"><ref bean="sysRoleDao"/></property>
+	</bean>
+	<bean id="sysOperGroupService" class="com.tydic.dbs.system.userGroup.bo.SysOperGroupBo">
+		<property name="sysOperGroupDao"><ref bean="sysOperGroupDao"/></property>
+	</bean>
+	<bean id="sysUserGroupService" class="com.tydic.dbs.system.userGroup.bo.SysUserGroupBo">
+		<property name="sysUserGroupDao"><ref bean="sysUserGroupDao"/></property>
+	</bean>
+	<bean id="sysDataPermissionService" class="com.tydic.dbs.system.role.bo.SysDataPermissionBo">
+		<property name="sysDataPermissionDao"><ref bean="sysDataPermissionDao"/></property>
+	</bean>
+	<bean id="sysUserGroupRoleService" class="com.tydic.dbs.system.userGroup.bo.SysUserGroupRoleBo">
+		<property name="sysUserGroupRoleDao"><ref bean="sysUserGroupRoleDao"/></property>
+	</bean>
+	<bean id="sysLoginLogService" class="com.tydic.dbs.system.log.bo.SysLoginLogBo">
+		<property name="sysLoginLogDao"><ref bean="sysLoginLogDao"/></property>
+	</bean>
+	<bean id="sysFunOperateService" class="com.tydic.dbs.system.menu.bo.SysFunOperateBo">
+		<property name="sysFunOperateDao"><ref bean="sysFunOperateDao"/></property>
+	</bean>
+	<bean id="sysOrganizeService" class="com.tydic.dbs.system.organize.bo.SysOrganizeBo">
+		<property name="sysOrganizeDao"><ref bean="sysOrganizeDao"/></property>
+	</bean>
+	<bean id="sysRoleService" class="com.tydic.dbs.system.role.bo.SysRoleBo">
+		<property name="sysRoleDao"><ref bean="sysRoleDao"/></property>
+		<property name="sysFunOperateDao"><ref bean="sysFunOperateDao"/></property>
+		<property name="sysRoleMenuDao"><ref bean="sysRoleMenuDao"/></property>
+	</bean>
+	<bean id="sysRoleMenuService" class="com.tydic.dbs.system.role.bo.SysRoleMenuBo">
+		<property name="sysRoleMenuDao"><ref bean="sysRoleMenuDao"/></property>
+	</bean>
+	<bean id="sysChanOperRelService" class="com.tydic.dbs.system.operator.bo.SysChanOperRelBo">
+		<property name="sysChanOperRelDao"><ref bean="sysChanOperRelDao"/></property>
+	</bean>
+	
+	<bean id="basRegionService" class="com.tydic.dbs.system.basRegion.bo.BasRegionBo">
+		<property name="basRegionDao"><ref bean="basRegionDao" /> </property>
+	</bean>
+
+	<bean id="sysUploadFileService" class="com.tydic.dbs.system.sysUploadFile.bo.SysUploadFileBo">
+		<property name="sysUploadFileDao"><ref bean="sysUploadFileDao"/></property>
+	</bean>
+	
+	<bean id="sysLoginSmsService" class="com.tydic.dbs.system.sms.bo.SysLoginSmsBo">
+		<property name="sysLoginSmsDao"><ref bean="sysLoginSmsDao"/></property>
+	</bean>
+	
+	<bean id="sendEmailService" class="com.tydic.dbs.system.email.bo.SendEmailServiceBo">
+	</bean>
+
+	<bean id="infFileLogService" class="com.tydic.dbs.system.log.bo.InfFileLogBo">
+		<property name="infFileLogDao"><ref bean="infFileLogDao"/> </property>
+	</bean>
+	<bean id="infIndentService" class="com.tydic.dbs.system.log.bo.InfIndentBo">
+		<property name="infIndentDao"><ref bean="infIndentDao"/> </property>
+	</bean>
+	<bean id="uploadFileService" class="com.tydic.dbs.system.log.bo.UploadFileBo">
+		<property name="uploadFileDao"><ref bean="uploadFileDao"/> </property>
+	</bean>
+	<bean id="sysSmsService" class="com.tydic.dbs.system.sms.bo.SysSmsBo">
+		<property name="sysSmsDao"><ref bean="sysSmsDao"/> </property>
+	</bean>
+	
+	<bean id="dBsSmsService" class="com.tydic.dbs.system.sms.bo.DBsSmsServiceImpl" />
+</beans>

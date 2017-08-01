@@ -1,0 +1,35 @@
+<header class="navbar-wrapper navbar-fixed">
+      <div class="navbar navbar-blue">
+          <div class="container-fluid cl">
+              <a class="logo navbar-logo" href="${ctx}/author/buss/index"><img src="${ctx}/img/logo.png" alt="logo"></a>
+              <a class="logo navbar-slogan" href="${ctx}/author/buss/index">中国联通大数据应用模型孵化平台</a>
+              <nav class="navbar-userbar fr">
+              	<#if Session['loginMember'] ??>
+                 <span class="btn btn-link-white user"><i class="fa fa-user"></i><span class="f-14">&nbsp;&nbsp;${Session['loginMember'].bussName?if_exists}</span></span>
+                </#if> 
+                 <a class="btn btn-link-white logout" href="javascript:void(0)" onclick="logout()"><span class="f-14">[退出]</span></a>
+                  <a class="btn btn-link-white " href="${ctx}/author/modifyPwd" title="修改密码"><i class="fa fa-lock"></i> <span class="f-14">&nbsp;修改密码</span></a>
+                  <a class="btn btn-link-white" href="http://61.148.212.4:9090/wodp/homepage.html" title="能力查看"><i class="fa fa-eye"></i> <span class="f-14">&nbsp;能力查看</span> </a>
+              </nav>
+          </div>
+      </div>
+</header>
+
+<script type="text/javascript">
+	    function logout() {
+				$.ajax({
+					type: "POST",
+					url: '${ctx}/logout',
+					datatype: 'json',
+					success: function(data,textStatus){
+						if (data.flag) {						      	       
+	       	              //退出成功跳转到登录页面
+	       	              document.location.href="${ctx}/login";
+						} else {
+							document.location.href="${ctx}/login";
+						}
+					}
+			   	});
+			}
+				
+</script>

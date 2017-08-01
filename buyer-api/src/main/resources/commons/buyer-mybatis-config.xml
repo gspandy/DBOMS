@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "${env.mybatis.url}">
+<configuration>
+	<properties>
+       	<property name="dialect" value="mysql"/>
+    </properties>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="BussInfo" type="com.tydic.dbs.buyer.vo.BussInfo"/>
+		<typeAlias alias="BussItResource" type="com.tydic.dbs.buyer.vo.BussItResource"/>
+		<typeAlias alias="BussTenant" type="com.tydic.dbs.buyer.vo.BussTenant" />
+		<typeAlias alias="BussTenantRole" type="com.tydic.dbs.buyer.vo.BussTenantRole" />
+		<typeAlias alias="bussDataPemission" type="com.tydic.dbs.buyer.vo.BussDataPemission"/>
+		<typeAlias alias="bussAuditStatus" type="com.tydic.dbs.buyer.vo.BussAuditStatus" />
+		<typeAlias alias="dataPemissionDict" type="com.tydic.dbs.buyer.vo.DataPemissionDict"/>
+		<typeAlias alias="interfaceLog" type="com.tydic.dbs.buyer.vo.InterfaceLog" />
+		<typeAlias alias="appInfo" type="com.tydic.dbs.buyer.vo.AppInfo" />
+		<typeAlias alias="DataPermissonCfg" type="com.tydic.dbs.buyer.vo.DataPermissonCfg" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussInfoMapper.xml"/>
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussItResourceMapper.xml"/>
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussTenantMapper.xml" />
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussTenantRoleMapper.xml" />
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussDataPemissionMapper.xml"/>
+		<mapper resource="com/tydic/dbs/buyer/mapper/BussAuditStatusMapper.xml" />
+		<mapper resource="com/tydic/dbs/buyer/mapper/InterfaceLogMapper.xml" />
+		<mapper resource="com/tydic/dbs/buyer/mapper/AppInfoMapper.xml" />
+		<mapper resource="com/tydic/dbs/buyer/mapper/DataPermissonCfgMapper.xml" />
+	</mappers>
+	<plugins>
+       	<plugin interceptor="com.tydic.commons.dao.PaginationInterceptor"/>
+    </plugins>
+	<mappers>
+
+
+
+
+		
+	</mappers>
+</configuration>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_USER_GROUP_ROLE">
+	
+	<resultMap type="SysUserGroupRole" id="sysUserGroupRoleResultMap">
+		<id property="grpRoleId" column="GRP_ROLE_ID"/>   
+		<result property="roleCode" column="ROLE_CODE"/>
+		<result property="groCode" column="GRO_CODE"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<resultMap type="SysUserGroupRole" id="userGroupRoleMap" extends="sysUserGroupRoleResultMap">
+		<result property="roleName" column="ROLE_NAME"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="grpRoleId != null"><![CDATA[ AND t.GRP_ROLE_ID = #{grpRoleId} ]]></if>
+		<if test="grpRoleIdIn != null"><![CDATA[ AND t.GRP_ROLE_ID IN ]]><foreach item="item" index="index" collection="grpRoleIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="roleCode != null"><![CDATA[ AND t.ROLE_CODE = #{roleCode} ]]></if>
+		<if test="roleCodeLike != null"><![CDATA[ AND t.ROLE_CODE LIKE '%' || #{roleCodeLike} || '%' ]]></if>
+		<if test="roleCodeIn != null"><![CDATA[ AND t.ROLE_CODE IN ]]><foreach item="item" index="index" collection="roleCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="groCodeLike != null"><![CDATA[ AND t.GRO_CODE LIKE '%' || #{groCodeLike} || '%' ]]></if>
+		<if test="groCodeIn != null"><![CDATA[ AND t.GRO_CODE IN ]]><foreach item="item" index="index" collection="groCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="grpRoleId != null"><![CDATA[ AND t.GRP_ROLE_ID = #{grpRoleId} ]]></if>
+		<if test="roleCode != null"><![CDATA[ AND t.ROLE_CODE = #{roleCode} ]]></if>
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+  			<if test="item == 'grpRoleIdAsc'"><![CDATA[ t.GRP_ROLE_ID asc ]]></if>
+  			<if test="item == 'grpRoleIdDesc'"><![CDATA[ t.GRP_ROLE_ID desc ]]></if>
+  			<if test="item == 'roleCodeAsc'"><![CDATA[ t.ROLE_CODE asc ]]></if>
+  			<if test="item == 'roleCodeDesc'"><![CDATA[ t.ROLE_CODE desc ]]></if>
+  			<if test="item == 'groCodeAsc'"><![CDATA[ t.GRO_CODE asc ]]></if>
+  			<if test="item == 'groCodeDesc'"><![CDATA[ t.GRO_CODE desc ]]></if>
+  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysUserGroupRoleResultMap">
+		<![CDATA[ SELECT * FROM SYS_USER_GROUP_ROLE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP_ROLE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  	<select id="selectByParams" parameterType="map" resultMap="sysUserGroupRoleResultMap">
+		<![CDATA[ SELECT * FROM SYS_USER_GROUP_ROLE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+    
+  	<!-- (2-2)============================= selectByParamsCount =================================== -->
+  	<select id="selectByParamsCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP_ROLE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysUserGroupRole" resultMap="sysUserGroupRoleResultMap">
+   	<![CDATA[ SELECT * FROM SYS_USER_GROUP_ROLE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	<!-- (3-2)============================= selectByVOCount =================================== -->
+  	<select id="selectByVOCount" parameterType="SysUserGroupRole" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_USER_GROUP_ROLE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="java.lang.Long" resultMap="sysUserGroupRoleResultMap">
+    	<![CDATA[ SELECT * FROM SYS_USER_GROUP_ROLE WHERE GRP_ROLE_ID=#{grpRoleId} ]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysUserGroupRole">
+
+		<![CDATA[
+		    INSERT INTO SYS_USER_GROUP_ROLE
+		      ( ROLE_CODE, GRO_CODE, CREATER, CREATE_TIME, REMARK )
+		    VALUES
+		      ( #{roleCode,jdbcType=VARCHAR}, #{groCode,jdbcType=VARCHAR},
+				#{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR} )
+      	]]>
+  	</insert>
+    
+  	<!-- (5-1)============================= updateByVO =================================== -->
+  	<update id="updateByVO" parameterType="SysUserGroupRole">
+    	<![CDATA[ UPDATE SYS_USER_GROUP_ROLE ]]>
+	    <set>  		
+    		<![CDATA[ ROLE_CODE = #{roleCode,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ GRO_CODE = #{groCode,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ CREATER = #{creater,jdbcType=VARCHAR}, ]]>
+    		<![CDATA[ CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}, ]]>
+    		<![CDATA[ REMARK = #{remark,jdbcType=VARCHAR} ]]>
+	    </set>  
+			WHERE GRP_ROLE_ID=#{grpRoleId}
+ 	</update>
+  
+  	<!-- (5-2)============================= updateByVO2 =================================== -->
+  	<update id="updateByVoNotNull" parameterType="SysUserGroupRole">
+    	<![CDATA[ UPDATE SYS_USER_GROUP_ROLE ]]>
+	    <set>  		
+    		<if test="roleCode != null"><![CDATA[ ROLE_CODE = #{roleCode}, ]]></if>
+    		<if test="groCode != null"><![CDATA[ GRO_CODE = #{groCode}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE GRP_ROLE_ID=#{grpRoleId}
+  	</update>
+  
+  	<!-- (5-3)============================= updateStatus =================================== -->
+  	<update id="updateStatus" parameterType="map">
+    	<![CDATA[ UPDATE SYS_USER_GROUP_ROLE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE GRP_ROLE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  	</update>
+    
+  	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    	<![CDATA[ DELETE FROM SYS_USER_GROUP_ROLE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysUserGroupRole">
+   		<![CDATA[ DELETE FROM SYS_USER_GROUP_ROLE WHERE 1=1  ]]>    			
+		<if test="grpRoleId != null"><![CDATA[ AND GRP_ROLE_ID = #{grpRoleId} ]]></if>
+		<if test="roleCode != null"><![CDATA[ AND ROLE_CODE = #{roleCode} ]]></if>
+		<if test="groCode != null"><![CDATA[ AND GRO_CODE = #{groCode} ]]></if>
+		<if test="creater != null"><![CDATA[ AND CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND REMARK = #{remark} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   		<![CDATA[ DELETE FROM SYS_USER_GROUP_ROLE WHERE GRP_ROLE_ID = #{grpRoleId} ]]>
+	</delete>
+
+	<!-- batch insert usergroup and role relation infomation -->
+	<insert id="batchInsertByVo" parameterType="map">
+		<![CDATA[
+		    INSERT INTO SYS_USER_GROUP_ROLE
+		      ( ROLE_CODE, GRO_CODE, CREATER, CREATE_TIME, REMARK )
+		    SELECT  c.* FROM (
+      	]]>
+      	<foreach collection="userGroupRoleArray" item="item" index="index" separator="union all">
+			<![CDATA[
+		      SELECT 
+				#{item.roleCode, jdbcType=VARCHAR},
+				#{item.groCode, jdbcType=VARCHAR},
+				#{item.creater, jdbcType=VARCHAR},
+				#{item.createTime, jdbcType=TIMESTAMP},
+				#{item.remark, jdbcType=VARCHAR} 
+		      FROM DUAL 
+      		]]>
+		</foreach>
+		<![CDATA[ ) c ]]>
+  	</insert>
+  	
+  	<select id="selectByGroCode" parameterType="java.lang.String" resultMap="userGroupRoleMap">
+  		<![CDATA[
+  			SELECT T.*, R.ROLE_NAME
+			  FROM SYS_USER_GROUP_ROLE T
+			  LEFT JOIN SYS_ROLE R ON T.ROLE_CODE = R.ROLE_CODE
+			 WHERE T.GRO_CODE = #{groCode }
+  		]]>
+  	</select>
+  
+</mapper>

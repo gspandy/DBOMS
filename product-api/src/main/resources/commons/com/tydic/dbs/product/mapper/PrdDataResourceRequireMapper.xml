@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PRD_DATA_RESOURCE_REQUIRE">
+	<resultMap type="PrdDataResourceRequire" id="prdDataResourceRequireResultMap">
+		<id property="dataResourceRequireId" column="DATA_RESOURCE_REQUIRE_ID"/>   
+		<result property="prdId" column="PRD_ID"/>
+		<result property="columnName" column="COLUMN_NAME"/>
+		<result property="columnType" column="COLUMN_TYPE"/>
+		<result property="columnDesc" column="COLUMN_DESC"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="dataResourceRequireId != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID = #{dataResourceRequireId} ]]></if>
+		<if test="dataResourceRequireIdLike != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID LIKE '%' || #{dataResourceRequireIdLike} || '%' ]]></if>
+		<if test="dataResourceRequireIdStart != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID LIKE #{dataResourceRequireIdStart} || '%' ]]></if>
+		<if test="dataResourceRequireIdEnd != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID LIKE '%' || #{dataResourceRequireIdEnd} ]]></if>
+		<if test="dataResourceRequireIdIn != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID IN ]]><foreach item="item" index="index" collection="dataResourceRequireIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="prdIdLike != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdLike} || '%' ]]></if>
+		<if test="prdIdStart != null"><![CDATA[ AND t.PRD_ID LIKE #{prdIdStart} || '%' ]]></if>
+		<if test="prdIdEnd != null"><![CDATA[ AND t.PRD_ID LIKE '%' || #{prdIdEnd} ]]></if>
+		<if test="prdIdIn != null"><![CDATA[ AND t.PRD_ID IN ]]><foreach item="item" index="index" collection="prdIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="columnName != null"><![CDATA[ AND t.COLUMN_NAME = #{columnName} ]]></if>
+		<if test="columnNameLike != null"><![CDATA[ AND t.COLUMN_NAME LIKE '%' || #{columnNameLike} || '%' ]]></if>
+		<if test="columnNameStart != null"><![CDATA[ AND t.COLUMN_NAME LIKE #{columnNameStart} || '%' ]]></if>
+		<if test="columnNameEnd != null"><![CDATA[ AND t.COLUMN_NAME LIKE '%' || #{columnNameEnd} ]]></if>
+		<if test="columnNameIn != null"><![CDATA[ AND t.COLUMN_NAME IN ]]><foreach item="item" index="index" collection="columnNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="columnType != null"><![CDATA[ AND t.COLUMN_TYPE = #{columnType} ]]></if>
+		<if test="columnTypeLike != null"><![CDATA[ AND t.COLUMN_TYPE LIKE '%' || #{columnTypeLike} || '%' ]]></if>
+		<if test="columnTypeStart != null"><![CDATA[ AND t.COLUMN_TYPE LIKE #{columnTypeStart} || '%' ]]></if>
+		<if test="columnTypeEnd != null"><![CDATA[ AND t.COLUMN_TYPE LIKE '%' || #{columnTypeEnd} ]]></if>
+		<if test="columnTypeIn != null"><![CDATA[ AND t.COLUMN_TYPE IN ]]><foreach item="item" index="index" collection="columnTypeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="columnDesc != null"><![CDATA[ AND t.COLUMN_DESC = #{columnDesc} ]]></if>
+		<if test="columnDescLike != null"><![CDATA[ AND t.COLUMN_DESC LIKE '%' || #{columnDescLike} || '%' ]]></if>
+		<if test="columnDescStart != null"><![CDATA[ AND t.COLUMN_DESC LIKE #{columnDescStart} || '%' ]]></if>
+		<if test="columnDescEnd != null"><![CDATA[ AND t.COLUMN_DESC LIKE '%' || #{columnDescEnd} ]]></if>
+		<if test="columnDescIn != null"><![CDATA[ AND t.COLUMN_DESC IN ]]><foreach item="item" index="index" collection="columnDescIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="dataResourceRequireId != null"><![CDATA[ AND t.DATA_RESOURCE_REQUIRE_ID = #{dataResourceRequireId} ]]></if>
+		<if test="prdId != null"><![CDATA[ AND t.PRD_ID = #{prdId} ]]></if>
+		<if test="columnName != null"><![CDATA[ AND t.COLUMN_NAME = #{columnName} ]]></if>
+		<if test="columnType != null"><![CDATA[ AND t.COLUMN_TYPE = #{columnType} ]]></if>
+		<if test="columnDesc != null"><![CDATA[ AND t.COLUMN_DESC = #{columnDesc} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'dataResourceRequireIdAsc'"><![CDATA[ t.DATA_RESOURCE_REQUIRE_ID asc ]]></if>
+	  			<if test="item == 'dataResourceRequireIdDesc'"><![CDATA[ t.DATA_RESOURCE_REQUIRE_ID desc ]]></if>
+	  			<if test="item == 'prdIdAsc'"><![CDATA[ t.PRD_ID asc ]]></if>
+	  			<if test="item == 'prdIdDesc'"><![CDATA[ t.PRD_ID desc ]]></if>
+	  			<if test="item == 'columnNameAsc'"><![CDATA[ t.COLUMN_NAME asc ]]></if>
+	  			<if test="item == 'columnNameDesc'"><![CDATA[ t.COLUMN_NAME desc ]]></if>
+	  			<if test="item == 'columnTypeAsc'"><![CDATA[ t.COLUMN_TYPE asc ]]></if>
+	  			<if test="item == 'columnTypeDesc'"><![CDATA[ t.COLUMN_TYPE desc ]]></if>
+	  			<if test="item == 'columnDescAsc'"><![CDATA[ t.COLUMN_DESC asc ]]></if>
+	  			<if test="item == 'columnDescDesc'"><![CDATA[ t.COLUMN_DESC desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="prdDataResourceRequireResultMap">
+		<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE_REQUIRE t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE_REQUIRE t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="prdDataResourceRequireResultMap">
+		<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE_REQUIRE t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE_REQUIRE t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="PrdDataResourceRequire" resultMap="prdDataResourceRequireResultMap">
+   	<![CDATA[ SELECT * FROM PRD_DATA_RESOURCE_REQUIRE t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="PrdDataResourceRequire" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM PRD_DATA_RESOURCE_REQUIRE t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="prdDataResourceRequireResultMap">
+    <![CDATA[ SELECT * FROM PRD_DATA_RESOURCE_REQUIRE WHERE  
+				DATA_RESOURCE_REQUIRE_ID=#{dataResourceRequireId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="PrdDataResourceRequire">
+
+		<![CDATA[
+		    INSERT INTO PRD_DATA_RESOURCE_REQUIRE
+		      (
+		      DATA_RESOURCE_REQUIRE_ID,
+		      PRD_ID,
+		      COLUMN_NAME,
+		      COLUMN_TYPE,
+		      COLUMN_DESC,
+		      CREATER,
+		      CREATE_TIME
+		      )
+		    VALUES
+		      (			  
+					#{dataResourceRequireId,jdbcType=VARCHAR}
+				,
+					#{prdId,jdbcType=VARCHAR}
+				,
+					#{columnName,jdbcType=VARCHAR}
+				,
+					#{columnType,jdbcType=VARCHAR}
+				,
+					#{columnDesc,jdbcType=VARCHAR}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="PrdDataResourceRequire">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE_REQUIRE ]]>
+	    <set>  		
+    		<![CDATA[ 
+					PRD_ID = #{prdId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					COLUMN_NAME = #{columnName,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					COLUMN_TYPE = #{columnType,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					COLUMN_DESC = #{columnDesc,jdbcType=VARCHAR},
+    		]]>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    		]]>
+				</if>
+	    </set>  
+			WHERE DATA_RESOURCE_REQUIRE_ID=#{dataResourceRequireId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="PrdDataResourceRequire">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE_REQUIRE ]]>
+	    <set>  		
+    		<if test="prdId != null"><![CDATA[ PRD_ID = #{prdId}, ]]></if>
+    		<if test="columnName != null"><![CDATA[ COLUMN_NAME = #{columnName}, ]]></if>
+    		<if test="columnType != null"><![CDATA[ COLUMN_TYPE = #{columnType}, ]]></if>
+    		<if test="columnDesc != null"><![CDATA[ COLUMN_DESC = #{columnDesc}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime} ]]></if>
+	    </set>  
+			WHERE DATA_RESOURCE_REQUIRE_ID=#{dataResourceRequireId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE PRD_DATA_RESOURCE_REQUIRE ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE DATA_RESOURCE_REQUIRE_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM PRD_DATA_RESOURCE_REQUIRE  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="PrdDataResourceRequire">
+   <![CDATA[ DELETE FROM PRD_DATA_RESOURCE_REQUIRE WHERE 1=1  ]]>    			
+		<![CDATA[ AND DATA_RESOURCE_REQUIRE_ID = #{dataResourceRequireId} ]]>
+		<![CDATA[ AND PRD_ID = #{prdId} ]]>
+		<![CDATA[ AND COLUMN_NAME = #{columnName} ]]>
+		<![CDATA[ AND COLUMN_TYPE = #{columnType} ]]>
+		<![CDATA[ AND COLUMN_DESC = #{columnDesc} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM PRD_DATA_RESOURCE_REQUIRE WHERE 
+		DATA_RESOURCE_REQUIRE_ID IN (#{dataResourceRequireId})
+		]]>
+	</delete>
+	<!-- (9)============================= deleteByPrdID =================================== -->
+	<delete id="deleteByPrdID" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM PRD_DATA_RESOURCE_REQUIRE WHERE 
+		PRD_ID IN (#{prdId})
+		]]>
+	</delete>
+  <select id="getList"   parameterType="java.lang.String" resultMap="prdDataResourceRequireResultMap">
+ 	 <![CDATA[ SELECT * FROM PRD_DATA_RESOURCE_REQUIRE  WHERE  
+				 PRD_ID = #{prdId}]]>
+  </select>
+</mapper>

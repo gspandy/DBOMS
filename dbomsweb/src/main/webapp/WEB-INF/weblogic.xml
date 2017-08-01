@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<jsp-descriptor>
+		<page-check-seconds>0</page-check-seconds>
+	</jsp-descriptor>
+	<container-descriptor>
+		<servlet-reload-check-secs>0</servlet-reload-check-secs>
+		<resource-reload-check-secs>0</resource-reload-check-secs>
+	</container-descriptor>
+</weblogic-web-app>

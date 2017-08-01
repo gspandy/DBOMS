@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>月账单查询页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <!-- 时间插件 -->
+    <script type="text/javascript" src="${ctx}/js/My97DatePicker/WdatePicker.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+	$(function () {
+		/***未左边导航添加样式***/
+		$("#menu6").parent(".info").show();
+		$("#menu6").addClass("active").siblings().removeClass("active");
+		
+		/***加载获取月账单列表方法***/
+		getList();	
+	});
+  	var totalPage;
+  	var totalRecords;
+  	var page = 1;
+  	var rows = 8;
+  	var param = {};
+  	function getList(){
+  		if (!timeCheck()) {
+			return false;
+		}
+		var startTime = $("#startTime").val()==undefined?"":$("#startTime").val();
+		var endTime = $("#endTime").val()==undefined?"":$("#endTime").val();
+		param["startMonth"] = startTime;
+		param["endMonth"] = endTime;
+		param["page"] = page;
+		param["rows"] = rows;
+		getData();
+  	}
+  	
+  	  /***切换页码获取数据***/
+	  function changPage(){
+		page = $(".curr").text()==undefined||$(".curr").text()==""?1:$(".curr").text();
+	    param["page"] = page;
+	    getList();
+	  }
+	  
+	  function getData(){
+	  		$.ajax({
+  			type: "POST",
+  			url: '${ctx}/author/bill/getMonthBillList',
+  			data: param,
+  			datatype: "json",
+  			success: function(data){
+  				if(data != null){
+  					if(data.totalAmount != null && data.totalAmount != undefined){
+  					document.getElementById("totalAmount").innerHTML=data.totalAmount;
+  					}
+  					var monthBillList = data.rows;
+  					totalPage = data.totalPage;
+  					totalRecords = data.totalNumber;
+  					$("#monthsBillList").empty();
+  					var temp = "";
+  					for (i in monthBillList){
+						temp += "<tr>"
+						+ "<td>"+i+"</td>"
+						+ "<td>"+monthBillList[i].monthId+"</td>"
+						+ "<td>"+monthBillList[i].billAmount+"</td>"
+						+ "<td>"
+						+ "<a class=\"btn btn-link\" onclick=\"queryMonthBill('"+monthBillList[i].monthId+"')\" title=\"月账单明细\"><i class=\"fa fa-search\"></i>月账单明细</a>"
+						+ "</td>"
+						+ "</tr>";
+						
+  					}
+  					$("#monthsBillList").append(temp);
+  					toPage();	
+  				}else{
+  					
+  				}
+  			},
+  			error: function(data){
+  				
+  			}
+	  	});
+	  	
+	  }
+    </script>
+    <!-- 加载分页控件 -->
+	<script type="text/javascript">
+		/***校验输入时间格式正确与否***/
+		function checkStartTime(){
+			var startTimeVal = $("#startTime").val();
+	  		var reg = /^\b[1-3]\d{3}(0[1-9]|1[0-2])$/;//输入日期格式校验
+	  		var flags = startTimeVal.match(reg);
+	  		if (startTimeVal !=undefined && startTimeVal !=null && startTimeVal !="" ){
+				if(flags == null){
+					$("#timeTip").show();
+					return false;
+				}else{
+					$("#timeTip").hide();
+					return true;
+				}
+				
+	  		}else{
+	  			$("#timeTip").hide();
+	  			return true;
+	  		}
+	  		
+		}
+		
+		function checkEndTime(){
+	  		var endTimeVal = $("#endTime").val();
+	  		var reg = /^\b[1-3]\d{3}(0[1-9]|1[0-2])$/;//输入日期格式校验
+	  		var flage = endTimeVal.match(reg);
+	  		
+	  		if (endTimeVal !=undefined && endTimeVal !=null && endTimeVal !="" ){
+				if(flage == null){
+					$("#timeTip").show();
+					return false;
+				}else{
+					$("#timeTip").hide();
+					return true;
+				}
+				
+	  		}else{
+	  			$("#timeTip").hide();
+	  			return true;
+	  		}
+		}
+		
+		/*
+		 * 查看月账单详情
+		 */
+		function queryMonthBill(monthId){
+			window.location.href = "${ctx}/author/bill/toMonthBillDetail?monthId="+monthId;
+		}		
+		
+		/***用时间查询需满足结束时间大于等于开始时间***/
+		function timeCheck(){
+	  		var startTimeVal = $("#startTime").val();
+	  		var endTimeVal = $("#endTime").val();
+	  		var reg = /^\b[1-3]\d{3}(0[1-9]|1[0-2])$/;//输入日期格式校验
+	  		var flags = startTimeVal.match(reg);
+	  		var flage = endTimeVal.match(reg);
+	  		if (startTimeVal==undefined||startTimeVal==null||startTimeVal=="") {
+				return true;
+			}
+	  		if (endTimeVal==undefined||endTimeVal==null||endTimeVal=="") {
+				return true;
+			}
+			/***
+			if (startTimeVal!=null&&startTimeVal!="" ){
+				if (flags == null){
+					return false;
+				}
+				return true;
+			}
+			if (endTimeVal!=null&&endTimeVal!=""){
+				if (flage == null){
+					return false;
+				}
+				return true;
+			}***/
+	  		if (endTimeVal>=startTimeVal) {
+				return true;
+			}else{
+				$.jBox.error('输入错误！<br/>结束月份必须大于等于开始月份', '提示');
+	  			return false;
+			}
+			
+	  		
+  		}
+		
+		  /***格式化时间***/
+		  function FormatDate (strTime) {
+		      var date = new Date(strTime);
+		      var mon;var day;var hour;var min;var ses;
+		      var  temp=date.getMonth()+1;
+		      if(temp<10){mon="0"+temp;}else {mon=temp;}
+		      if(date.getDate()<10){day="0"+date.getDate();}else {day=date.getDate();}
+		      if(date.getHours()<10){hour="0"+date.getHours();}else {hour=date.getHours();}
+		      if(date.getMinutes()<10){min="0"+date.getMinutes();}else {min=date.getMinutes();}
+		      if(date.getSeconds()<10){ses="0"+date.getSeconds();}else {ses=date.getSeconds();}
+		      return date.getFullYear()+"-"+mon+"-"+day+" " +hour+":"+min+":"+ses;
+		  }
+		
+		function toPage(){
+			kkpager.total = totalPage;
+			kkpager.totalRecords = totalRecords;
+			kkpager.pno = page;
+			kkpager.hasPrv = (kkpager.pno > 1);
+			kkpager.hasNext = (kkpager.pno < kkpager.total);
+			kkpager.generPageHtml({
+			     pno : page,
+			     mode : 'click', 
+			     total : totalPage,  
+			     totalRecords : totalRecords,
+			     click : function(n){
+			         this.selectPage(n);
+			  		 changPage();
+			         return false;
+			     },
+			     getHref : function(n){
+			         return 'javascript:void(0)';
+			     }
+				 });
+		}
+		
+		function doExport(){
+        	$("form[name='searchForm']").submit();
+    	}
+		
+	</script> 
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+<!-------------------------CONT---------------------------->    
+   <article class="article-box">
+        <div class="List-cont">
+         <section class="panel panel-primary search-panel ">
+             <div class="panel-header"><h4>月账单查询</h4></div>
+             <div class="panel-body">
+               <div class="search-form">
+                <form id="searchForm" name="searchForm" action="${ctx}/author/bill/doMBListExport" method="post">
+                 <div class="row mt-10 cl">
+                      <div class="col-sm-4">
+                          <label class="form-label" for="">计费月份：</label><div class="formControls formControls-max"><input type="text" class="input-text input-min" id="startTime" name="startTime" onclick="WdatePicker({el:'startTime',dateFmt:'yyyy-MM',skin:'whyGreen'})" value="${(ordPrd.ordDatebegin?string("yyyy-MM"))!''}">--<input type="text" class="input-text input-min" id="endTime" name="endTime" onclick="WdatePicker({el:'endTime',dateFmt:'yyyy-MM',skin:'whyGreen'})" value="${(ordPrd.ordDatebegin?string("yyyy-MM"))!''}"></div>
+                     	  <p class="label" style="color: #ee3170;font-size: 14px;display:none;" id="timeTip" name="timeTip" >输入错误，请输入“yyyyMM”六位数字格式</p> 
+                     </div>
+                     
+                     <div class="col-sm-8 text-r">
+                     <a href="javascript:void(0)" class="btn btn-primary" onclick="getList();">查询</a>
+                     <a href="javaScript:void(0)" class="btn btn-primary-outline" onclick="doExport()" >导出</a>
+                     </div>
+                 </div>
+                </form> 
+                </div>
+             </div>
+         </section>
+           <div class="panel panel-default mt-10">
+               <div class="panel-body">
+                    <div class="text-r">
+                       
+                      合计金额： <b class="f-20 c-orange" id="totalAmount"></b> 元
+                     
+                    </div>
+                     <table class="table table-primary mt-10">
+                   <thead><tr>
+                       <th>序号</th>                  
+                       <th>计费月份</th>                  
+                         
+                       <th>计费金额（元）</th>  
+                       <th>操作</th>  
+                       
+                   </tr></thead>
+                    <tbody id="monthsBillList"></tbody>
+              
+                  
+                   
+                </table>  
+         <div id="kkpager" ></div>
+      
+               </div>
+           </div>
+           </div>
+     </article> 
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+<!--------------------------MODAL---------------------------->
+
+</body>
+</html>

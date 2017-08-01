@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_PERMISSION">
+	<resultMap type="SysPermission" id="sysPermissionResultMap">
+		<id property="operId" column="OPER_ID"/>
+		<result property="operName" column="OPER_NAME"/>
+		<result property="operPwd" column="OPER_PWD"/>
+		<result property="orgCode" column="ORG_CODE"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="operType" column="OPER_TYPE"/>
+		<result property="errorCount" column="ERROR_COUNT"/>
+		<result property="status" column="STATUS"/>
+		<result property="lastLoginTime" column="LAST_LOGIN_TIME"/>
+		<result property="channelId" column="CHANNEL_ID"/>
+		<collection property="roleCodeList" javaType="ArrayList" column="OPER_ID" select="selectRoleListByOperId"/>
+		<collection property="groupCodeList" javaType="ArrayList" column="OPER_ID" select="selectGroupListByOperId"/>
+		<collection property="mallCodeList" javaType="ArrayList" column="OPER_ID" select="selectMallListByOperId"/>
+		<collection property="regionCodeList" javaType="ArrayList" column="OPER_ID" select="selectRegionByOperId"/>
+		<collection property="channelIdList" javaType="ArrayList" column="OPER_ID" select="selectChannelIdByOperId"/>
+		<collection property="regionCodes" javaType="ArrayList" column="OPER_ID" select="selectRegionCodesByOperId"/>
+	</resultMap>
+	
+	<!-- (1-1)============================= selectPermissionByOperatorId =================================== -->
+  	<select id="selectPermissionByOperatorId" parameterType="java.lang.String" resultMap="sysPermissionResultMap">
+		<![CDATA[ SELECT SO.OPER_ID, SO.OPER_NAME, SO.OPER_PWD, SO.ORG_CODE, SO.MOBILE, SO.OPER_TYPE, SO.ERROR_COUNT, SO.STATUS, SO.LAST_LOGIN_TIME,
+		(SELECT SCOR.CHANNEL_ID FROM SYS_CHAN_OPER_REL SCOR WHERE SCOR.OPER_ID = SO.OPER_ID) AS CHANNEL_ID
+		FROM SYS_OPERATOR SO WHERE SO.OPER_ID = #{operId} ]]>
+  	</select>
+  	
+	<!-- (1-2)============================= selectRoleListByOperId =================================== -->
+	<select id="selectRoleListByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ SELECT DISTINCT SUGR.ROLE_CODE FROM SYS_OPER_GROUP SOG, SYS_USER_GROUP_ROLE SUGR 
+		WHERE SOG.GRO_CODE = SUGR.GRO_CODE AND SOG.OPER_ID = #{operId} ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectGroupListByOperId =================================== -->
+	<select id="selectGroupListByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ SELECT DISTINCT SOG.GRO_CODE FROM SYS_OPER_GROUP SOG WHERE SOG.OPER_ID = #{operId} ]]>
+	</select>
+	
+	<!-- (1-3)============================= selectMallListByOperId =================================== -->
+	<select id="selectMallListByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ SELECT DISTINCT SDP.MALL_CODE FROM SYS_OPER_GROUP SOG, SYS_USER_GROUP_ROLE SUGR, SYS_DATA_PERMISSION SDP 
+		WHERE SOG.GRO_CODE = SUGR.GRO_CODE 
+		AND SUGR.ROLE_CODE = SDP.ROLE_CODE 
+		AND SOG.OPER_ID = #{operId} ]]>
+	</select>
+	
+	<!-- (1-4)============================= selectRegionByOperId =================================== -->
+	<select id="selectRegionByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ SELECT DISTINCT SDP.REGION_CODE FROM SYS_OPER_GROUP SOG, SYS_USER_GROUP_ROLE SUGR, SYS_DATA_PERMISSION SDP 
+		WHERE SOG.GRO_CODE = SUGR.GRO_CODE 
+		AND SUGR.ROLE_CODE = SDP.ROLE_CODE 
+		AND SOG.OPER_ID = #{operId} ]]>
+	</select>
+	
+	<!-- (1-5)============================= selectChannelIdByOperId =================================== -->
+	<select id="selectChannelIdByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ 
+			WITH RECURSIVE r AS ( 
+					SELECT * FROM CHL_CHANNEL 
+			     union   ALL 
+			        SELECT CHL_CHANNEL.* FROM CHL_CHANNEL, r WHERE CHL_CHANNEL.PARENT_CHANNEL_ID = r.CHANNEL_ID
+			     ) 
+			SELECT DISTINCT r.CHANNEL_ID 
+			FROM r,(SELECT SCOR.CHANNEL_ID FROM SYS_CHAN_OPER_REL SCOR WHERE SCOR.OPER_ID = #{operId}) PARENT_CHANNEL_ID 
+			where r.CHANNEL_ID = PARENT_CHANNEL_ID.CHANNEL_ID
+		]]>
+	</select>
+	
+	<!-- (1-6)============================= selectRegionCodesByOperId =================================== -->
+	<select id="selectRegionCodesByOperId" parameterType="java.lang.String" resultType="java.lang.String">
+		<![CDATA[ 
+		
+			WITH RECURSIVE r AS ( 
+					SELECT * FROM BAS_REGION WHERE REGION_CODE IN 
+						(SELECT DISTINCT SDP.REGION_CODE FROM SYS_OPER_GROUP SOG, SYS_USER_GROUP_ROLE SUGR, SYS_DATA_PERMISSION SDP 
+						WHERE SOG.GRO_CODE = SUGR.GRO_CODE 
+						AND SUGR.ROLE_CODE = SDP.ROLE_CODE 
+						AND SOG.OPER_ID = #{operId}) 
+			     union   ALL 
+			        SELECT BAS_REGION.* FROM BAS_REGION, r WHERE BAS_REGION.REGION_PID = r.REGION_CODE 
+			     ) 
+			SELECT DISTINCT r.REGION_CODE FROM r
+		
+		]]>
+	</select>
+</mapper>

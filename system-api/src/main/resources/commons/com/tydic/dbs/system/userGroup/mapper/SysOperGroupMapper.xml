@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_OPER_GROUP">
+
+	<resultMap type="SysOperGroup" id="sysOperGroupResultMap">
+		<id property="operGrpRelId" column="OPER_GRP_REL_ID"/>   
+		<result property="operId" column="OPER_ID"/>
+		<result property="groCode" column="GRO_CODE"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="operGrpRelId != null"><![CDATA[ AND t.OPER_GRP_REL_ID = #{operGrpRelId} ]]></if>
+		<if test="operGrpRelIdGt != null"><![CDATA[ AND t.OPER_GRP_REL_ID > #{operGrpRelIdGt} ]]></if>
+		<if test="operGrpRelIdGte != null"><![CDATA[ AND t.OPER_GRP_REL_ID >= #{operGrpRelIdGte} ]]></if>
+		<if test="operGrpRelIdLt != null"><![CDATA[ AND t.OPER_GRP_REL_ID < #{operGrpRelIdLt} ]]></if>
+		<if test="operGrpRelIdLte != null"><![CDATA[ AND t.OPER_GRP_REL_ID <= #{operGrpRelIdLte} ]]></if>
+		<if test="operGrpRelIdIn != null"><![CDATA[ AND t.OPER_GRP_REL_ID IN ]]><foreach item="item" index="index" collection="operGrpRelIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="operIdLike != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdLike} || '%' ]]></if>
+		<if test="operIdStart != null"><![CDATA[ AND t.OPER_ID LIKE #{operIdStart} || '%' ]]></if>
+		<if test="operIdEnd != null"><![CDATA[ AND t.OPER_ID LIKE '%' || #{operIdEnd} ]]></if>
+		<if test="operIdIn != null"><![CDATA[ AND t.OPER_ID IN ]]><foreach item="item" index="index" collection="operIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="groCodeLike != null"><![CDATA[ AND t.GRO_CODE LIKE '%' || #{groCodeLike} || '%' ]]></if>
+		<if test="groCodeStart != null"><![CDATA[ AND t.GRO_CODE LIKE #{groCodeStart} || '%' ]]></if>
+		<if test="groCodeEnd != null"><![CDATA[ AND t.GRO_CODE LIKE '%' || #{groCodeEnd} ]]></if>
+		<if test="groCodeIn != null"><![CDATA[ AND t.GRO_CODE IN ]]><foreach item="item" index="index" collection="groCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeGt != null"><![CDATA[ AND t.CREATE_TIME > #{createTimeGt} ]]></if>
+		<if test="createTimeGte != null"><![CDATA[ AND t.CREATE_TIME >= #{createTimeGte} ]]></if>
+		<if test="createTimeLt != null"><![CDATA[ AND t.CREATE_TIME < #{createTimeLt} ]]></if>
+		<if test="createTimeLte != null"><![CDATA[ AND t.CREATE_TIME <= #{createTimeLte} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="operGrpRelId != null"><![CDATA[ AND t.OPER_GRP_REL_ID = #{operGrpRelId} ]]></if>
+		<if test="operId != null"><![CDATA[ AND t.OPER_ID = #{operId} ]]></if>
+		<if test="groCode != null"><![CDATA[ AND t.GRO_CODE = #{groCode} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'operGrpRelIdAsc'"><![CDATA[ t.OPER_GRP_REL_ID asc ]]></if>
+	  			<if test="item == 'operGrpRelIdDesc'"><![CDATA[ t.OPER_GRP_REL_ID desc ]]></if>
+	  			<if test="item == 'operIdAsc'"><![CDATA[ t.OPER_ID asc ]]></if>
+	  			<if test="item == 'operIdDesc'"><![CDATA[ t.OPER_ID desc ]]></if>
+	  			<if test="item == 'groCodeAsc'"><![CDATA[ t.GRO_CODE asc ]]></if>
+	  			<if test="item == 'groCodeDesc'"><![CDATA[ t.GRO_CODE desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysOperGroupResultMap">
+		<![CDATA[ SELECT * FROM SYS_OPER_GROUP t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_OPER_GROUP t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  	<select id="selectByParams" parameterType="map" resultMap="sysOperGroupResultMap">
+		<![CDATA[ SELECT * FROM SYS_OPER_GROUP t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  	</select>
+    
+  	<!-- (2-2)============================= selectByParamsCount =================================== -->
+  	<select id="selectByParamsCount" parameterType="map" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_OPER_GROUP t ]]> 
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysOperGroup" resultMap="sysOperGroupResultMap">
+   	<![CDATA[ SELECT * FROM SYS_OPER_GROUP t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	<!-- (3-2)============================= selectByVOCount =================================== -->
+  	<select id="selectByVOCount" parameterType="SysOperGroup" resultType="int">
+   		<![CDATA[ SELECT COUNT(*) FROM SYS_OPER_GROUP t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+	<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  	<!-- (3-3)============================= selectByPk =================================== -->
+  	<select id="selectByPk" parameterType="java.lang.Long" resultMap="sysOperGroupResultMap">
+    	<![CDATA[ SELECT * FROM SYS_OPER_GROUP WHERE  
+				OPER_GRP_REL_ID=#{operGrpRelId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysOperGroup">
+		<![CDATA[
+		    INSERT INTO SYS_OPER_GROUP
+		      (
+		      OPER_ID,
+		      GRO_CODE,
+		      CREATER,
+		      CREATE_TIME,
+		      REMARK
+		      )
+		    VALUES
+		      (
+					#{operId,jdbcType=VARCHAR}
+				,
+					#{groCode,jdbcType=VARCHAR}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  	</insert>
+    
+  	<!-- (5-1)============================= updateByVO =================================== -->
+  	<update id="updateByVO" parameterType="SysOperGroup">
+    <![CDATA[ UPDATE SYS_OPER_GROUP ]]>
+	    <set>  		
+    		<![CDATA[  
+					OPER_ID = #{operId,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					GRO_CODE = #{groCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[  
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[  
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE OPER_GRP_REL_ID=#{operGrpRelId}
+  	</update>
+  
+  	<!-- (5-2)============================= updateByVO2 =================================== -->
+  	<update id="updateByVoNotNull" parameterType="SysOperGroup">
+    <![CDATA[ UPDATE SYS_OPER_GROUP ]]>
+	    <set>  		
+    		<if test="operId != null"><![CDATA[ OPER_ID = #{operId}, ]]></if>
+    		<if test="groCode != null"><![CDATA[ GRO_CODE = #{groCode}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE OPER_GRP_REL_ID=#{operGrpRelId}
+  	</update>
+    
+  	<!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    	<![CDATA[ DELETE FROM SYS_OPER_GROUP  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysOperGroup">
+   	<![CDATA[ DELETE FROM SYS_OPER_GROUP WHERE 1=1  ]]>    			
+		<if test="operGrpRelId != null"><![CDATA[ AND OPER_GRP_REL_ID = #{operGrpRelId} ]]></if>
+		<if test="operId != null"><![CDATA[ AND OPER_ID = #{operId} ]]></if>
+		<if test="groCode != null"><![CDATA[ AND GRO_CODE = #{groCode} ]]></if>
+		<if test="creater != null"><![CDATA[ AND CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND CREATE_TIME = #{createTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND REMARK = #{remark} ]]></if>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   		<![CDATA[ DELETE FROM SYS_OPER_GROUP WHERE OPER_GRP_REL_ID IN (#{operGrpRelId}) ]]>
+	</delete>
+	
+	<delete id="deleteByOperId" parameterType="java.lang.String">
+   		<![CDATA[ DELETE FROM SYS_OPER_GROUP WHERE OPER_ID IN (#{operId}) ]]>
+	</delete>
+	
+	<delete id="deleteByGroCode" parameterType="java.lang.String">
+   		<![CDATA[ DELETE FROM SYS_OPER_GROUP WHERE GRO_CODE IN (#{groCode}) ]]>
+	</delete>
+  
+</mapper>

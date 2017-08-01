@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://code.alibabatech.com/schema/dubbo
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<!-- 应用配置，用于配置当前应用信息，不管该应用是提供者还是消费者。 -->
+	<dubbo:application name="system-consumer-app"/>
+	
+	<!-- 注册中心配置，用于配置连接注册中心相关信息。 -->
+	<dubbo:registry protocol="zookeeper" address="192.168.0.214:4181"/>
+
+    <!-- 权限管理 -->
+    <dubbo:reference id="sysMenuService"  interface="com.tydic.dbs.dbsweb.system.menu.service.SysMenuService" />
+	<dubbo:reference id="sysOperatorService" interface="com.tydic.dbs.dbsweb.system.operator.service.SysOperatorService" />
+	<dubbo:reference id="sysOperGroupService"  interface="com.tydic.dbs.dbsweb.system.userGroup.service.SysOperGroupService"/>
+	<dubbo:reference id="sysLoginLogService"  interface="com.tydic.dbs.dbsweb.system.log.service.SysLoginLogService" />
+	<dubbo:reference id="sysFunOperateService" interface="com.tydic.dbs.dbsweb.system.menu.service.SysFunOperateService"  />
+	<dubbo:reference id="sysOrganizeService"  interface="com.tydic.dbs.dbsweb.system.organize.service.SysOrganizeService"/>
+	<dubbo:reference id="sysRoleService" interface="com.tydic.dbs.dbsweb.system.role.service.SysRoleService"  />
+	<dubbo:reference id="sysRoleMenuService" interface="com.tydic.dbs.dbsweb.system.role.service.SysRoleMenuService" />
+	<dubbo:reference id="sysDataPermissionService" interface="com.tydic.dbs.dbsweb.system.role.service.SysDataPermissionService" />
+	<dubbo:reference id="sysUserGroupService" interface="com.tydic.dbs.dbsweb.system.userGroup.service.SysUserGroupService"  />
+	<dubbo:reference id="sysUserGroupRoleService"  interface="com.tydic.dbs.dbsweb.system.userGroup.service.SysUserGroupRoleService" />
+	<dubbo:reference id="sysChanOperRelService"  interface="com.tydic.dbs.dbsweb.system.operator.service.SysChanOperRelService"/>
+	<dubbo:reference id="crmUserService"  interface="com.tydic.dbs.crm.user.service.CrmUserService"/>
+</beans>

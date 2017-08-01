@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYS_VIP_SHIP_ADDRESS">
+	<resultMap type="SysVipShipAddress" id="sysVipShipAddressResultMap">
+		<id property="vipShipAddressId" column="VIP_SHIP_ADDRESS_ID"/>   
+		<result property="sysVipUserId" column="SYS_VIP_USER_ID"/>
+		<result property="provinceCode" column="PROVINCE_CODE"/>
+		<result property="cityCode" column="CITY_CODE"/>
+		<result property="districtCode" column="DISTRICT_CODE"/>
+		<result property="fullAddress" column="FULL_ADDRESS"/>
+		<result property="linkman" column="LINKMAN"/>
+		<result property="linkmanTel" column="LINKMAN_TEL"/>
+		<result property="status" column="STATUS"/>
+		<result property="creater" column="CREATER"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifier" column="MODIFIER"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="reorder" column="REORDER"/>
+		<result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+	<sql id="conditionByParams">  
+		<if test="vipShipAddressId != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID = #{vipShipAddressId} ]]></if>
+		<if test="vipShipAddressIdGt != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID > #{vipShipAddressIdGt} ]]></if>
+		<if test="vipShipAddressIdGte != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID >= #{vipShipAddressIdGte} ]]></if>
+		<if test="vipShipAddressIdLt != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID < #{vipShipAddressIdLt} ]]></if>
+		<if test="vipShipAddressIdLte != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID <= #{vipShipAddressIdLte} ]]></if>
+		<if test="vipShipAddressIdIn != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID IN ]]><foreach item="item" index="index" collection="vipShipAddressIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="sysVipUserId != null"><![CDATA[ AND t.SYS_VIP_USER_ID = #{sysVipUserId} ]]></if>
+		<if test="sysVipUserIdGt != null"><![CDATA[ AND t.SYS_VIP_USER_ID > #{sysVipUserIdGt} ]]></if>
+		<if test="sysVipUserIdGte != null"><![CDATA[ AND t.SYS_VIP_USER_ID >= #{sysVipUserIdGte} ]]></if>
+		<if test="sysVipUserIdLt != null"><![CDATA[ AND t.SYS_VIP_USER_ID < #{sysVipUserIdLt} ]]></if>
+		<if test="sysVipUserIdLte != null"><![CDATA[ AND t.SYS_VIP_USER_ID <= #{sysVipUserIdLte} ]]></if>
+		<if test="sysVipUserIdIn != null"><![CDATA[ AND t.SYS_VIP_USER_ID IN ]]><foreach item="item" index="index" collection="sysVipUserIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="provinceCode != null"><![CDATA[ AND t.PROVINCE_CODE = #{provinceCode} ]]></if>
+		<if test="provinceCodeLike != null"><![CDATA[ AND t.PROVINCE_CODE LIKE '%' || #{provinceCodeLike} || '%' ]]></if>
+		<if test="provinceCodeStart != null"><![CDATA[ AND t.PROVINCE_CODE LIKE #{provinceCodeStart} || '%' ]]></if>
+		<if test="provinceCodeEnd != null"><![CDATA[ AND t.PROVINCE_CODE LIKE '%' || #{provinceCodeEnd} ]]></if>
+		<if test="provinceCodeIn != null"><![CDATA[ AND t.PROVINCE_CODE IN ]]><foreach item="item" index="index" collection="provinceCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="cityCode != null"><![CDATA[ AND t.CITY_CODE = #{cityCode} ]]></if>
+		<if test="cityCodeLike != null"><![CDATA[ AND t.CITY_CODE LIKE '%' || #{cityCodeLike} || '%' ]]></if>
+		<if test="cityCodeStart != null"><![CDATA[ AND t.CITY_CODE LIKE #{cityCodeStart} || '%' ]]></if>
+		<if test="cityCodeEnd != null"><![CDATA[ AND t.CITY_CODE LIKE '%' || #{cityCodeEnd} ]]></if>
+		<if test="cityCodeIn != null"><![CDATA[ AND t.CITY_CODE IN ]]><foreach item="item" index="index" collection="cityCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="districtCode != null"><![CDATA[ AND t.DISTRICT_CODE = #{districtCode} ]]></if>
+		<if test="districtCodeLike != null"><![CDATA[ AND t.DISTRICT_CODE LIKE '%' || #{districtCodeLike} || '%' ]]></if>
+		<if test="districtCodeStart != null"><![CDATA[ AND t.DISTRICT_CODE LIKE #{districtCodeStart} || '%' ]]></if>
+		<if test="districtCodeEnd != null"><![CDATA[ AND t.DISTRICT_CODE LIKE '%' || #{districtCodeEnd} ]]></if>
+		<if test="districtCodeIn != null"><![CDATA[ AND t.DISTRICT_CODE IN ]]><foreach item="item" index="index" collection="districtCodeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="fullAddress != null"><![CDATA[ AND t.FULL_ADDRESS = #{fullAddress} ]]></if>
+		<if test="fullAddressLike != null"><![CDATA[ AND t.FULL_ADDRESS LIKE '%' || #{fullAddressLike} || '%' ]]></if>
+		<if test="fullAddressStart != null"><![CDATA[ AND t.FULL_ADDRESS LIKE #{fullAddressStart} || '%' ]]></if>
+		<if test="fullAddressEnd != null"><![CDATA[ AND t.FULL_ADDRESS LIKE '%' || #{fullAddressEnd} ]]></if>
+		<if test="fullAddressIn != null"><![CDATA[ AND t.FULL_ADDRESS IN ]]><foreach item="item" index="index" collection="fullAddressIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="linkman != null"><![CDATA[ AND t.LINKMAN = #{linkman} ]]></if>
+		<if test="linkmanLike != null"><![CDATA[ AND t.LINKMAN LIKE '%' || #{linkmanLike} || '%' ]]></if>
+		<if test="linkmanStart != null"><![CDATA[ AND t.LINKMAN LIKE #{linkmanStart} || '%' ]]></if>
+		<if test="linkmanEnd != null"><![CDATA[ AND t.LINKMAN LIKE '%' || #{linkmanEnd} ]]></if>
+		<if test="linkmanIn != null"><![CDATA[ AND t.LINKMAN IN ]]><foreach item="item" index="index" collection="linkmanIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="linkmanTel != null"><![CDATA[ AND t.LINKMAN_TEL = #{linkmanTel} ]]></if>
+		<if test="linkmanTelLike != null"><![CDATA[ AND t.LINKMAN_TEL LIKE '%' || #{linkmanTelLike} || '%' ]]></if>
+		<if test="linkmanTelStart != null"><![CDATA[ AND t.LINKMAN_TEL LIKE #{linkmanTelStart} || '%' ]]></if>
+		<if test="linkmanTelEnd != null"><![CDATA[ AND t.LINKMAN_TEL LIKE '%' || #{linkmanTelEnd} ]]></if>
+		<if test="linkmanTelIn != null"><![CDATA[ AND t.LINKMAN_TEL IN ]]><foreach item="item" index="index" collection="linkmanTelIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createrLike != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrLike} || '%' ]]></if>
+		<if test="createrStart != null"><![CDATA[ AND t.CREATER LIKE #{createrStart} || '%' ]]></if>
+		<if test="createrEnd != null"><![CDATA[ AND t.CREATER LIKE '%' || #{createrEnd} ]]></if>
+		<if test="createrIn != null"><![CDATA[ AND t.CREATER IN ]]><foreach item="item" index="index" collection="createrIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeGt != null"><![CDATA[ AND t.CREATE_TIME > #{createTimeGt} ]]></if>
+		<if test="createTimeGte != null"><![CDATA[ AND t.CREATE_TIME >= #{createTimeGte} ]]></if>
+		<if test="createTimeLt != null"><![CDATA[ AND t.CREATE_TIME < #{createTimeLt} ]]></if>
+		<if test="createTimeLte != null"><![CDATA[ AND t.CREATE_TIME <= #{createTimeLte} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifierLike != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierLike} || '%' ]]></if>
+		<if test="modifierStart != null"><![CDATA[ AND t.MODIFIER LIKE #{modifierStart} || '%' ]]></if>
+		<if test="modifierEnd != null"><![CDATA[ AND t.MODIFIER LIKE '%' || #{modifierEnd} ]]></if>
+		<if test="modifierIn != null"><![CDATA[ AND t.MODIFIER IN ]]><foreach item="item" index="index" collection="modifierIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeGt != null"><![CDATA[ AND t.MODIFY_TIME > #{modifyTimeGt} ]]></if>
+		<if test="modifyTimeGte != null"><![CDATA[ AND t.MODIFY_TIME >= #{modifyTimeGte} ]]></if>
+		<if test="modifyTimeLt != null"><![CDATA[ AND t.MODIFY_TIME < #{modifyTimeLt} ]]></if>
+		<if test="modifyTimeLte != null"><![CDATA[ AND t.MODIFY_TIME <= #{modifyTimeLte} ]]></if>
+		<if test="reorder != null"><![CDATA[ AND t.REORDER = #{reorder} ]]></if>
+		<if test="reorderGt != null"><![CDATA[ AND t.REORDER > #{reorderGt} ]]></if>
+		<if test="reorderGte != null"><![CDATA[ AND t.REORDER >= #{reorderGte} ]]></if>
+		<if test="reorderLt != null"><![CDATA[ AND t.REORDER < #{reorderLt} ]]></if>
+		<if test="reorderLte != null"><![CDATA[ AND t.REORDER <= #{reorderLte} ]]></if>
+		<if test="reorderIn != null"><![CDATA[ AND t.REORDER IN ]]><foreach item="item" index="index" collection="reorderIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="vipMobileNumber != null"><![CDATA[ AND t1.VIP_MOBILE_NUMBER = #{vipMobileNumber} ]]></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="vipShipAddressId != null"><![CDATA[ AND t.VIP_SHIP_ADDRESS_ID = #{vipShipAddressId} ]]></if>
+		<if test="sysVipUserId != null"><![CDATA[ AND t.SYS_VIP_USER_ID = #{sysVipUserId} ]]></if>
+		<if test="provinceCode != null"><![CDATA[ AND t.PROVINCE_CODE = #{provinceCode} ]]></if>
+		<if test="cityCode != null"><![CDATA[ AND t.CITY_CODE = #{cityCode} ]]></if>
+		<if test="districtCode != null"><![CDATA[ AND t.DISTRICT_CODE = #{districtCode} ]]></if>
+		<if test="fullAddress != null"><![CDATA[ AND t.FULL_ADDRESS = #{fullAddress} ]]></if>
+		<if test="linkman != null"><![CDATA[ AND t.LINKMAN = #{linkman} ]]></if>
+		<if test="linkmanTel != null"><![CDATA[ AND t.LINKMAN_TEL = #{linkmanTel} ]]></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="creater != null"><![CDATA[ AND t.CREATER = #{creater} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifier != null"><![CDATA[ AND t.MODIFIER = #{modifier} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="reorder != null"><![CDATA[ AND t.REORDER = #{reorder} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'vipShipAddressIdAsc'"><![CDATA[ t.VIP_SHIP_ADDRESS_ID asc ]]></if>
+	  			<if test="item == 'vipShipAddressIdDesc'"><![CDATA[ t.VIP_SHIP_ADDRESS_ID desc ]]></if>
+	  			<if test="item == 'sysVipUserIdAsc'"><![CDATA[ t.SYS_VIP_USER_ID asc ]]></if>
+	  			<if test="item == 'sysVipUserIdDesc'"><![CDATA[ t.SYS_VIP_USER_ID desc ]]></if>
+	  			<if test="item == 'provinceCodeAsc'"><![CDATA[ t.PROVINCE_CODE asc ]]></if>
+	  			<if test="item == 'provinceCodeDesc'"><![CDATA[ t.PROVINCE_CODE desc ]]></if>
+	  			<if test="item == 'cityCodeAsc'"><![CDATA[ t.CITY_CODE asc ]]></if>
+	  			<if test="item == 'cityCodeDesc'"><![CDATA[ t.CITY_CODE desc ]]></if>
+	  			<if test="item == 'districtCodeAsc'"><![CDATA[ t.DISTRICT_CODE asc ]]></if>
+	  			<if test="item == 'districtCodeDesc'"><![CDATA[ t.DISTRICT_CODE desc ]]></if>
+	  			<if test="item == 'fullAddressAsc'"><![CDATA[ t.FULL_ADDRESS asc ]]></if>
+	  			<if test="item == 'fullAddressDesc'"><![CDATA[ t.FULL_ADDRESS desc ]]></if>
+	  			<if test="item == 'linkmanAsc'"><![CDATA[ t.LINKMAN asc ]]></if>
+	  			<if test="item == 'linkmanDesc'"><![CDATA[ t.LINKMAN desc ]]></if>
+	  			<if test="item == 'linkmanTelAsc'"><![CDATA[ t.LINKMAN_TEL asc ]]></if>
+	  			<if test="item == 'linkmanTelDesc'"><![CDATA[ t.LINKMAN_TEL desc ]]></if>
+	  			<if test="item == 'statusAsc'"><![CDATA[ t.STATUS asc ]]></if>
+	  			<if test="item == 'statusDesc'"><![CDATA[ t.STATUS desc ]]></if>
+	  			<if test="item == 'createrAsc'"><![CDATA[ t.CREATER asc ]]></if>
+	  			<if test="item == 'createrDesc'"><![CDATA[ t.CREATER desc ]]></if>
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'modifierAsc'"><![CDATA[ t.MODIFIER asc ]]></if>
+	  			<if test="item == 'modifierDesc'"><![CDATA[ t.MODIFIER desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'reorderAsc'"><![CDATA[ t.REORDER asc ]]></if>
+	  			<if test="item == 'reorderDesc'"><![CDATA[ t.REORDER desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="sysVipShipAddressResultMap">
+		<![CDATA[ SELECT * FROM SYS_VIP_SHIP_ADDRESS t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_SHIP_ADDRESS t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="sysVipShipAddressResultMap">
+		<![CDATA[ SELECT * FROM SYS_VIP_SHIP_ADDRESS t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_SHIP_ADDRESS t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<!-- 	<include refid="orderByFragment" /> -->
+	</select>
+    
+    <!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectMallVipShipAddressByParams" parameterType="map" resultMap="sysVipShipAddressResultMap">
+		<![CDATA[  SELECT * FROM SYS_VIP_SHIP_ADDRESS T LEFT JOIN SYS_VIP_USER T1 ON T1.SYS_VIP_USER_ID=T.SYS_VIP_USER_ID ]]>
+		<where>  
+			<![CDATA[ t1.VIP_MOBILE_NUMBER= #{vipMobileNumber} and t.STATUS=#{status}]]>
+		</where>
+		ORDER BY T.CREATE_TIME DESC
+  </select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="SysVipShipAddress" resultMap="sysVipShipAddressResultMap">
+   	<![CDATA[ SELECT * FROM SYS_VIP_SHIP_ADDRESS t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="SysVipShipAddress" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM SYS_VIP_SHIP_ADDRESS t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<!-- <include refid="orderByFragment" /> -->
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.Long" resultMap="sysVipShipAddressResultMap">
+    <![CDATA[ SELECT * FROM SYS_VIP_SHIP_ADDRESS WHERE  
+				VIP_SHIP_ADDRESS_ID=#{vipShipAddressId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="SysVipShipAddress">
+				<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="vipShipAddressId">  
+		        	SELECT nextval('SEQ_SYS_VIP_SHIP_ADDRESS') AS vipShipAddressId
+		        </selectKey>
+
+		<![CDATA[
+		    INSERT INTO SYS_VIP_SHIP_ADDRESS
+		      (
+		      VIP_SHIP_ADDRESS_ID,
+		      SYS_VIP_USER_ID,
+		      PROVINCE_CODE,
+		      CITY_CODE,
+		      DISTRICT_CODE,
+		      FULL_ADDRESS,
+		      LINKMAN,
+		      LINKMAN_TEL,
+		      STATUS,
+		      CREATER,
+		      CREATE_TIME,
+		      MODIFIER,
+		      MODIFY_TIME,
+		      REORDER,
+		      REMARK
+		      )
+		    VALUES
+		      (			  
+					#{vipShipAddressId,jdbcType=DECIMAL}
+				,
+					#{sysVipUserId,jdbcType=DECIMAL}
+				,
+					#{provinceCode,jdbcType=VARCHAR}
+				,
+					#{cityCode,jdbcType=VARCHAR}
+				,
+					#{districtCode,jdbcType=VARCHAR}
+				,
+					#{fullAddress,jdbcType=VARCHAR}
+				,
+					#{linkman,jdbcType=VARCHAR}
+				,
+					#{linkmanTel,jdbcType=VARCHAR}
+				,
+					#{status,jdbcType=CHAR}
+				,
+					#{creater,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifier,jdbcType=VARCHAR}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{reorder,jdbcType=DECIMAL}
+				,
+					#{remark,jdbcType=VARCHAR}
+				
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="SysVipShipAddress">
+    <![CDATA[ UPDATE SYS_VIP_SHIP_ADDRESS ]]>
+	    <set>  		
+    		<![CDATA[ 
+					SYS_VIP_USER_ID = #{sysVipUserId,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					PROVINCE_CODE = #{provinceCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					CITY_CODE = #{cityCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					DISTRICT_CODE = #{districtCode,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					FULL_ADDRESS = #{fullAddress,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					LINKMAN = #{linkman,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					LINKMAN_TEL = #{linkmanTel,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					STATUS = #{status,jdbcType=CHAR},
+    		]]>
+				<if test="creater != null">
+    		<![CDATA[ 
+					CREATER = #{creater,jdbcType=VARCHAR},
+    		]]>
+				</if>
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+    		<![CDATA[ 
+					MODIFIER = #{modifier,jdbcType=VARCHAR},
+    		]]>
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+    		<![CDATA[ 
+					REORDER = #{reorder,jdbcType=DECIMAL},
+    		]]>
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+	    </set>  
+			WHERE VIP_SHIP_ADDRESS_ID=#{vipShipAddressId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="SysVipShipAddress">
+    <![CDATA[ UPDATE SYS_VIP_SHIP_ADDRESS ]]>
+	    <set>  		
+    		<if test="sysVipUserId != null"><![CDATA[ SYS_VIP_USER_ID = #{sysVipUserId}, ]]></if>
+    		<if test="provinceCode != null"><![CDATA[ PROVINCE_CODE = #{provinceCode}, ]]></if>
+    		<if test="cityCode != null"><![CDATA[ CITY_CODE = #{cityCode}, ]]></if>
+    		<if test="districtCode != null"><![CDATA[ DISTRICT_CODE = #{districtCode}, ]]></if>
+    		<if test="fullAddress != null"><![CDATA[ FULL_ADDRESS = #{fullAddress}, ]]></if>
+    		<if test="linkman != null"><![CDATA[ LINKMAN = #{linkman}, ]]></if>
+    		<if test="linkmanTel != null"><![CDATA[ LINKMAN_TEL = #{linkmanTel}, ]]></if>
+    		<if test="status != null"><![CDATA[ STATUS = #{status}, ]]></if>
+    		<if test="creater != null"><![CDATA[ CREATER = #{creater}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifier != null"><![CDATA[ MODIFIER = #{modifier}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="reorder != null"><![CDATA[ REORDER = #{reorder}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark} ]]></if>
+	    </set>  
+			WHERE VIP_SHIP_ADDRESS_ID=#{vipShipAddressId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE SYS_VIP_SHIP_ADDRESS ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE VIP_SHIP_ADDRESS_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM SYS_VIP_SHIP_ADDRESS  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="SysVipShipAddress">
+   <![CDATA[ DELETE FROM SYS_VIP_SHIP_ADDRESS WHERE 1=1  ]]>    			
+		<![CDATA[ AND VIP_SHIP_ADDRESS_ID = #{vipShipAddressId} ]]>
+		<![CDATA[ AND SYS_VIP_USER_ID = #{sysVipUserId} ]]>
+		<![CDATA[ AND PROVINCE_CODE = #{provinceCode} ]]>
+		<![CDATA[ AND CITY_CODE = #{cityCode} ]]>
+		<![CDATA[ AND DISTRICT_CODE = #{districtCode} ]]>
+		<![CDATA[ AND FULL_ADDRESS = #{fullAddress} ]]>
+		<![CDATA[ AND LINKMAN = #{linkman} ]]>
+		<![CDATA[ AND LINKMAN_TEL = #{linkmanTel} ]]>
+		<![CDATA[ AND STATUS = #{status} ]]>
+		<![CDATA[ AND CREATER = #{creater} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND MODIFIER = #{modifier} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND REORDER = #{reorder} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.Long">
+   <![CDATA[ 
+		DELETE FROM SYS_VIP_SHIP_ADDRESS WHERE 
+		VIP_SHIP_ADDRESS_ID IN (#{vipShipAddressId})
+		]]>
+	</delete>
+  
+</mapper>

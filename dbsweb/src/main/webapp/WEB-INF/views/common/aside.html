@@ -1,0 +1,73 @@
+<aside class="aside">
+    <ul id="sidebar" class="sidebar mt-20 ">
+        <li class="item">
+            <h4><i class="fa fa-calendar"></i>商户信息</h4>
+            <div class="info" id="info_first">
+                <a id="menu1" class="" href="${ctx}/${bussinfoQueryUrl}">商户总览</a>
+                <a id="menu2" href="${ctx}/${bussinfoGuideUrl}">商户配置</a>
+                <a id="menu7" href="${ctx}/${bussinfoAppUrl}">商户APP</a>
+                
+                <!--  
+                <a href="${ctx}/${userSettingUrl}">商户配置</a>
+                <a href="${ctx}/${userSettingDetail}">商户配置详情</a>
+                -->
+            </div>
+        </li>
+        <li class="item">
+            <h4><i class="fa fa-tags"></i>产品中心</h4>
+            <div class="info">
+                <a id="menu3" href="${ctx}/${bussinfoProductUrl}">我的产品</a>
+            </div>
+        </li>
+        <li class="item">
+            <h4><i class="fa fa-map"></i>工单中心</h4>
+            <div class="info">
+                <a id="menu4" href="${ctx}/${orderListUrl}">我的工单</a>
+            </div>
+        </li>
+        <li class="item">
+            <h4><i class="fa fa-yen"></i>&nbsp;&nbsp;我的账单</h4>
+            <div class="info">
+                <a id="menu5" href="${ctx}/${historyChargeUrl}">历史计费清单</a>
+                <a id="menu6" href="${ctx}/${monthBillListUrl}">月账单查询</a>
+            </div>
+        </li>
+    </ul>
+</aside>
+<script type="text/javascript">
+$(function () {
+	//左导航栏
+	$.sidebar("#sidebar .item h4","#sidebar .item .info","fast",3,"click"); /*5个参数顺序不可打乱，分别是：相应区,隐藏显示的内容,速度,类型,事件*/	
+});
+//左导航栏
+jQuery.sidebar = function(obj,obj_c,speed,obj_type,Event){
+	if(obj_type == 2){
+		$(obj+":first").find("b").html("-");
+		$(obj_c+":first").show();
+	}
+	$(obj).bind(Event,function(){
+		if($(this).next().is(":visible")){
+			if(obj_type == 2){
+				return false;
+			}
+			else{
+				$(this).next().slideUp(speed).end().removeClass("selected");
+				$(this).find("b").html("+");
+			}
+		}
+		else{
+			if(obj_type == 3){
+				$(this).next().slideDown(speed).end().addClass("selected");
+				$(this).find("b").html("-");
+			}else{
+				$(obj_c).slideUp(speed);
+				$(obj).removeClass("selected");
+				$(obj).find("b").html("+");
+				$(this).next().slideDown(speed).end().addClass("selected");
+				$(this).find("b").html("-");
+			}
+		}
+	});
+}
+
+</script>

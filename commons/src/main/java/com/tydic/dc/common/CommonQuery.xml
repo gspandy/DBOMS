@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="COMMON_QUERY">
+	<!-- 维度 -->
+    <resultMap id="dimMap" type="com.tydic.dc.common.vo.DimVO">
+    	<result property="key" column="KEY"/>
+    	<result property="code" column="CODE"/>
+    	<result property="value" column="VALUE"/>
+    	<result property="parent" column="PARENT"/>
+    </resultMap>
+    <!-- 维度定义 -->
+    <resultMap id="dimDefMap" type="com.tydic.dc.common.vo.DimDefVO">
+    	<result property="key" column="KEY"/>
+    	<result property="code" column="CODE"/>
+    	<result property="value" column="VALUE"/>
+    </resultMap>
+    <!-- 用户维度 -->
+    <resultMap id="userDimMap" type="com.tydic.dc.common.vo.DimDefVO">
+    	<result property="userId" column="USER_ID"/>
+    	<result property="dimId" column="DIM_ID"/>
+    </resultMap>
+    <!-- 指标 -->
+    <resultMap id="indexMap" type="com.tydic.dc.common.vo.IndexVO">
+    	<result property="key" column="KEY"/>
+    	<result property="code" column="CODE"/>
+    	<result property="value" column="VALUE"/>
+    	<result property="parent" column="PARENT"/>
+    	<result property="unitType" column="UNIT_TYPE"/>
+    	<result property="unit" column="UNIT"/>
+    	<result property="user" column="USER_"/>
+    	<result property="desc" column="DESC_"/>
+    	<result property="indexType" column="INDEX_TYPE"/>
+    </resultMap>
+	<!-- 
+		取得每一级维度值数据  	
+		AND EXISTS (SELECT sdv.DIM_ID FROM DIC_DIM_META_VALUEDEF sdv WHERE sdv.parent_dim_code = dv.dim_code)
+	 -->
+    <select id="getDimLevelFirst" resultMap="dimMap">
+		<![CDATA[ 
+		SELECT distinct dv.DIM_ID key,dv.dim_code code,dv.dim_code_name value FROM DIC_DIM_META_VALUEDEF dv
+		    WHERE dv.parent_dim_code='-1' AND dv.rec_sts='1' 
+		    order by dv.dim_code_name
+		]]>
+    </select>
+    <!-- 取得维度定义   -->
+    <select id="getDimDefine" resultMap="dimDefMap">
+		<![CDATA[ 
+		SELECT DIM_ID key,dim_colid code,dim_name value FROM DIC_DIM_META_DEF
+		]]>
+    </select>
+    <!-- 取得指标定义  -->
+    <select id="getIndex" resultMap="indexMap">
+		<![CDATA[ 
+		SELECT distinct aid.index_id key,aid.index_code code,aid.index_name value,aid.index_unittype unit_type,aid.index_unit unit,so.oper_name USER_,aid.index_desc DESC_ ,aid.index_type INDEX_TYPE  FROM APP_INDEX_DEF aid
+        left join SYS_OPERATOR so on so.oper_id=aid.index_rela_user
+		]]>
+    </select>
+    
+    <select id="getDimStoreCode" resultType="map">
+		<![CDATA[ 
+		select DIM_ID,DIM_PATH from APP_RPT_DIM_STORE_CODE
+		]]>
+    </select>
+    
+    <!-- 根据用户取得维度数据  -->
+    <select id="getDimByUser" parameterType="string" resultMap="userDimMap">
+		<![CDATA[ 
+		SELECT USER_ID,DIM_ID FROM SM_USER_DATA_AUTH WHERE USER_ID=${user}
+		]]>
+    </select>
+    
+    <!-- 根所报表ID取得数据表名及所属数据库用户(初始) -->
+    <select id="getDataMetaInit" statementType="CALLABLE">
+    	<![CDATA[
+    	{call PROC_RPT_DATATABLE_FORTEST(#{rptId,mode=IN,jdbcType=VARCHAR},#{beginDate,mode=IN,jdbcType=VARCHAR},#{endDate,mode=IN,jdbcType=VARCHAR},#{tbname,mode=OUT,jdbcType=VARCHAR})}
+    	]]>
+    </select>
+    
+    <!-- 根所报表ID取得数据表名及所属数据库用户(初始，模拟) -->
+    <select id="getDataMetaInitDemo" statementType="CALLABLE">
+    	<![CDATA[
+    	{call PROC_RPT_DATATABLE_INIT(#{rptId,mode=IN,jdbcType=VARCHAR},#{tbname,mode=OUT,jdbcType=VARCHAR})}
+    	]]>
+    </select>
+    
+    <!-- 根所报表ID取得数据表名及所属数据库用户(钻取) -->
+    <select id="getDataMeta" statementType="CALLABLE">
+    	<![CDATA[
+    	{ 
+    		call PROC_RPT_DATATABLE (
+    			#{rptId,mode=IN,jdbcType=VARCHAR},
+    			#{beginDate,mode=IN,jdbcType=VARCHAR},
+    			#{endDate,mode=IN,jdbcType=VARCHAR},
+    			#{dimId,mode=IN,jdbcType=VARCHAR},
+    			#{dimCode,mode=IN,jdbcType=VARCHAR},
+    			#{action_,mode=IN,jdbcType=VARCHAR},
+    			#{tbname,mode=OUT,jdbcType=VARCHAR}
+    	    ) 
+    	}
+    	]]>
+    </select>
+    
+    <!-- 
+    	取最新元数据时间:
+		SELECT 'RPT_DAY' AS DATA_FLAG,MAX(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+		WHERE LENGTH('DW_BI_USERINFO_DT_20130704')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+		UNION
+		SELECT 'RPT_MONTH' AS DATA_FLAG,MAX(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+		WHERE LENGTH('DW_BI_USERINFO_DT_201307')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+     -->
+    <select id="getNowMetaDate" resultType="map">
+		<![CDATA[ 
+	    SELECT 'RPT_DAY' AS DATA_FLAG,MAX(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+	    WHERE LENGTH('DW_BI_USERINFO_DT_20130704')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+	    UNION
+	    SELECT 'RPT_MONTH' AS DATA_FLAG,MAX(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+	    WHERE LENGTH('DW_BI_USERINFO_DT_201307')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+	    UNION
+	    SELECT 'RPT_MIN_DAY' AS DATA_FLAG,MIN(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+	    WHERE LENGTH('DW_BI_USERINFO_DT_20130704')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+	    UNION
+	    SELECT 'RPT_MIN_MONTH' AS DATA_FLAG,MIN(TO_NUMBER(SUBSTR(TAB_NAME,LENGTH('DW_BI_USERINFO_DT_')+1))) DATA_NEW_DATE FROM DIC_INDEX_META_DEF 
+	    WHERE LENGTH('DW_BI_USERINFO_DT_201307')=LENGTH(TAB_NAME) AND TAB_NAME LIKE 'DW_BI_USERINFO_DT_%'
+		]]>
+    </select>
+  
+</mapper>

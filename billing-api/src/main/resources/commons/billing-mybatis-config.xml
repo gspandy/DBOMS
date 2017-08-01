@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "${env.mybatis.url}">
+<configuration>
+	<properties>
+       	<property name="dialect" value="mysql"/>
+    </properties>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="BillingList" type="com.tydic.dbs.billing.vo.BillingList"/>
+		<typeAlias alias="ChaBill" type="com.tydic.dbs.billing.vo.ChaBill"/>
+		<typeAlias alias="ChaBillVo" type="com.tydic.dbs.billing.vo.ChaBillVo"/>
+		<typeAlias alias="ConsumList" type="com.tydic.dbs.billing.vo.ConsumList"/>
+		<typeAlias alias="BillVo" type="com.tydic.dbs.billing.vo.BillVo"/>
+
+	</typeAliases>
+	<plugins>
+       	<plugin interceptor="com.tydic.commons.dao.PaginationInterceptor"/>
+    </plugins>
+	<mappers>
+		<mapper resource="com/tydic/dbs/billing/mapper/BillingListMapper.xml"/>
+		<mapper resource="com/tydic/dbs/billing/mapper/ChaBillMapper.xml"/>
+		<mapper resource="com/tydic/dbs/billing/mapper/ConsumListMapper.xml"/>
+	</mappers>
+</configuration>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BUSS_TENANT">
+	<resultMap type="BussTenant" id="bussTenantResultMap">
+		<id property="tenantId" column="TENANT_ID"/>   
+		<result property="bussId" column="BUSS_ID"/>
+		<result property="tenantName" column="TENANT_NAME"/>
+		<result property="mobile" column="MOBILE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="remark" column="REMARK"/>
+		<result property="email"  column="EMAIL" />
+		<result property="status" column="STATUS" />
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="auditReason" column="AUDIT_REASON" />
+		<result property="idCard" column="ID_CARD"/>
+	</resultMap>
+
+	<resultMap type="dataPemissionDict" id="dataPemissionDictMap">
+		<id property="code" column="CODE"/>
+		<result property="name" column="NAME"/>
+		<result property="reOrder" column="REORDER"/>
+		<result property="parentCode" column="PARENT_CODE"/>
+	</resultMap>
+	<!-- conditionByParams:
+		like: name+Like
+		less than : name+Lt or name+Lte
+		greater than : name+Gt or name+Gte
+		in:	name+In
+	 -->
+		<sql id="conditionByParams">  
+		<if test="tenantId != null"><![CDATA[ AND t.TENANT_ID = #{tenantId} ]]></if>
+		<if test="tenantIdLike != null"><![CDATA[ AND t.TENANT_ID LIKE '%' || #{tenantIdLike} || '%' ]]></if>
+		<if test="tenantIdStart != null"><![CDATA[ AND t.TENANT_ID LIKE #{tenantIdStart} || '%' ]]></if>
+		<if test="tenantIdEnd != null"><![CDATA[ AND t.TENANT_ID LIKE '%' || #{tenantIdEnd} ]]></if>
+		<if test="tenantIdIn != null"><![CDATA[ AND t.TENANT_ID IN ]]><foreach item="item" index="index" collection="tenantIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="bussIdLike != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdLike} || '%' ]]></if>
+		<if test="bussIdStart != null"><![CDATA[ AND t.BUSS_ID LIKE #{bussIdStart} || '%' ]]></if>
+		<if test="bussIdEnd != null"><![CDATA[ AND t.BUSS_ID LIKE '%' || #{bussIdEnd} ]]></if>
+		<if test="bussIdIn != null"><![CDATA[ AND t.BUSS_ID IN ]]><foreach item="item" index="index" collection="bussIdIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="tenantName != null"><![CDATA[ AND t.TENANT_NAME = #{tenantName} ]]></if>
+		<if test="tenantNameLike != null"><![CDATA[ AND t.TENANT_NAME LIKE '%' || #{tenantNameLike} || '%' ]]></if>
+		<if test="tenantNameStart != null"><![CDATA[ AND t.TENANT_NAME LIKE #{tenantNameStart} || '%' ]]></if>
+		<if test="tenantNameEnd != null"><![CDATA[ AND t.TENANT_NAME LIKE '%' || #{tenantNameEnd} ]]></if>
+		<if test="tenantNameIn != null"><![CDATA[ AND t.TENANT_NAME IN ]]><foreach item="item" index="index" collection="tenantNameIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="mobile != null"><![CDATA[ AND t.MOBILE = #{mobile} ]]></if>
+		<if test="mobileLike != null"><![CDATA[ AND t.MOBILE LIKE '%' || #{mobileLike} || '%' ]]></if>
+		<if test="mobileStart != null"><![CDATA[ AND t.MOBILE LIKE #{mobileStart} || '%' ]]></if>
+		<if test="mobileEnd != null"><![CDATA[ AND t.MOBILE LIKE '%' || #{mobileEnd} ]]></if>
+		<if test="mobileIn != null"><![CDATA[ AND t.MOBILE IN ]]><foreach item="item" index="index" collection="mobileIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="createTimeLike != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeLike} || '%' ]]></if>
+		<if test="createTimeStart != null"><![CDATA[ AND t.CREATE_TIME LIKE #{createTimeStart} || '%' ]]></if>
+		<if test="createTimeEnd != null"><![CDATA[ AND t.CREATE_TIME LIKE '%' || #{createTimeEnd} ]]></if>
+		<if test="createTimeIn != null"><![CDATA[ AND t.CREATE_TIME IN ]]><foreach item="item" index="index" collection="createTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="modifyTimeLike != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeLike} || '%' ]]></if>
+		<if test="modifyTimeStart != null"><![CDATA[ AND t.MODIFY_TIME LIKE #{modifyTimeStart} || '%' ]]></if>
+		<if test="modifyTimeEnd != null"><![CDATA[ AND t.MODIFY_TIME LIKE '%' || #{modifyTimeEnd} ]]></if>
+		<if test="modifyTimeIn != null"><![CDATA[ AND t.MODIFY_TIME IN ]]><foreach item="item" index="index" collection="modifyTimeIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+		<if test="remarkLike != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkLike} || '%' ]]></if>
+		<if test="remarkStart != null"><![CDATA[ AND t.REMARK LIKE #{remarkStart} || '%' ]]></if>
+		<if test="remarkEnd != null"><![CDATA[ AND t.REMARK LIKE '%' || #{remarkEnd} ]]></if>
+		<if test="remarkIn != null"><![CDATA[ AND t.REMARK IN ]]><foreach item="item" index="index" collection="remarkIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="email != null"><![CDATA[ AND t.EMAIL = #{email} ]]></if>
+		<if test="emailLike != null"><![CDATA[ AND t.EMAIL LIKE '%' || #{emailLike} || '%' ]]></if>
+		<if test="emailStart != null"><![CDATA[ AND t.EMAIL LIKE #{emailStart} || '%' ]]></if>
+		<if test="emailEnd != null"><![CDATA[ AND t.EMAIL LIKE '%' || #{emailEnd} ]]></if>
+		<if test="emailIn != null"><![CDATA[ AND t.EMAIL IN ]]><foreach item="item" index="index" collection="emailIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="status != null"><![CDATA[ AND t.STATUS = #{status} ]]></if>
+		<if test="statusLike != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusLike} || '%' ]]></if>
+		<if test="statusStart != null"><![CDATA[ AND t.STATUS LIKE #{statusStart} || '%' ]]></if>
+		<if test="statusEnd != null"><![CDATA[ AND t.STATUS LIKE '%' || #{statusEnd} ]]></if>
+		<if test="statusIn != null"><![CDATA[ AND t.STATUS IN ]]><foreach item="item" index="index" collection="statusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="auditStatus != null"><![CDATA[ AND t.AUDIT_STATUS = #{auditStatus} ]]></if>
+		<if test="auditStatusLike != null"><![CDATA[ AND t.AUDIT_STATUS LIKE '%' || #{auditStatusLike} || '%' ]]></if>
+		<if test="auditStatusStart != null"><![CDATA[ AND t.AUDIT_STATUS LIKE #{auditStatusStart} || '%' ]]></if>
+		<if test="auditStatusEnd != null"><![CDATA[ AND t.AUDIT_STATUS LIKE '%' || #{auditStatusEnd} ]]></if>
+		<if test="auditStatusIn != null"><![CDATA[ AND t.AUDIT_STATUS IN ]]><foreach item="item" index="index" collection="auditStatusIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="auditReason != null"><![CDATA[ AND t.AUDIT_REASON = #{auditReason} ]]></if>
+		<if test="auditReasonLike != null"><![CDATA[ AND t.AUDIT_REASON LIKE '%' || #{auditReasonLike} || '%' ]]></if>
+		<if test="auditReasonStart != null"><![CDATA[ AND t.AUDIT_REASON LIKE #{auditReasonStart} || '%' ]]></if>
+		<if test="auditReasonEnd != null"><![CDATA[ AND t.AUDIT_REASON LIKE '%' || #{auditReasonEnd} ]]></if>
+		<if test="auditReasonIn != null"><![CDATA[ AND t.AUDIT_REASON IN ]]><foreach item="item" index="index" collection="auditReasonIn" open="(" separator="," close=")">#{item}</foreach></if>
+		<if test="idCard != null"><![CDATA[ AND t.ID_CARD = #{idCard} ]]></if>
+		<if test="idCardLike != null"><![CDATA[ AND t.ID_CARD LIKE '%' || #{idCardLike} || '%' ]]></if>
+		<if test="idCardStart != null"><![CDATA[ AND t.ID_CARD LIKE #{idCardStart} || '%' ]]></if>
+		<if test="idCardEnd != null"><![CDATA[ AND t.ID_CARD LIKE '%' || #{idCardEnd} ]]></if>
+		<if test="idCardIn != null"><![CDATA[ AND t.ID_CARD IN ]]><foreach item="item" index="index" collection="idCardIn" open="(" separator="," close=")">#{item}</foreach></if>
+	</sql>
+	
+	<sql id="conditionByVO">  
+		<if test="tenantId != null"><![CDATA[ AND t.TENANT_ID = #{tenantId} ]]></if>
+		<if test="bussId != null"><![CDATA[ AND t.BUSS_ID = #{bussId} ]]></if>
+		<if test="tenantName != null"><![CDATA[ AND t.TENANT_NAME = #{tenantName} ]]></if>
+		<if test="mobile != null"><![CDATA[ AND t.MOBILE = #{mobile} ]]></if>
+		<if test="createTime != null"><![CDATA[ AND t.CREATE_TIME = #{createTime} ]]></if>
+		<if test="modifyTime != null"><![CDATA[ AND t.MODIFY_TIME = #{modifyTime} ]]></if>
+		<if test="remark != null"><![CDATA[ AND t.REMARK = #{remark} ]]></if>
+	</sql>
+	
+	<sql id="orderByFragment">
+	  <if test="orderBy!= null">
+	  	<foreach item="item" index="index" collection="convertedOrderBy" open="order by" separator="," close="">
+	  			<if test="item == 'tenantIdAsc'"><![CDATA[ t.TENANT_ID asc ]]></if>
+	  			<if test="item == 'tenantIdDesc'"><![CDATA[ t.TENANT_ID desc ]]></if>
+	  			<if test="item == 'bussIdAsc'"><![CDATA[ t.BUSS_ID asc ]]></if>
+	  			<if test="item == 'bussIdDesc'"><![CDATA[ t.BUSS_ID desc ]]></if>
+	  			<if test="item == 'tenantNameAsc'"><![CDATA[ t.TENANT_NAME asc ]]></if>
+	  			<if test="item == 'tenantNameDesc'"><![CDATA[ t.TENANT_NAME desc ]]></if>
+	  			<if test="item == 'mobileAsc'"><![CDATA[ t.MOBILE asc ]]></if>
+	  			<if test="item == 'mobileDesc'"><![CDATA[ t.MOBILE desc ]]></if>
+
+	  			<if test="item == 'createTimeAsc'"><![CDATA[ t.CREATE_TIME asc ]]></if>
+	  			<if test="item == 'createTimeDesc'"><![CDATA[ t.CREATE_TIME desc ]]></if>
+	  			<if test="item == 'modifyTimeAsc'"><![CDATA[ t.MODIFY_TIME asc ]]></if>
+	  			<if test="item == 'modifyTimeDesc'"><![CDATA[ t.MODIFY_TIME desc ]]></if>
+	  			<if test="item == 'remarkAsc'"><![CDATA[ t.REMARK asc ]]></if>
+	  			<if test="item == 'remarkDesc'"><![CDATA[ t.REMARK desc ]]></if>
+		</foreach>
+	  </if>
+	</sql>
+  
+  	<sql id="orderByFragment2">
+	  <if test="orderBy!= null">
+		<![CDATA[ order by ${orderBy}  ]]>
+	  </if>
+	</sql>
+	
+	<!-- (1-1)============================= selectAll =================================== -->
+	<select id="selectAll" resultMap="bussTenantResultMap">
+		<![CDATA[ SELECT * FROM BUSS_TENANT t ]]>
+	</select>
+	
+	<!-- (1-2)============================= selectAllCount =================================== -->
+	<select id="selectAllCount" resultType="int">
+		<![CDATA[ SELECT COUNT(*) FROM BUSS_TENANT t ]]>
+	</select>
+	
+	<!-- (2-1)============================= selectByParams =================================== -->
+  <select id="selectByParams" parameterType="map" resultMap="bussTenantResultMap">
+		<![CDATA[ SELECT * FROM BUSS_TENANT t ]]>
+		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+		<include refid="orderByFragment" />
+	  <if test="sign != null"><![CDATA[ ORDER BY t.create_time DESC LIMIT #{minSize},#{maxSize} ]]></if>
+  </select>
+    
+  <!-- (2-2)============================= selectByParamsCount =================================== -->
+  <select id="selectByParamsCount" parameterType="map" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_TENANT t ]]> 
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByParams" />
+		</where>
+			<include refid="orderByFragment" />
+	</select>
+    
+	<!-- (3-1)============================= selectByVO =================================== -->
+	<select id="selectByVO" parameterType="BussTenant" resultMap="bussTenantResultMap">
+   	<![CDATA[ SELECT * FROM BUSS_TENANT t ]]>  
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  <!-- (3-2)============================= selectByVOCount =================================== -->
+  <select id="selectByVOCount" parameterType="BussTenant" resultType="int">
+   	<![CDATA[ SELECT COUNT(*) FROM BUSS_TENANT t ]]>   
+   		<where>  
+			<![CDATA[ 1=1 ]]>
+			<include refid="conditionByVO" />
+		</where>
+		<include refid="orderByFragment" />
+	</select>
+  	
+  	
+  <!-- (3-3)============================= selectByPk =================================== -->
+  <select id="selectByPk" parameterType="java.lang.String" resultMap="bussTenantResultMap">
+    <![CDATA[ SELECT * FROM BUSS_TENANT WHERE  
+				TENANT_ID=#{tenantId}
+		]]>
+	</select>
+  	
+	<!-- (4)============================= insertByVo =================================== -->
+	<insert id="insertByVo" parameterType="BussTenant">
+
+		<![CDATA[
+		    INSERT INTO BUSS_TENANT
+		      (
+		      TENANT_ID,
+		      BUSS_ID,
+		      TENANT_NAME,
+		      MOBILE,
+		      CREATE_TIME,
+		      MODIFY_TIME,
+		      AUDIT_STATUS,
+		      EMAIL,
+		      REMARK,
+		      ID_CARD
+		      )
+		    VALUES
+		      (			  
+					#{tenantId,jdbcType=VARCHAR}
+				,
+					#{bussId,jdbcType=VARCHAR}
+				,
+					#{tenantName,jdbcType=VARCHAR}
+				,
+					#{mobile,jdbcType=VARCHAR}
+				,
+					#{createTime,jdbcType=TIMESTAMP}
+				,
+					#{modifyTime,jdbcType=TIMESTAMP}
+				,
+					#{auditStatus,jdbcType=VARCHAR}
+				,
+					#{email,jdbcType=VARCHAR}
+		        ,
+					#{remark,jdbcType=VARCHAR}
+				,
+					#{idCard,jdbcType=VARCHAR}
+		      )
+      	]]>
+  </insert>
+    
+  <!-- (5-1)============================= updateByVO =================================== -->
+  <update id="updateByVO" parameterType="BussTenant">
+    <![CDATA[ UPDATE BUSS_TENANT ]]>
+	    <set>
+			<if test="bussId != null">
+    		<![CDATA[ 
+					BUSS_ID = #{bussId,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="tenantName != null">
+    		<![CDATA[ 
+					TENANT_NAME = #{tenantName,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="mobile != null">
+    		<![CDATA[ 
+					MOBILE = #{mobile,jdbcType=VARCHAR},
+    		]]>
+			</if>
+
+				<if test="createTime != null">
+    		<![CDATA[ 
+					CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    		]]>
+				</if>
+			<if test="modifyTime != null">
+    		<![CDATA[ 
+					MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+    		]]>
+			</if>
+			<if test="remark != null">
+    		<![CDATA[ 
+					REMARK = #{remark,jdbcType=VARCHAR}
+    		]]>
+			</if>
+			<if test="email != null">
+				<![CDATA[
+					EMAIL = #{email,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="status != null">
+				<![CDATA[
+					STATUS = #{status,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="auditStatus != null">
+				<![CDATA[
+					AUDIT_STATUS = #{auditStatus,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="auditReason != null">
+				<![CDATA[
+					AUDIT_REASON = #{auditReason,jdbcType=VARCHAR},
+    		]]>
+			</if>
+			<if test="idCard != null">
+				<![CDATA[
+					ID_CARD = #{idCard,jdbcType=VARCHAR},
+    		]]>
+			</if>
+	    </set>  
+			WHERE TENANT_ID=#{tenantId}
+  </update>
+  
+  <!-- (5-2)============================= updateByVO2 =================================== -->
+  <update id="updateByVoNotNull" parameterType="BussTenant">
+    <![CDATA[ UPDATE BUSS_TENANT ]]>
+	    <set>  		
+    		<if test="bussId != null"><![CDATA[ BUSS_ID = #{bussId}, ]]></if>
+    		<if test="tenantName != null"><![CDATA[ TENANT_NAME = #{tenantName}, ]]></if>
+    		<if test="mobile != null"><![CDATA[ MOBILE = #{mobile}, ]]></if>
+    		<if test="createTime != null"><![CDATA[ CREATE_TIME = #{createTime}, ]]></if>
+    		<if test="modifyTime != null"><![CDATA[ MODIFY_TIME = #{modifyTime}, ]]></if>
+    		<if test="remark != null"><![CDATA[ REMARK = #{remark}, ]]></if>
+    		<if test="auditStatus != null"><![CDATA[ AUDIT_STATUS = #{auditStatus}, ]]></if>
+			<if test="email != null"><![CDATA[ EMAIL = #{email}, ]]></if>
+			<if test="status != null"><![CDATA[ STATUS = #{status} ]]></if>
+	    </set>  
+			WHERE TENANT_ID=#{tenantId}
+  </update>
+  
+  <!-- (5-3)============================= updateStatus =================================== -->
+  <update id="updateStatus" parameterType="map">
+    <![CDATA[ UPDATE BUSS_TENANT ]]>
+	    <set>
+		<![CDATA[  
+			STATUS = #{status,jdbcType=VARCHAR},
+			MODIFIER = #{modifier,jdbcType=VARCHAR},
+			MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+		]]>
+	    </set>  
+			WHERE TENANT_ID IN <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+    
+  <!-- (6)============================= deleteAll =================================== -->
+	<delete id="deleteAll">
+    <![CDATA[ DELETE FROM BUSS_TENANT  ]]>
+	</delete>
+    
+	<!-- (7)============================= deleteByVO =================================== -->
+	<delete id="deleteByVO" parameterType="BussTenant">
+   <![CDATA[ DELETE FROM BUSS_TENANT WHERE 1=1  ]]>    			
+		<![CDATA[ AND TENANT_ID = #{tenantId} ]]>
+		<![CDATA[ AND BUSS_ID = #{bussId} ]]>
+		<![CDATA[ AND TENANT_NAME = #{tenantName} ]]>
+		<![CDATA[ AND MOBILE = #{mobile} ]]>
+		<![CDATA[ AND CREATE_TIME = #{createTime} ]]>
+		<![CDATA[ AND MODIFY_TIME = #{modifyTime} ]]>
+		<![CDATA[ AND REMARK = #{remark} ]]>
+	</delete>
+    
+	<!-- (8)============================= deleteByPk =================================== -->
+	<delete id="deleteByPk" parameterType="java.lang.String">
+   <![CDATA[ 
+		DELETE FROM BUSS_TENANT WHERE 
+		TENANT_ID IN (#{tenantId})
+		]]>
+	</delete>
+  	<!-- ===============================selectBussTenant=============================== -->
+	<select id="selectBussTenant" parameterType="map" resultType="java.util.Map">
+		<![CDATA[ SELECT * FROM BUSS_TENANT AS bt, BUSS_TENANT_ROLE AS btr WHERE bt.TENANT_ID=btr.TENANT_ID]]>
+		<if test="bussId != null"> AND  bt.BUSS_ID =#{bussId}</if>
+		<if test="tenantId!=null"> AND  bt.TENANT_ID =#{tenantId}</if>
+		<![CDATA[AND bt.STATUS='1'AND btr.STATUS='1' ORDER BY btr.ROLE_ID]]>
+	</select>
+	<!-- =====================================getDataPemissionDict=============================================== -->
+	<select id="getDataPemissionDict" resultMap="dataPemissionDictMap">
+		<![CDATA[ SELECT * FROM DATA_PEMISSION_DICT ]]>
+	</select>
+</mapper>

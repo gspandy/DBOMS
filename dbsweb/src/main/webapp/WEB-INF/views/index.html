@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>首页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+    <#include "/views/common/head.html"/>
+    <script type="text/javascript" src="${ctx}/js/kkpager/kkpager.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="${ctx}/js/modal/bootstrap-modalmanager.js"></script>
+    <link rel="stylesheet" href="${ctx}/js/kkpager/kkpager_blue.css">
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]--> 
+    
+</head>
+<body>
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/>
+     
+     
+<!-------------------------CONT----------------------------> 
+     <article class="article-box">
+        <div class="index-tab pt-20 mr-15">
+        <div class="row container cl">
+           
+                <div class="panel user-panel">
+                     <div class="panel-body">
+                        <article class=" row cl">
+                           <div class="col-sm-5">
+                                <div class="fl pic ml-30">
+                               <a href="">
+                                    <img width="110" height="110"  src="${ctx}/img/user_pic.jpg" alt="用户头像">
+                               </a>
+                               
+                            </div>
+                            <div class="fl info mt-25 ml-15 f-14">
+                                <p>用户名称：${Session['loginMember'].bussName?if_exists}</p>
+                                <p>登录时间：${Session['loginMember'].loginTime?string('yyyy-MM-dd HH:mm:ss')}</p>
+                            </div>
+                           </div>
+                           <div class="col-sm-7">
+                                  <ul class="state-list product-state-list ">
+                            <li> <span> <i class="fa fa-calendar-check-o"></i></span> 已提交产品：<b class="c-orange">${submitedProductNo?if_exists}</b></li>           
+                            <li> <span> <i class="fa fa-thumbs-up"></i></span> 已审核产品：<b class="c-orange">${auditedProductNo?if_exists}</b></li>
+                           
+                        </ul>
+                        <div class="dashed mt-15 mr-100"></div>
+                        <ul class="state-list order-state-list ">                            
+                            <li> <span> <i class="fa fa-tasks"></i></span> 未提交工单：<b class="c-orange">${preSubmitOrderNo?if_exists}</b></li>
+                            <li> <span> <i class="fa fa-share-square-o"></i></span> 已提交工单：<b class="c-orange">${submitedOrderNo?if_exists}</b></li>
+                            <li> <span> <i class="fa fa-star"></i></span> 已执行工单：<b class="c-orange">${commitedOrderNo?if_exists}</b></li>
+
+                            
+                        </ul>
+                    
+                           </div>
+                        </article>
+                     </div>
+                 </div>            
+        </div>
+        
+        <div class="row container mt-10 cl">
+           <div class="col-sm-12">
+               <div class="panel other-panel">
+                <div class="panel-body panel-bg ">
+                   
+                </div>
+            </div>
+           </div>       
+        </div>  
+           
+        </div>    
+       
+        
+       
+     </article>
+  
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>密码修改页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+    
+    <#include "/views/common/head.html"/>
+    <link rel="stylesheet" href="${ctx}/js/jbox/jbox.css">
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jBox-2.3.min.js"></script> 
+    <script type="text/javascript" src="${ctx}/js/jbox/jquery.jbox-zh-cn.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <script type="text/javascript">
+  		
+  		/***光标指引到用户账户输入框***/
+		function setfocus(){
+			$("#UserName").focus();
+		}
+		
+		/***校验旧密码非空***/
+		function checkOldPwd(){		
+		  var  oldPwd =$("#oldPwd").val();
+		  if (oldPwd == ""){
+		  	$("#oldPwdTip").show();
+		  	return false;
+		  }else {
+		  	$("#oldPwdTip").hide();
+		  	return true;
+		  }
+	    	
+		}
+		/***校验新密码必须是8-18位数字或者字母***/
+		function checkNewPwd(){
+		  var  oldPwd =$("#oldPwd").val();			
+		  var  newPwd =$("#newPwd").val();
+		  var  uspassword = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{8,18}/;
+		  if (newPwd == ""){
+		  	$("#newPwdTip").show();
+		  	$("#newPwdTip2").hide();
+		  	return false;
+		  }else {
+		  	$("#newPwdTip").hide();
+		  	if(!uspassword.test(newPwd)){
+		  		$("#newPwdTip2").show();
+		  		 return false;
+		  	}else{
+		  		if(oldPwd==newPwd){
+		  			$("#newPwdTip3").hide();
+		  			return false;
+		  		}else{
+	    			$("#newPwdTip2").hide();
+	    			return true;
+		  		}
+		  	}
+		  }
+	    	
+		}
+		
+		/***2次输入密码比较***/
+		function checkCNewPwd(){
+			var cnewPwd=$("#cnewPwd").val();
+			var  newPwd =$("#newPwd").val();
+		 	var  uspassword = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{8,18}/;
+		 	if (cnewPwd == ""){
+			  	$("#cnewPwdTip").show();
+			  	$("#cnewPwdTip2").hide();
+			  	$("#cnewPwdTip3").hide();
+			  	return false;
+			  }else {
+			  	$("#cnewPwdTip").hide();
+			  	if(!uspassword.test(cnewPwd)){
+			  		$("#cnewPwdTip3").show();
+			  		 return false;
+			  	}else{
+	    			$("#cnewPwdTip3").hide();
+	    			if (newPwd != cnewPwd){
+	    				$("#cnewPwdTip2").show();
+			  		 	return false;
+	    			}else {
+	    				$("#cnewPwdTip2").hide();
+			  		 	return true;
+	    			}
+			  	}
+			  }
+			
+		}
+		
+		function submit(){
+			var oldPwd = $.trim($("#oldPwd").val());
+			var newPwd = $.trim($("#newPwd").val());
+			var cnewPwd = $.trim($("#cnewPwd").val());
+			var jsonParam = {"newPwd":newPwd,"cnewPwd":cnewPwd,"oldPwd":oldPwd};
+			if (checkOldPwd()){
+				if (checkNewPwd()){
+					if(checkCNewPwd()){
+						$.ajax({
+							type : "POST",
+								url : '${ctx}/author/doModifyPwd',
+								dataType : 'json',
+								data : jsonParam,
+								success : function(data){
+									if(data.flag){
+										$.jBox.tip('修改密码成功！','success');
+										document.location.href="${ctx}/author/buss/index";
+									}else{
+										$.jBox.error('修改密码失败！<br/>'+data.msg, '提示');
+									}
+								},
+								error : function(data){
+									$.jBox.error('修改密码失败！<br/>'+data.msg, '提示');
+								}
+						});
+					}
+				}
+			}
+			
+		}
+    </script> 
+</head>
+<body onload="setfocus()">
+<!------------------------HEADER----------------------------> 
+  <#include "/views/common/header.html"/>
+  
+<!------------------------SIDEBAR-------------------------->
+  <#include "/views/common/aside.html"/> 
+
+<!------------------------CONT---------------------------->   
+  <article class="article-box">
+        <div class="add-cont">
+         <section class="panel panel-primary pb-200">
+             <div class="panel-header"><h4>修改密码</h4></div>
+             <div class="panel-body ">
+                  <div class="form-group pt-50  cl">
+                      <label class=" fl"><b class="c-red">*</b>旧密码：</label>
+                      <input id="oldPwd" type="password" class="input-text" placeholder="请输入旧密码" onblur="checkOldPwd()">
+                  	  <span style="color: #ee3170;font-size: 14px;display:none" id="oldPwdTip" name="oldPwdTip" >请输入旧密码！</span>
+                  </div>
+                 
+                  <div class="form-group  cl">
+                      <label class=" fl"><b class="c-red">*</b>新密码：</label>
+                       <input id="newPwd" type="password" class="input-text" placeholder="请输入新密码" onblur="checkNewPwd()">
+                       <span style="color: #ee3170;font-size: 14px;display:none" id="newPwdTip" name="newPwdTip" >请输入新密码！</span>
+                       <span style="color: #ee3170;font-size: 14px;display:none" id="newPwdTip2" name="newPwdTip2" >请输入8～18位数字加字母组合的密码！</span>
+                       <span style="color: #ee3170;font-size: 14px;display:none" id="newPwdTip3" name="newPwdTip3" >新密码与旧密码相同,请重新输入新密码！</span>
+                  </div>
+                 
+                  <div class="form-group cl">
+                      <label class=" fl"><b class="c-red">*</b>确认新密码：</label>
+                         <input id="cnewPwd" type="password" class="input-text" placeholder="请输入确认密码" onblur="checkCNewPwd()">
+                         <span style="color: #ee3170;font-size: 14px;display:none" id="cnewPwdTip" name="cnewPwdTip" >请输入确认密码！</span>
+                         <span style="color: #ee3170;font-size: 14px;display:none" id="cnewPwdTip3" name="cnewPwdTip3" >请输入8～18位数字加字母组合的密码！</span>
+                         <span style="color: #ee3170;font-size: 14px;display:none" id="cnewPwdTip2" name="cnewPwdTip2" >两次新密码输入不匹配！</span>
+                      </div>
+             </div>
+         </section>    
+        <div class="btn-wrap mt-20 ml-60">
+             <button class="btn btn-primary" onclick="submit()">提交</button>
+              &nbsp; &nbsp; 
+             <button class="btn btn-close" onclick="javascript :history.back(-1)">取消</button>
+            
+          
+          </div>   
+         </div>   
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <#include "/views/common/footer.html"/>
+
+</body>
+</html>

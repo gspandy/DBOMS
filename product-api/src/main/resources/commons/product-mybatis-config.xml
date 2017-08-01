@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "${env.mybatis.url}">
+<configuration>
+	<properties>
+       	<property name="dialect" value="mysql"/>
+    </properties>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="lazyLoadingEnabled" value="false"/>
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="25000" />
+	</settings>
+	<typeAliases>
+		<typeAlias alias="PrdInfo" type="com.tydic.dbs.product.vo.PrdInfo"/>
+		<typeAlias alias="PrdDataResource" type="com.tydic.dbs.product.vo.PrdDataResource"/>
+		<typeAlias alias="OrdPrdAndData" type="com.tydic.dbs.order.vo.OrdPrdAndData"/>
+		<typeAlias alias="PrdDataResourceRequire" type="com.tydic.dbs.product.vo.PrdDataResourceRequire"/>
+	</typeAliases>
+	<plugins>
+       	<plugin interceptor="com.tydic.commons.dao.PaginationInterceptor"/>
+    </plugins>
+	<mappers>
+		<mapper resource="com/tydic/dbs/product/mapper/PrdInfoMapper.xml"/>
+		<mapper resource="com/tydic/dbs/product/mapper/PrdDataResourceMapper.xml"/>
+		<mapper resource="com/tydic/dbs/product/mapper/PrdDataResourceRequireMapper.xml"/>
+
+
+		
+	</mappers>
+</configuration>

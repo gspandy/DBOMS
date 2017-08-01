@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商户配置页-中国联通研究院大数据应用模型孵化平台</title>
+    <meta name="keywords" content="关键词,5个左右,单个8汉字以内"> 
+    <meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！"> 
+
+
+
+  
+    <script type="text/javascript" src="js/app.js"></script>
+    <!--[if IE 6]> 
+      <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+      <script>DD_belatedPNG.fix('.pngfix,.icon');</script> 
+    <![endif]-->
+    <#include "/views/common/head.html"/>
+</head>
+<body>
+ <!------------------------HEADER----------------------------> 
+  <header class="navbar-wrapper navbar-fixed">
+      <div class="navbar navbar-blue">
+          <div class="container-fluid cl">
+              <a class="logo navbar-logo" href="#"><img src="img/logo.png" alt="logo"></a>
+              <a class="logo navbar-slogan" href="#">中国联通大数据应用模型孵化平台</a>
+              <nav class="navbar-userbar fr">
+                 <span class="user mr-15"><a href=""><i class="fa fa-user"></i>小米</a> <a href="">[ 退出 ]</a></span>
+                  <a class="btn btn-link-white" href="#" title="设置"><i class="fa fa-gear"></i></a>
+                  <a class="btn btn-link-white" href="http://61.148.212.4:9090/wodp/homepage.html" title="能力查看"><i class="fa fa-eye"></i> <span class="f-14">能力查看</span> </a>
+              </nav>
+          </div>
+      </div>
+  </header>
+  
+ <!------------------------SIDEBAR-------------------------->  
+    <aside class="aside">
+         <ul id="sidebar" class="sidebar mt-20 ">
+             <li class="item">
+                 <h4><i class="fa fa-calendar"></i>商户信息</h4>
+                 <div class="info">
+                     <a class="active" href="#">商户总览</a>
+                     <a href="#">商户配置</a>
+                 </div>
+             </li>
+             <li class="item">
+                 <h4><i class="fa fa-tags"></i>产品中心</h4>
+                 <div class="info">
+                     <a href="#">我的产品</a>
+                 </div>
+             </li>
+             <li class="item">
+                 <h4><i class="fa fa-map-o"></i>工单中心</h4>
+                 <div class="info">
+                     <a href="#">我的工单</a>
+                 </div>
+             </li>
+             <li class="item">
+                 <h4>&nbsp;<i class="fa fa-yen"></i>&nbsp;我的账单</h4>
+                 <div class="info">
+                     <a href="#">历史计费清单</a>
+                     <a href="#">月账单查询</a>
+                 </div>
+             </li>
+         </ul>
+     </aside>
+     
+<!-------------------------CONT---------------------------->    
+     <article class="article-box">
+        <div class="add-cont">
+         <section class="panel panel-primary">
+             <div class="panel-header"><h4>商户配置</h4></div>
+              <div class="panel-seheader">
+                     <h5>IT资源配置</h5>
+              </div>
+             <div class="panel-body">
+                  <div class="form-group  cl">
+                      <label class=" fl">CPU需求：</label>
+                      <select class="input-text" name="" id="">
+                          <option value="">2核</option>
+                          <option value="">4核</option>
+                          <option value="">8核</option>
+                          <option value="">16核</option>
+                          <option value="">32核</option>
+                          <option value="">64核</option>
+                      </select>
+                  </div>
+                  <div class="form-group  cl">
+                      <label class=" fl">内存需求：</label>
+                      <select class="input-text" name="" id="">
+                          <option value="">16G</option>
+                          <option value="">32G</option>
+                          <option value="">64G</option>
+                          <option value="">128G</option>
+                          <option value="">256G</option>
+                          <option value="">512G</option>     
+                      </select>
+                  </div>
+                  <div class="form-group cl">
+                      <label class=" fl">存储需求：</label>
+                          <select class="input-text" name="" id="">
+                          <option value="">1T</option>
+                          <option value="">2T</option>
+                          <option value="">3T</option>
+                          <option value="">4T</option>
+                          <option value="">5T</option>
+                          <option value="">6T</option>
+                            
+                      </select>
+                      </div>
+                  <div class="form-group  cl">
+                      <label class=" fl">FTP空间需求：</label>
+                     <select class="input-text" name="" id="">
+                          <option value="">300G</option>
+                          <option value="">500G</option>
+                          <option value="">800G</option>
+                          <option value="">1T</option>
+                          <option value="">2T</option>
+                          <option value="">3T</option>     
+                      </select>
+                  </div>    
+             </div>
+         </section>
+         <section class="panel panel-secondary">
+             <div class="panel-header"><h4>用户角色权限</h4></div>
+             <div class="panel-body">
+                 <a class="btn btn-primary f-12" data-toggle="modal" href="#modal-upowerAdd">增加用户角色权限</a>
+                 <table class="table table-primary mt-10 mb-10">
+                     <thead>
+                         <tr>  
+                             <th>操作员ID</th>
+                             <th>姓名</th>
+                             <th>联系电话</th>
+                             <th>EMAIL</th>
+                             <th>角色权限</th>
+                             <th>操作</th>
+                         </tr>         
+                     </thead>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                        <tr>
+                           <td>1283344343</td> 
+                           <td>张三</td> 
+                           <td>1549655452</td> 
+                           <td>zhangsan@126.com</td> 
+                           <td>数据加工角色,数据建模角色</td> 
+                           <td><a class="c-999" title="修改" href=""><i class="fa fa-edit"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="c-999" title="删除" href=""><i class="fa fa-trash"></i></a></td> 
+                        </tr>
+                         
+                 </table>
+                 <div class="btn-wrap text-c">
+                     <a class="btn btn-link " href="">上一页</a>
+                     &nbsp;&nbsp;&nbsp;&nbsp;
+                     <a class="btn btn-link" href="">下一页</a>
+                 </div>
+             </div>
+         </section>
+         <section class="panel panel-secondary">
+             <div class="panel-header"><h4>数据权限</h4></div>
+             <div class="panel-body">      
+                  <div class="form-group  cl">
+                      <label class=" fl">商户数据权限：</label>
+                       <span class="btn-upload">
+                      <input class="input-text upload-url" type="text" name="uploadfile1" id="uploadfile" readonly="" >
+									<button class="btn btn-secondary ml-20 f-12">上传</button>
+									<input type="file"  name="upload" onchange="document.getElementById('uploadfile').value=this.value;this.style.display='none'" class="input-file valid">
+                 </span>
+                  </div>
+                  
+             </div>
+         </section>
+         <section class="panel panel-secondary">
+             <div class="panel-header"><h4>状态信息</h4></div>
+             <div class="panel-body">
+                
+                 <p>配置状态：未配置</p>
+                <p>审核结果：审批通过</p> 
+                 
+             </div>
+         </section>
+         <div class="btn-wrap mt-20 ml-80">
+             <button class="btn btn-primary">保存</button>
+              &nbsp; &nbsp; 
+             <button class="btn btn-primary">提交</button>
+            
+          
+          </div>    
+    </article>
+       
+<!------------------------FOOTER----------------------------> 
+  <footer class="footer" >
+      <div class="container-fluid">
+		<p>Copyright &copy;1999-2016&nbsp;中国联通&nbsp;版权所有 <br>
+        经营许可编号：<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">***ICP备****号</a><br>
+		</p>
+	</div>
+  </footer>
+<!--------------------------MODAL---------------------------->
+<!--增加用户角色权限 MODAL-->
+<div id="modal-upowerAdd" class="modal full hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+ <div class="modal-header">
+    <h3 id="myModalLabel">增加用户角色权限</h3><a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();"><i class="fa fa-times"></i></a>
+ </div>
+  <div class="modal-body">
+         <div class="form-group cl">
+              <label class=" fl">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+              <input class="input-text fl"  type="text"  onblur="true">  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">身份证号码：</label>
+              <input class="input-text fl"  type="text" >  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">联系电话：</label>
+              <input class="input-text fl"  type="text" >  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">EMAIL：</label>
+              <input class="input-text fl"  type="text" >  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">联系地址：</label>
+              <input class="input-text fl"  type="text" >  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</label>
+              <input class="input-text fl"  type="text" >  
+         </div>
+         <div class="form-group cl">
+              <label class=" fl">角色权限：</label>
+             <div class="box-wrap">
+                 
+             </div>
+              
+             
+         </div>
+      
+ </div>
+  <div class="modal-footer">
+ <button class="btn btn-primary">确定</button> <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+ </div>
+</div>
+
+</body>
+</html>
